@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/03style.css">
+    <title>03 - ngFor</title>
+</head>
+<body>
+    <header>
+        <h1>Lesson 3 - *ngFor</h1>
+    </header>
+    <main>
+        <p>The <b>*ngFor</b> directive is very powerful and allows us to build our page dynamically without relying on a mountain of JS to do so. I went over the benefit of that in Lesson 1, so lets get right to it. This directive utilizes for..of, so if you need a refresher on that, check out Lesson 2.</p>
+        <h3>The Example</h3>
+        <p>We have the following array"</p>
+        <pre>fighters = [ 'Ryu', 'Ken', 'Guile', 'Sagat', 'Laura' ]</pre>
+        <p>And we want to create an unordered list that displays each name in our array. How can we do this? Let's start with the basic markup structure:</p>
+        <div class="codebox">
+            <p>&lt;ul&gt;</p>
+            <p class="ind1">&lt;li&gt;</p>
+            <p class="ind1">&lt;/li&gt;</p>
+            <p>&lt;/ul&gt;</p>
+        </div>
+        <p>So where do we put the darn thing? The important thing to remember regarding placement is that we <strong>place the *ngFor directive on the element we want repeated.</strong> In this example, we want the <i>&lt;li&gt;</i> element to repeat for each of our fighters, so that's where we will put the <i>*ngFor</i>. If we had attached it to the <i>&lt;ul&gt;</i> elements, the entire list would repeat itself, and that's not what we want.</p>
+        <div class="codebox">
+            <p>&lt;ul&gt;</p>
+            <p class="ind1">&lt;li *ngFor=""&gt;</p>
+            <p class="ind1">&lt;/li&gt;</p>
+            <p>&lt;/ul&gt;</p>
+        </div>
+        <p>We've got our directive in there, but what goes inside? Next, we <b>declare our for loop using for..of</b> style. We went over this in lesson two, so lets how see how it looks:</p>
+        <div class="codebox">
+            <p>&lt;ul"&gt;</p>
+            <p class="ind1">&lt;li *ngFor="let fighter of fighters"&gt;</p>
+            <p class="ind1">&lt;/li&gt;</p>
+            <p>&lt;/ul&gt;</p>
+        </div>
+        <p>Let's review a little bit: We declared a new variable named <i>fighter</i>. We could have named it whatever we want; we chose fighter so that we can understand what we are looking at when we look at the code at a later time, we just need to remember that anytime we want to utilize this variable, we need to call it by the name we just declared. Also notice that we declared this variable to go through the arrary <i>fighters</i>. This is the name of a previously declared variable, so we have to make sure we get the name right.</p>
+        <p>Now that we have a variable that will represent <b>each value of the array</b>, we can call that value in our markup using our good friends: {{ }}</p>
+        <div class="codebox">
+            <p>&lt;ul"&gt;</p>
+            <p class="ind1">&lt;li *ngFor="let fighter of fighters"&gt;</p>
+            <p class="ind2">{{ fighter }}</p>
+            <p class="ind1">&lt;/li&gt;</p>
+            <p>&lt;/ul&gt;</p>
+        </div>
+        <p>And we're done! This will display a list item for each of our fighters, resulting in a dynamically built list.</p>
+        <h3>Taking it one step further: Properties of our variable</h3>
+        <p>This is super cool, but in real world practice, we won't always be simply iterating over strings in an array. Often, we will be iterating over objects instead. This example will show you just how powerful <b>*ngFor</b> can be. Now lets say we got the following object:</p>
+        <pre id="example1"></pre>
+        <p>Now, instead of simply displaying the name in our list, we want to display every property in our object. Lets set up the markup first:</p>
+        <div class="codebox">
+            <p>&lt;ul"&gt;</p>
+            <p class="ind1">&lt;li *ngFor="let fighter of fighters"&gt;</p>
+            <p class="ind2">&lt;p&gt;&lt;/p&gt;</p>
+            <p class="ind2">&lt;p&gt;&lt;/p&gt;</p>
+            <p class="ind2">&lt;p&gt;&lt;/p&gt;</p>
+            <p class="ind1">&lt;/li&gt;</p>
+            <p>&lt;/ul&gt;</p>
+        </div>
+        <p>Remember that similar to <b>*ngIf</b>, the directive <b>*ngFor</b> will affect not only the element that we attach it to, but <strong>all of its children as well</strong>. This means all of our <i>&lt;p&gt;</i> tags will also be repeated.</p>
+        <p>So how do we display each property of that object? Remember that the variable <i>fighter</i> in our for..of will hold the value of every item inside our array. We know that our array is an array of objects, therefor the variable <i>fighter</i> will also be an object. Because of this, we can call the properties of said object like so:</p>
+        <div class="codebox">
+            <p>&lt;ul"&gt;</p>
+            p class="ind1">&lt;li *ngFor="let fighter of fighters"&gt;</p><
+            <p class="ind2">&lt;p&gt;Name: {{ fighter.name }}&lt;/p&gt;</p>
+            <p class="ind2">&lt;p&gt;Origin: {{ fighter.origin }}&lt;/p&gt;</p>
+            <p class="ind2">&lt;p&gt;Style: {{ fighter.style }}&lt;/p&gt;</p>
+            <p class="ind1">&lt;/li&gt;</p>
+            <p>&lt;/ul&gt;</p>
+        </div>
+        <p>And we're set! Now we will get a list items for each of our fighters, and each list item will have three p tags that will display their name, origin, and fighting style.</p>
+        <div class="lucky-box">
+            <div class="lucky-expect-bg"></div>
+            <p>What if I also want to display the index? You told me last lesson that you would show us how.</p>
+        </div>
+        <h3>Including the Index</h3>
+        <p>If we want to include the index inside our html with *ngFor, you would declare it like this</p>
+        <div class="example">
+            <p>&lt;li *ngFor="let fighter of fighters; let i = index"&gt;</p>
+        </div>
+        <p>And that's it. Now, in addition to using the variable <i>fighter</i> to get each value of the array, we can also use the variable <i>i</i> to get its respective index as well. If we were to apply that to our example, the code would look like this:</p>
+        <div class="codebox">
+            <p>&lt;ul"&gt;</p>
+            <p class="ind1">&lt;li *ngFor="let fighter of fighters; let i = index"&gt;</p>
+            <p class="ind2">&lt;p&gt;Array Index: {{ i }}&lt;/p&gt;</p>
+            <p class="ind2">&lt;p&gt;Name: {{ fighter.name }}&lt;/p&gt;</p>
+            <p class="ind2">&lt;p&gt;Origin: {{ fighter.origin }}&lt;/p&gt;</p>
+            <p class="ind2">&lt;p&gt;Style: {{ fighter.style }}&lt;/p&gt;</p>
+            <p class="ind1">&lt;/li&gt;</p>
+            <p>&lt;/ul&gt;</p>
+        </div>
+        <p>The result looks like... (I shrunk it down a bit)</p>
+        <div class="result">
+            <ul>
+                <li>
+                    <p>Array Index: 0</p>
+                    <p>Name: Ryu</p>
+                    <p>Origin: Japan</p>
+                    <p>Style: Zoning</p>
+                </li>
+                <li>
+                    <p>Array Index: 1</p>
+                    <p>Name: Ken</p>
+                    <p>Origin: USA</p>
+                    <p>Style: Rushdown</p>
+                </li>
+                <li>
+                    <p>Array Index: 2</p>
+                    <p>Name: Guile</p>
+                    <p>Origin: USA</p>
+                    <p>Style: Zoning</p>
+                </li>
+                <li>
+                    <p>Array Index: 3</p>
+                    <p>Name: Sagat</p>
+                    <p>Origin: Thailand</p>
+                    <p>Style: Zoning</p>
+                </li>
+                <li>
+                    <p>Array Index: 4</p>
+                    <p>Name: Laura</p>
+                    <p>Origin: Brazil</p>
+                    <p>Style: Grappler</p>
+                </li>
+            </ul>
+        </div>
+        <p>Is that a good example of the index?</p>
+        <div class="lucky-box">
+            <div class="lucky-sleep-bg"></div>
+            <p>zzzzzzz........</p>
+        </div>
+        <p>Outstanding.</p>
+        <footer>
+            <a href="02-forof.html">&lt;&lt; 02 - for..of</a>
+            <a href="">04 - ???? &gt;&gt; </a>
+        </footer>
+    </main>
+    <script src="js/03.js"></script>
+</body>
+</html>

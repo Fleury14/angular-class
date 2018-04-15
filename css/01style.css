@@ -15,6 +15,10 @@
   text-indent: 20px;
 }
 
+.codebox .ind2 {
+  text-indent: 40px;
+}
+
 .lucky-box {
   background-color: #600;
   color: #eee;
@@ -49,10 +53,36 @@
   background-size: cover;
 }
 
+.lucky-box .lucky-expect-bg {
+  height: 100px;
+  width: 100px;
+  background: url("../img/lucky-expect.jpg");
+  background-size: cover;
+}
+
+.lucky-box .lucky-sleep-bg {
+  height: 150px;
+  width: 150px;
+  background: url("../img/lucky-sleep.JPG");
+  background-size: cover;
+  transform: rotate(90deg);
+}
+
 .example {
   background-color: #336600;
   color: #eee;
   padding: 10px;
+}
+
+.result {
+  background-color: #006666;
+  color: #eee;
+  padding: 10px;
+  font-size: 10px;
+}
+
+.result p {
+  margin: 3px;
 }
 
 a {
@@ -68,6 +98,23 @@ a:hover {
 footer {
   display: flex;
   justify-content: space-between;
+}
+
+body {
+  background: linear-gradient(#eee, #ddd);
+  font-family: 'Lato', sans-serif;
+  min-height: 100vh;
+  padding: 0px 30px;
+}
+
+header {
+  color: #600;
+  text-align: center;
+}
+
+h3 {
+  color: #009999;
+  font-weight: 300;
 }
 
 body {

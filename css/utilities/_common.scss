@@ -13,6 +13,10 @@
     .ind1 {
         text-indent: 20px;
     }
+
+    .ind2 {
+        text-indent: 40px;
+    }
 }
 
 .lucky-box {
@@ -47,6 +51,21 @@
         background: url('../img/lucky-why.jpg');
         background-size: cover;
     }
+
+    .lucky-expect-bg {
+        height: 100px;
+        width: 100px;
+        background: url('../img/lucky-expect.jpg');
+        background-size: cover;
+    }
+
+    .lucky-sleep-bg {
+        height: 150px;
+        width: 150px;
+        background: url('../img/lucky-sleep.JPG');
+        background-size: cover;
+        transform: rotate(90deg);
+    }
 }
 
 .example {
@@ -55,6 +74,15 @@
     padding: 10px;
 }
 
+.result {
+    background-color: darken($color-2, 10);
+    color: #eee;
+    padding: 10px;
+    font-size: 10px;
+    p {
+        margin: 3px;
+    }
+}
 
 a {
     color: $color-2;
@@ -69,4 +97,21 @@ a {
 footer {
     display: flex;
     justify-content: space-between;
+}
+
+body {
+    background: $background;
+    font-family: 'Lato', sans-serif;
+    min-height: 100vh;
+    padding: 0px 30px;
+}
+
+header {
+    color: $color-1;
+    text-align: center;
+}
+
+h3 {
+    color: $color-2;
+    font-weight: 300;
 }
