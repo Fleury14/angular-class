@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css?family=Lato');
+@import 'utilities/vars';
+@import 'utilities/common';
+
+
+body {
+    background: $background;
+    font-family: 'Lato', sans-serif;
+    min-height: 100vh;
+    padding: 0px 30px;
+}
+
+header {
+    color: $color-1;
+    text-align: center;
+}
+
+h3 {
+    color: $color-2;
+    font-weight: 300;
+}
+
+main {
+    display: grid;
+    grid-template-columns: 5% 45% 45% 5%;
+    grid-template-rows: 100% 750px;
+    grid-column-gap: 20px;
+
+    .sub-title {
+        grid-column: 2 / 4;
+        grid-row: 1 / 2;
+    }
+
+    h4 {
+        text-align: center;
+    }
+
+    aside {
+        grid-column: 2 / 3;
+        grid-row: 2 / 3;
+        background-color: lighten($color-1, 70);
+        padding: 10px;
+    }
+
+    section {
+        grid-column: 3 / 4;
+        grid-row: 2 / 3;
+        background-color: lighten($color-2, 60);
+    }
+
+    .summary {
+        grid-column: 2 / 4;
+        grid-row: 3 / 4;
+    }
+}

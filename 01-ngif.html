@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>01 - ngIf</title>
+    <link rel="stylesheet" href="css/01style.css">
+</head>
+<body>
+    <header>
+        <h1>Lesson 1 - ngIf</h1>
+    </header>
+    <main>
+        <p>You've probably run into the following situation: You have an element that you want to put on the page, but you only want it to display if it meets a certain condition in your Javascript. For example, you have a button that you only want to appear if a user is logged in.</p>
+        <h3>How would we do that in Javascript?</h3>
+        <p>It would probably look something like this:</p>
+        <ul>
+            <li>Write out your if statement</li>
+            <li>If it's true, create your element</li>
+            <li>Then assign it an innerHTML with all the relevant info you want</li>
+            <li>Append it to an existing element</li>
+        </ul>
+        <p>This seems fine, but we have several problems. First of all, it's a lot of code. Any chance we can get away with writing less code, the better.</p>
+        <p>Secondly, you're writing out an entire HTML element inside your javascript file. This means you don't get the same benefit within your IDE that you would if you were writing inside an HTML file. Notice how when you create a tag, it makes the ending tags for you? How everything is neatly colored? Don't expect to see any of that while you're writing your markup in a JS file. Emmet? Hah! You can get around this part by editing your settings files, but the moral of the story? You're probably going to make a typo. And that > that you forgot isn't going to show up in your HTML file.</p>
+        <p>Finally, since we're using innerHTML, everything is <strong>unsanitized</strong>. This means when you have to throw data in that HTML that includes input from the user (and you will), you run the risk of opening up your site to cross-site scripting attacks (XSS) unless you are very careful with your data.</p>
+        <p>Your code probably looks like this.</p>
+        <div class="codebox">
+            <p>if (loggedInUser) {</p>
+            <p class="ind1">const elementAppendee = document.getElementById('userBox');</p>
+            <p class="ind1">const newElement = document.createElement('p');</p>
+            <p class="ind1">newElement.innerHTML = `Welcome ${loggedInUser.name}`</p>
+            <p class="ind1">elementAppendee.appendChild(newElement);</p>
+            <p>}</p>
+        </div>
+        <div class="lucky-box">
+            <div class="lucky-right-bg"></div>
+            <p>Can I do this without writing any Javascript?</p>
+        </div>
+        <p>Glad you asked.</p>
+        <h3>Doin' it in Angular: *ngIf</h3>
+        <p>Doing the same thing in angular will require use of the <strong>*ngIf</strong>. Just put <i>*ngIf=""</i> inside any element you want to show up conditionally. For example:</p>
+        <div class="example">
+            &lt;p *ngIf="loggedInUser"&gt;Hello&lt;/p&gt;
+        </div>
+        <p>In this case, the p tag will only show up if loggedInUser is equal to true. </p>
+        <div class="example">
+            &lt;a href="page2.html" *ngIf="entries > 5"&gt;&lt;p&gt;Next Page&lt;&gt;/p&lt;/a&gt;
+        </div>
+        <p>In the above example, the link displaying 'Next Page' would only show up if the value of the <i>entries</i> variable is greater than 5.</p>
+        <div class="lucky-box">
+            <div class="lucky-lookat-bg"></div>
+            <p>What about functions? Can I use the result of a function to be my condition?</p>
+        </div>
+        <p>You sure can. Check out this example:</p>
+        <div class="example">
+            &lt;a href="admin.html" *ngIf="areYouAnAdmin()"&gt;&lt;p&gt;Admin Page&lt;&gt;/p&lt;/a&gt;
+        </div>
+        <p>Now this link to admin.html will only show up if the result of the method <i>areYouAnAdmin</i> returns a true value. This is useful when you don't want the conditions to be explicitly available to the user.</p>
+        <p>One last thing to note, the condition of whether or not to display applies to not only the element you apply *ngIf to, but <strong>all of it's child elements as well.</strong> So in the following code:</p>
+        <div class="codebox">
+            <p>&lt;div *ngIf="myVar"&gt;</p>
+            <p class="ind1">&lt;p&gt; ... &lt;/p&gt;</p>
+            <p class="ind1">&lt;p&gt; ... &lt;/p&gt;</p>
+            <p>&lt;/div&gt;</p>
+        </div>
+        <p>Not only does the div not show up if the value of myVar resolves to false, but the p tags inside will not show up as well.</p>
+        <h3>Summary</h3>
+        <p>Using ngIf now brings several benefits that offset the problems we had earlier using Javascript.</p>
+        <ul>
+            <li>All our markup is in the HTML file. We won't have to go into another file to see where our potential markup is. It's all in one place.</li>
+            <li>We can use the interpolation brackets to bring in content that is automatically sanitized for is like this: {{ variable }}</li>
+            <li>Our code is now both easier to read, and easier to debug</li>
+            <li>If the condition resolves to be false, the HTML is completely hidden and is not shown in the inspector, so we can hide what we want from the user. (There are ways around this that we will get to later)</li>
+        </ul>
+        <p>And we did all this with no javascript whatsoever.</p>
+    </main>
+    <footer>
+        <a href="index.html">&lt;&lt; Back to list</a>
+        <a href="02-forof.html">02 - for..of &gt;&gt; </a>
+    </footer>
+</body>
+</html>

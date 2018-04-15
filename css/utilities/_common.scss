@@ -1,0 +1,72 @@
+
+.codebox {
+    background-color: #111;
+    color: #eee;
+    font-family: monospace;
+    padding: 10px;
+    margin: 20px;
+
+    p {
+        margin: 5px;
+    }
+
+    .ind1 {
+        text-indent: 20px;
+    }
+}
+
+.lucky-box {
+    background-color: $color-1;
+    color: #eee;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    margin: 20px;
+
+    p {
+        margin-left: 50px;
+    }
+
+    .lucky-right-bg {
+        height: 100px;
+        width: 100px;
+        background: url('../img/lucky-right.jpg');
+        background-size: cover;
+    }
+
+    .lucky-lookat-bg {
+        height: 100px;
+        width: 100px;
+        background: url('../img/lucky-lookat.jpg');
+        background-size: cover;
+    }
+
+    .lucky-why-bg {
+        height: 100px;
+        width: 100px;
+        background: url('../img/lucky-why.jpg');
+        background-size: cover;
+    }
+}
+
+.example {
+    background-color: $color-3;
+    color: #eee;
+    padding: 10px;
+}
+
+
+a {
+    color: $color-2;
+    text-decoration: none;
+    transition: 0.3s all;
+
+    &:hover {
+        color: lighten($color-2, 10);
+    }
+}
+
+footer {
+    display: flex;
+    justify-content: space-between;
+}

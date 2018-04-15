@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/02style.css">
+    <title>02 - for..of</title>
+</head>
+<body>
+    <header>
+        <h1>Lesson 2 - for..of</h1>
+    </header>
+    <main>
+        <div class="sub-title">
+            <p class="sub-title">Before we get into explaining the magic of the directive <b>*ngFor</b>, first let's go over the variant of the for loop known as <b>for..of</b>, as you will be seeing it. If you're already familiar with it, feel free to skip ahead.</p>
+            <h3>Standard for loop vs. for..in</h3>
+            <p>Let's say we have the following array:</p>
+            <pre>const colors = ['orange', 'purple', 'yellow', 'pink', 'blue']</pre>
+            <p>The object is to use a loop to console log each color. Lets view the standard method as using for..of so you can see them side by side</p>
+        </div>
+        <aside>
+            <h4>Standard way</h4>
+            <div class="codebox">
+                <p>for (let color = 0; color < colors.length; color++) {</p>
+                <p class="ind1">console.log( colors[color] );</p>
+                <p>}</p>
+            </div>
+            <p>You should be familiar with this format. When the loop starts, it assigns a variable we named <i>color</i> that starts with the value 0. We then execute the code inside the loop, so in this case, we console.log from the array <i>colors</i> the index of the current value of the variable <i>color</i>, which right now is 0. So the result looks like <i>console.log( colors[0] );</i></p>
+            <p>After that's done, we then execute the last parameter of the for loop, the <b>incrementor</b>. With this loop, it's <i>color++</i>, so we increase the value of <i>color</i> by 1. We then check to make sure that the value of <i>color</i> is less than the length of the <i>colors</i> array as specified by the second part of the for loop. Since the value of <i>color</i> is now 1, and the length of the array is 5, the condition passes, and we run the code inside the loop again, running the console log.</p>
+            <p>Finally this continues as we go through the array until after the last color. After we increment the value of <i>color</i>, it becomes 5, which is no longer less than the length of the array. Because of this, the loop stops, and we continue on our merry way.</p>
+            <p>Something to note here, we could have named the variable <i>color</i> anything we wanted. You've probably seen it named <i>i</i> quite a bit. We could name it <i>taco</i>, <i>pineapple</i>, or whatever we want. We just have to remember that when we need to refer to that variable, that we use the correct name.</p>
+            <p>Also note that the name of the array, <i>colors</i>, can <b>not</b> be changed. We are referring to a very specific array that we want to loop through, that we have already declared. For this reason, we must name it <i>colors</i>, and nothing else.</p>
+        </aside>
+        <section>
+            <h4>Using for..of</h4>
+            <div class="codebox">
+                <p>for (let color of colors) {</p>
+                <p class="ind1">console.log( color );</p>
+                <p>}</p>
+            </div>
+            <p>Now this may be new to you. We are looking through the array <i>colors</i>, and we will execute the code inside the loop for every item that is inside that array. We have declared a variable named <i>color</i> that will hold the value of each item in the array as we run through the loop.</p>
+            <p>Much like the old way, the name <i>color</i> is arbitrary; we could have named it <i>bicycle</i> and that would be fine, as long as we made sure that when we referred to the item in the array that we are going over, we used the correct name of the variable we declared</p>
+            <p>Also like the old way, the name of the array we are going through, <i>colors</i> is <b>NOT</b> arbitrary; we are going through an array that we have already given a name to, so we must refer to it by it's proper name.</p>
+            <p>The easiest way to remember the for..of loop is that its is going to execute the code inside the loop oince for each value inside the array.</p>
+        </section>
+        <div class="summary">
+            <h3>Summary</h3>
+            <p>Each method will return the same thing. One thing you may not have known is that using for..of is part of ES6, meaning if you want to use it in Javascript, you can!</p>
+            <p>There are other variants of iterating through an array that you may have used such as <b>for..in</b>, and <b>.forEach()</b>. They both have their uses, we're going over for..of because it's what you will see in Angular when we utilize <b>*ngFor</b>.</p>
+            <div class="lucky-box">
+                <div class="lucky-why-bg"></div>
+                <p>Wait, I noticed that for..of isn't passing the value of the index? What if I want to use that index? I love indexes!</p>
+            </div>
+            <p>Odd love of indexes aside, yes, there is a way to do it. I'm not going over it here because they way to do it in JS is different than how it will look using *ngFor, so we will go over it... in the next lesson.</p>
+            <h3>References</h3>
+            <p>You know... in case you wanna read more.</p>
+            <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of"><p>MDN page for for..of</p></a>
+            <a href="http://www.benmvp.com/learning-es6-for-of-loop/"><p>A nice description of all the ways to go over an array by Ben Ilegbodu</p></a>
+            <footer>
+                <a href="01-ngif.html">&lt;&lt; 01 - *ngIf</a>
+                <a href="">03 - *ngFor &gt;&gt; </a>
+            </footer>
+        </div>
+        
+
+    </main>
+</body>
+</html>

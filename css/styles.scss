@@ -1,0 +1,34 @@
+@import url('https://fonts.googleapis.com/css?family=Lato');
+@import 'utilities/vars';
+
+
+body {
+    background: $background;
+    font-family: 'Lato', sans-serif;
+    min-height: 100vh;
+}
+
+header {
+    color: $color-1;
+    text-align: center;
+}
+
+main {
+    width: 75%;
+    margin: 0 auto;
+}
+
+li {
+    margin-bottom: 20px;
+    font-size: 1.25em;
+}
+
+a {
+    color: $color-2;
+    text-decoration: none;
+    transition: 0.3s all;
+
+    &:hover {
+        color: lighten($color-2, 10);
+    }
+}
