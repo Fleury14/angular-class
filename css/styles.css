@@ -29,4 +29,9 @@ a {
 a:hover {
   color: #00cccc;
 }
+
+footer {
+  font-size: 10px;
+  text-align: center;
+}
 /*# sourceMappingURL=styles.css.map */
