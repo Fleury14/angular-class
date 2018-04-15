@@ -137,7 +137,7 @@ h3 {
 main {
   display: grid;
   grid-template-columns: 5% 45% 45% 5%;
-  grid-template-rows: 100% 100% 100%;
+  grid-template-rows: 100% 100% 100% 100%;
   grid-column-gap: 20px;
 }
 
@@ -161,10 +161,25 @@ main section {
   grid-column: 3 / 4;
   grid-row: 2 / 3;
   background-color: #ccffff;
+  padding: 10px;
 }
 
 main .summary {
   grid-column: 2 / 4;
   grid-row: 3 / 4;
+}
+
+@media only screen and (max-width: 768px) {
+  main aside {
+    grid-column: 2 / 4;
+    margin-bottom: 20px;
+  }
+  main section {
+    grid-column: 2 / 4;
+    grid-row: 3 / 4;
+  }
+  main .summary {
+    grid-row: 4 / 5;
+  }
 }
 /*# sourceMappingURL=02style.css.map */

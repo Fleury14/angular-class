@@ -23,7 +23,7 @@ h3 {
 main {
     display: grid;
     grid-template-columns: 5% 45% 45% 5%;
-    grid-template-rows: 100% 100% 100%;
+    grid-template-rows: 100% 100% 100% 100%;
     grid-column-gap: 20px;
 
     .sub-title {
@@ -46,10 +46,29 @@ main {
         grid-column: 3 / 4;
         grid-row: 2 / 3;
         background-color: lighten($color-2, 60);
+        padding: 10px;
     }
 
     .summary {
         grid-column: 2 / 4;
         grid-row: 3 / 4;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    main {
+        aside {
+            grid-column: 2 / 4;
+            margin-bottom: 20px;
+        }
+
+        section {
+            grid-column: 2 / 4;
+            grid-row: 3 / 4;
+        }
+
+        .summary {
+            grid-row: 4 / 5;
+        }
     }
 }
