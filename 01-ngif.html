@@ -45,7 +45,7 @@
         </div>
         <p>In this case, the p tag will only show up if loggedInUser is equal to true. </p>
         <div class="example">
-            &lt;a href="page2.html" *ngIf="entries > 5"&gt;&lt;p&gt;Next Page&lt;&gt;/p&lt;/a&gt;
+            &lt;a href="page2.html" *ngIf="entries > 5"&gt;&lt;p&gt;Next Page&lt;/p&gt;&lt;/a&gt;
         </div>
         <p>In the above example, the link displaying 'Next Page' would only show up if the value of the <i>entries</i> variable is greater than 5.</p>
         <div class="lucky-box">
@@ -54,7 +54,7 @@
         </div>
         <p>You sure can. Check out this example:</p>
         <div class="example">
-            &lt;a href="admin.html" *ngIf="areYouAnAdmin()"&gt;&lt;p&gt;Admin Page&lt;&gt;/p&lt;/a&gt;
+            &lt;a href="admin.html" *ngIf="areYouAnAdmin()"&gt;&lt;p&gt;Admin Page&lt;/p&gt;&lt;/a&gt;
         </div>
         <p>Now this link to admin.html will only show up if the result of the method <i>areYouAnAdmin</i> returns a true value. This is useful when you don't want the conditions to be explicitly available to the user.</p>
         <p>One last thing to note, the condition of whether or not to display applies to not only the element you apply *ngIf to, but <strong>all of it's child elements as well.</strong> So in the following code:</p>
