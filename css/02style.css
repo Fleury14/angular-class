@@ -15,6 +15,10 @@
   text-indent: 20px;
 }
 
+.codebox .ind2 {
+  text-indent: 40px;
+}
+
 .lucky-box {
   background-color: #600;
   color: #eee;
@@ -49,10 +53,36 @@
   background-size: cover;
 }
 
+.lucky-box .lucky-expect-bg {
+  height: 100px;
+  width: 100px;
+  background: url("../img/lucky-expect.jpg");
+  background-size: cover;
+}
+
+.lucky-box .lucky-sleep-bg {
+  height: 150px;
+  width: 150px;
+  background: url("../img/lucky-sleep.JPG");
+  background-size: cover;
+  transform: rotate(90deg);
+}
+
 .example {
   background-color: #336600;
   color: #eee;
   padding: 10px;
+}
+
+.result {
+  background-color: #006666;
+  color: #eee;
+  padding: 10px;
+  font-size: 10px;
+}
+
+.result p {
+  margin: 3px;
 }
 
 a {
@@ -87,10 +117,27 @@ h3 {
   font-weight: 300;
 }
 
+body {
+  background: linear-gradient(#eee, #ddd);
+  font-family: 'Lato', sans-serif;
+  min-height: 100vh;
+  padding: 0px 30px;
+}
+
+header {
+  color: #600;
+  text-align: center;
+}
+
+h3 {
+  color: #009999;
+  font-weight: 300;
+}
+
 main {
   display: grid;
   grid-template-columns: 5% 45% 45% 5%;
-  grid-template-rows: 100% 750px;
+  grid-template-rows: 100% 100% 100% 100%;
   grid-column-gap: 20px;
 }
 
@@ -114,10 +161,25 @@ main section {
   grid-column: 3 / 4;
   grid-row: 2 / 3;
   background-color: #ccffff;
+  padding: 10px;
 }
 
 main .summary {
   grid-column: 2 / 4;
   grid-row: 3 / 4;
+}
+
+@media only screen and (max-width: 768px) {
+  main aside {
+    grid-column: 2 / 4;
+    margin-bottom: 20px;
+  }
+  main section {
+    grid-column: 2 / 4;
+    grid-row: 3 / 4;
+  }
+  main .summary {
+    grid-row: 4 / 5;
+  }
 }
 /*# sourceMappingURL=02style.css.map */
