@@ -19,6 +19,10 @@
   text-indent: 40px;
 }
 
+.codebox .ind3 {
+  text-indent: 60px;
+}
+
 .lucky-box {
   background-color: #600;
   color: #eee;
