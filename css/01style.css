@@ -53,6 +53,13 @@
   background-size: cover;
 }
 
+.lucky-box .lucky-left-bg {
+  height: 100px;
+  width: 100px;
+  background: url("../img/lucky-left.jpg");
+  background-size: cover;
+}
+
 .lucky-box .lucky-expect-bg {
   height: 100px;
   width: 100px;
@@ -115,6 +122,14 @@ header {
 h3 {
   color: #009999;
   font-weight: 300;
+}
+
+h4 {
+  color: #336600;
+}
+
+.highlight {
+  color: yellow;
 }
 
 body {
