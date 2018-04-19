@@ -49,5 +49,49 @@
     </div>
     <p>Well, thats a problem. What happened? The issue is that anonymous functions <b>change the scope</b>, and as a result, the <b>this</b> keyword no longer refers to the entire class, it now refers to the window, because the function is anonymous. Bummer.</p>
     <p>So, how do we solve this problem? The first, and most common, is to use the arrow notation:</p>
+    <div class="codebox">
+        <p>export class MyClass {</p>
+        <p class="ind1">public myVar:string = 'I need healing!';</p>
+        <p class="ind1">constructor() {</p>
+        <p class="ind2">console.log('This class has been constructed!!!1');</p>
+        <p class="ind1">}</p><br>
+        <p class="ind1 highlight">public logMessage():void {</p>
+        <p class="ind2 highlight">setTimeout(() => {</p>
+        <p class="ind3 highlight">console.log('From the beginning of the logMessage method:', this.myVar);</p>
+        <p class="ind2 highlight">}, 2000);</p>
+        <p class="ind1">}</p>
+        <p>}</p>
+    </div>
+    <p>Result (after 2 seconds pass):</p>
+    <div class="result">
+        <p>From the beginning of the logMessage method: 'I need healing!'</p>
+    </div>
+    <p>So why did this work? Because <b>using the arrow function allows us to retain the scope that we had before.</b> The scope no longer breaks since we didn't use an anonymous function. There is another, less common method, and that is using <b>.bind</b>.</p>
+    <div class="codebox">
+        <p>export class MyClass {</p>
+        <p class="ind1">public myVar:string = 'I need healing!';</p>
+        <p class="ind1">constructor() {</p>
+        <p class="ind2">console.log('This class has been constructed!!!1');</p>
+        <p class="ind1">}</p><br>
+        <p class="ind1 highlight">public logMessage():void {</p>
+        <p class="ind2 highlight">setTimeout(function() {</p>
+        <p class="ind3 highlight">console.log('From the beginning of the logMessage method:', this.myVar);</p>
+        <p class="ind2 highlight">}.bind(this), 2000);</p>
+        <p class="ind1">}</p>
+        <p>}</p>
+    </div>
+    <p>In this example, we use <i>.bind</i> to <b>pass the scope</b> to the anonymous function. This ensures that we retain the scope of the entire class instead of resetting it to the windows. Personallly, I don't see <i>.bind</i> in the wild that often, but you will see arrow notation <b>all the time</b>. Therefore it would be a good idea to familiarize yourself with arrow notation so it becomes second nature.</p>
+    <div class="lucky-box">
+        <div class="lucky-lookat-bg"></div>
+        <p>Can I use the phat arrow in my vanilla Javascript as well?</p>
+    </div>
+    <p>Absolutely. This is part of ES6, so you can use it in vanilla JS as well.</p>
+    <a href="https://tylermcginnis.com/this-keyword-call-apply-bind-javascript/">A very detailed explanation of this, .call, .bind and .apply by Tyler McGinnins</a>
+    <p>Shout out to Ben Reckas for supplying the above link.</p>
+    <footer>
+        <a href="04-classes.html">&lt;&lt; 04 - Classes</a>
+        <a href="index.html">Back to list</a>
+        <a href="">06 - Typing &gt;&gt; </a>
+    </footer>
 </body>
 </html>
