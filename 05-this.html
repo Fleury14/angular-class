@@ -86,12 +86,26 @@
         <p>Can I use the phat arrow in my vanilla Javascript as well?</p>
     </div>
     <p>Absolutely. This is part of ES6, so you can use it in vanilla JS as well.</p>
+    <div class="lucky-box">
+        <div class="lucky-right-bg"></div>
+        <p>I've got one more question that's been bugging me. When do I use <b>this</b> in front of variable names? Also, you need to order more treats.</p>
+    </div>
+    <p>Thats a good question. Check out this example:</p>
+    <img src="img/this-demo-1.jpg" alt="this var demonstration">
+    <p>Check out the variables declared up top with our fancy <i>public</i> keyword. Because we declared then up top like that, <b>they are available to the entire class</b>. That means any method I build inside the class can use that variable, <b>as long as you precede it with the keyword this</b>, like we did in the first console.log of <i>myMethod()</i></p>
+    <p>You can also declare variables the same way you do in Javascript as long as you do it <b>inside a method</b> like we do inside <i>myMethod()</i>. What you gotta remember is that when you declare variables like this, you can only use those variables <strong>inside the method which is was declared in.</strong>. If I made a second method called <i>mySecondMethod()</i>, I wouldn't be able to use the <i>lol</i> variable that I declared inside of <i>myMethod()</i>.</p>
+    <p>When you refer to variables that are declred inside a method, you do not need to use the keyword <i>this</i>, as demostrated in the second console.log.</p>
+    <p>Finally, why do I need to order more dog treats? I just ordered some last weekend.</p>
+    <div class="lucky-box">
+        <div class="lucky-left-bg"></div>
+        <p>...</p>
+    </div>
     <a href="https://tylermcginnis.com/this-keyword-call-apply-bind-javascript/">A very detailed explanation of this, .call, .bind and .apply by Tyler McGinnins</a>
     <p>Shout out to Ben Reckas for supplying the above link.</p>
     <footer>
         <a href="04-classes.html">&lt;&lt; 04 - Classes</a>
         <a href="index.html">Back to list</a>
-        <a href="">06 - Typing &gt;&gt; </a>
+        <a href="06-types.html">06 - Typing &gt;&gt; </a>
     </footer>
 </body>
 </html>

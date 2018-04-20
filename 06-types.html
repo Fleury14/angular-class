@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>06 - Types</title>
+    <link rel="stylesheet" href="css/04style.css">
+</head>
+<body>
+    <header>
+        <h1>Lesson 6 - You Can't Spell Typescript Without Types</h1>
+    </header>
+    <p>As you might imagine, one of the most important things about a language named Typescript is utilizing static typing. This is the act of declaring our variables and methods and making sure we specify exactly what type of data it is going to contain, take in, or return.</p>
+    <h3>Variables</h3>
+    <p>This is probably the easiest example to demonstrate. Take the following example:</p>
+    <div class="codebox">
+        <p>public myVar:string;</p>
+    </div>
+    <p>Here we have declared a variable <i>myVar</i> and given it a type string. If you attempt to assign it a value that is any other type, such as <i>3</i> or <i>false</i>, we will get an error with one exception that a certain dog is sure to remind me later in the lesson. It is important to note that we are not giving the variable an initial value in this example. We can do that if we want:</p>
+    <div class="codebox">
+        <p>public myVar:string = 'I need healing';</p>
+    </div>
+    <p>We have declared the variable <i>myVar</i>, given it a type <i>string</i>, and given it the value: 'I need healing'. One little shortcut to note: If you you give a variable an initial value, the type will automatically be assigned based on the value of the variable. So the following: </p>
+    <div class="codebox">
+        <p>public myNum = 1979;</p>
+    </div>
+    <p>This declares a variable <i>myNum</i>, gives it a value of <i>1979</i>, and automatically assigns it as a type of <i>number</i> because of the value we assigned the variable. This is known as <b>type inference</b>. As you begin your Angular adventure, it is probably a good idea to avoid using type inference to start, but as you get more comfortable with typing everything, feel free to use it.</p>
+    <p>On another note, failing to give a variable a type automatically assigns it the type <i>any</i>. We will see how dangerous this can be in a bit.</p>
+    <h3>Arrays</h3>
+    <p>We can declare an array of a certain type simply by putting [] at the end of the type. Peep this example:</p>
+    <div class="codebox">
+        <p>public myArr:string[];</p>
+    </div>
+    <p>By adding the square brackets [], we have declared that the variable <i>myArr</i> is going to be an array of strings. Similar to variable declaration, please note that this is not assigning any value to this array, we are simply declaring it. If you try to push to this array without initializing it first, you will get an error about trying to apply .push to undefined. You can avoid this simply by giving it an empty value, either at the point of declaration (works, but not ideal), or later in your code where you plan to utilize said array (preferred). Here's both examples:</p>
+    <div class="example">
+        <p>public myArr:string[] = [];</p>
+    </div>
+    <p>OR</p>
+    <div class="example">
+        <p>public myArr:string[];</p>
+        <p>(later in the code INSIDE A METHOD)</p>
+        <p>this.myArr = [];</p>
+    </div>
+    <h3>Methods</h3>
+    <p>We can also use typing to display the input and output of a method as well. Behold this method:</p>
+    <div class="codebox">
+        <p>public someFunkyMethod(<span class="highlight">myVar:string</span>)<span class="highlight">:boolean</span> {</p>
+        <p class="ind1">if (myVar === 'ted') {</p>
+        <p class="ind2">return true;</p>
+        <p class="ind1">} else {</p>
+        <p class="ind2">return false;</p>
+        <p class="ind1">}</p>
+        <p>}</p>
+    </div>
+    <p>Here we are declaring a new method named <i>someFunkyMethod</i>. In the first highlight, we are declaring that it will take in one parameter named <i>myVar</i>, and it <b>has to be a string.</b> If we tried to call it somewhere else and pass in a number, we would get an error. The second highlighted part says that we are declaring that this method will always return a boolean. If we had declared that, but then failed to return a boolean, we would get yet another error.</p>
+    <div class="lucky-box">
+        <div class="lucky-right-bg"></div>
+        <p>Why do I even need to use types in the first place? Can't I make everything "any" and just be on my merry way?</p>
+    </div>
+    <p>Techinically, yes, you can, and it will work, but you would be robbing yourself of one of the main benefits of using Typescript in the first place. Those benefits include</p>
+    <ul>
+        <li>
+            <p>It protects you from yourself. If you accidentally pass a variable of the wrong type, or put an incorrect variable type in a method, you will get the error <b>in development</b>, not in run-time. This means you can prevent bugs in your app before they happen, because your IDE is letting you know ahead of time. Nothing is more annoying than running your app thinking everything is great and then having to go through thousands of lines of code to try to figure out what went wrong. The more errors our IDE gives us while we're coding, the easier it will be to catch bugs before they bite you.</p>
+        </li>
+        <li>
+            <p>It helps your auto-complete inside your IDE. This will become more apparent when we go into creating your own types with interfaces, and will also benefit us when working with classes.</p>
+        </li>
+        <li>
+            <p>It makes our code more readable. We can look at the method and see what its taking and giving our with a little more clarity. Sometimes our variable names aren't descriptive enough, or we didn't write enough comments. Sure, just seeing the typing isn't going to give you instant comprehension of a method, but it definitely helps.</p>
+        </li>
+        <li>
+            <p>We can make our own types too! In fact, let's talk about that.</p>
+        </li>
+    </ul>
+    <h3>Interfaces</h3>
+    <p>An interface is another type of blueprint that allows us to declare our own custom types. We usually keep our interfaces in a seperate file, that itself in is a seperate <i>interfaces</i> folder. Here's an example of an interface I would call <i>Deck.ts</i>:</p>
+    <div class="codebox">
+        <p>interface Card {</p>
+        <p class="ind1">suit: string;</p>
+        <p class="ind1">rank: string;</p>
+        <p>}</p><br>
+        <p>export default Card;</p>
+    </div>
+    <p>I've used an interface to create a new type <i>Card</i>. It is an object that will have two properties: <i>rank</i> and <i>suit</i>, and both must be strings. Thanks to the export command below, we can now import this interface in our other files and utilize this custom class:</p>
+    <div class="codebox">
+        <p>import { Component } from '@angular/core</p>
+        <p>import Card from './../../interfaces/card'</p><br>
+        <p>@Component({</p>
+        <p class="ind1">selector: 'app-myclass',</p>
+        <p class="ind1">templateUrl: './myclass.component.html'</p>
+        <p>})</p><br>
+        <p>export class MyClass {</p>
+        <p class="ind1 highlight">public myCard:Card = {</p>
+        <p class="ind2 highlight">rank: 'K'</p>
+        <p class="ind2 highlight">suit: 'clubs'</p>
+        <p class="ind1 highlight">}</p>
+        <p>}</p>
+    </div>
+    <p>I've created a new variable <i>myCard</i>, and declared it a type <i>Card</i>. Because we gave it a type <i>Card</i>, it <b>must be an object, with properties <i>rank</i> and <i>suit</i> that are both strings.</b> If I tried to assign a value like false or [] or 10, or I made one of the properties a boolean, I'm going to get an error.</p>
+    <p>This can be <b>SUPER</b> important when we start dealing with larger and more complex objects that have lots of properties. Imagine you are creating an app in which everyone has a user profile. We can create an interface to make sure that we store their name, email, password, phone number, address and Overwatch main character. Then when we import that interface and start using it, we can make sure that we don't forget one of those fields because if we do, the IDE will warn us. Creating a custom type <b>helps maintain the integrity of the data we are passing around our application.</b> </p>
+    <p>As an extra added bonus, it also helps our auto-complete. If I refer to a variable of type <i>Card</i> and I push the . to begin to input a property, the autocompleter will give us an option of both <i>rank</i> and <i>suit</i> because it knows those are the properties associated with that interface.</p>
+    <p>Interfaces are awesome. Use them. Now as for the next lesson...</p>
+    <div class="lucky-box">
+        <div class="lucky-expect-bg"></div>
+        <p>Wait! You said earlier that you would talk about that exception when it comes to type values. Is there a way to break our typing?!</p>
+    </div>
+    <p>And here I thought you would forget. Okay, yes, there is a way to break our typing through use of the <i>any</i> type. Let's look at this example:</p>
+    <div class="codebox">
+        <p>public myString:string = 'I still need healing!';</p>
+        <p>public myNum:any = 3;</p><br>
+        <p>public mysteryMethod() {</p>
+        <p class="highlight ind1">this.myString = 3;</p>
+        <p class="class ind1">console.log(this.myString);</p>
+        <p>}</p>
+    </div>
+    <p>So this should make sense: we made a string and gave it a value that is a string, which is cool. We gave a variable of type <i>any</i> a number, which is also cool. And the highlighted text should shoot an error, because we're trying to give a string a number, which is uncool. So let's remove it:</p>
+    <div class="codebox">
+        <p>public myString:string = 'I still need healing!';</p>
+        <p>public myNum:any = 3;</p><br>
+        <p>public mysteryMethod() {</p>
+        <p class="class ind1">console.log(this.myString);</p>
+        <p>}</p>
+    </div>
+    <p>So now, everything should work. What's more important is that if you hover over the variable <i>this.myString</i> in the console.log, VS Code will tell you that the variable is a type String.</p>
+    <img src="img/var-demo-1.jpg" alt="variable demo 1">
+    <p>So now, what happens if we do this?</p>
+    <div class="codebox">
+        <p>public myString:string = 'I still need healing!';</p>
+        <p>public myNum:any = 3;</p><br>
+        <p>public mysteryMethod() {</p>
+        <p class="ind1">this.myString = this.myNum;</p>
+        <p class="ind1">console.log('The value of myString is: ', this.myString);</p>
+        <p>}</p>
+    </div>
+    <p>If you try this in your compiler, not only will it work, but the console log will give you this:</p>
+    <div class="result">
+        <p>The value of myString is: 3</p>
+    </div>
+    <div class="lucky-box">
+        <div class="lucky-why-bg"></div>
+        <p>Whaaaaaaaaaat?!?!</p>
+    </div>
+    <p>I know, right? If you assign a variable as a type <i>any</i>, not only can you put anything into that value, but you can <b>assign the value of that variable to another variable, even it it violates the type</b>. Whoa.</p>
+    <p>You can see how this can be dangerous. You can be expecting a variable to be a number, attempt all kinds of math operations on it, but then it's a string and your function is all messed up. Wanna know whats even crazier? Even after assigning our first variable a value that violated it, typescript <b>still thinks it has the original type</b>.</p>
+    <img src="img/var-demo-2.jpg" alt="variable demo 2">
+    <p>Hopefully, your head hasn't exploded yet. It may be difficult to grasp how this is happening, but the important part to know is that this was all cause by setting one variable to a type <i>any</i> and passing it around. So try to avoid using <i>any</i> wherever you can.</p>
+    <footer>
+        <a href="05-this.html">&lt;&lt; 04 - Classes</a>
+        <a href="index.html">Back to list</a>
+        <a href="">07 - ???? &gt;&gt; </a>
+    </footer>
+</body>
+</html>
