@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/04style.css">
+    <title>04 - Classes</title>
+</head>
+<body>
+    <header>
+        <h1>Lesson 4: Let's Stay Classy</h1>
+    </header>
+    <main>
+        <p>When we work in Angular, it's important to know that all of our code consists of <b>classes.</b> It is very important for us to understand how a class works and what you can and cannot do inside a class.</p>
+        <div class="codebox">
+            <p>export class MyClass {</p>
+            <p>}</p>
+        </div>
+        <p>Here we have a basic empty class. The <b>export</b> keyword means that this code can be imported by another class. Remember that a class is similar to a blueprint; the class by itself will not actually do anything, it has to be assigned (usually to a variable) for it to actually put in work. Let's take a look at some things you would put in a class:</p>
+        <h3>The constructor</h3>
+        <div class="codebox">
+            <p>export class MyClass {</p>
+                <p class="ind1">constructor() {</p>
+                <p class="ind1">}</p>
+            <p>}</p>
+        </div>
+        <p>The constructor is a basic part of every class. Any code inside the parentheses () is used for dependency injection, which we have not gone over yet so don't sweat it. The code inside the curly braces is executed <b>any time the class is created</b>. If you want to put any vanilla Javascript, you can totally do that and it will run as soon as the class is started. Let's add a console.log inside our example to demonstrate:</p>
+        <div class="codebox">
+            <p>export class MyClass {</p>
+            <p class="ind1">constructor() {</p>
+            <p class="ind2">console.log('This class has been constructed!!!1');</p>
+            <p class="ind1">}</p>
+            <p>}</p>
+        </div>
+        <p>In this example, the console.log is executed as soon as the class is created.</p>
+        <h4>SIDE NOTE:</h4>
+        <p>There are other ways to execute code when a class is created that you may have seen. More common is <b>OnInit</b>, less common but still useful is <b>AfterViewInit</b>. We will talk about exactly when this code executes when we discuss lifecycle hooks at a later time, however, for now you will see ngOnInit inside a class very often; just know that the code inside runs each time the class is loaded.</p>
+        <h3>What else is commonly inside a class?</h3>
+        <h4>Variable declaration</h4>
+        <p>You can, and often will, declare variables inside the class. They can be used throughout the entire class. Let's look at an example and examine what's different between declaring a variable inside a class and what you may be used to seeing in JS.</p>
+        <div class="codebox">
+            <p>export class MyClass {</p>
+            <p class="ind1 highlight">public myVar:string;</p>
+            <p class="ind1">constructor() {</p>
+            <p class="ind2">console.log('This class has been constructed!!!1');</p>
+            <p class="ind1">}</p>
+            <p>}</p>
+        </div>
+        <p>Let's start from the beginning: The <i>public</i> keyword before the variable name. Declaring a variable as <i>public</i> means that variable can be accessed outside the class. An example of this would be when we use the interpolation brackets {{ }} to display the value of a variable in our HTML. That <b>only works if the variable is set to public.</b> If you set a variable to <i>private</i> instead of <i>public</i>, you will only be able to use that variable inside that class.</p>
+        <p>So why would you ever use private? Wouldn't it be easier to just set everything to public and not have to worry about whether or not we can use something? While it would indeed be easier on the coding end, by making everything public, you are giving the end user access to information that you would not want them to modify, much less see. A good example would be a password: Is that the kind of information you want the user to get? What if they were able to modify parameters of a game? If I was playing a game where I had a certain amount of lives, and I made that public, whats to preventing me from finding that variable name, going into the console and typing in "lives = 99"?</p>
+        <p>Because of this, a good rule of thumb is to make as much as you can, (especially variables) private unless you absolutely need to.</p>
+        <p>The next part is the name of the variable <i>myVar</i> which is all good but its followed by <i>:string</i>. This is declaring the type of the variable. By making myVar a string, I have declared that it can <b>ONLY</b> contain a string. If I try to assign it a value that is a number, I will get a compliation error.</p>
+        <p>Static typing is super important, something that will get its own lesson very soon. If you fail to give a variable a type, it will default to the type <i>any</i> which, as you may have guessed, can contain anything. For now get in the habit of giving <b>everything</b> a type. You'll thank me later.</p>
+        <h4>Methods</h4>
+        <p>Lets look at an example of a method being declared inside a class:</p>
+        <div class="codebox">
+            <p>export class MyClass {</p>
+            <p class="ind1">public myVar:string;</p>
+            <p class="ind1">constructor() {</p>
+            <p class="ind2">console.log('This class has been constructed!!!1');</p>
+            <p class="ind1">}</p><br>
+            <p class="ind1 highlight">public logMessage(message:string):void {</p>
+            <p class="ind2 highlight">console.log(message);</p>
+            <p class="ind1 highlight">}</p>
+            <p>}</p>
+        </div>
+        <p>You will notice that methods can also be <i>public</i> or <i>private</i>. This is the same as what we talked about with variables: Methods that are public can be access from outside of the class, like from the HTML, or from another class. A private method can only be called inside its own class.</p>
+        <div class="lucky-box">
+            <div class="lucky-left-bg"></div>
+            <p>Hey, this kinda looks like a function. Is that what this is?</p>
+        </div>
+        <p>Yes! A method is a function that is declared inside a class. You may ask yourself, what is the difference between a method and a function?</p>
+        <ul>
+            <li>
+                <p>A method retains the scope of the entire class it is in. So all those variables we declare in the beginning of the class, but outside of the method? We can use them by utilizing the keyword <b>this</b> keyword, which is what the next lesson is all about.</p>
+            </li>
+        </ul>
+        <p>So if you look at the example now we know a method is a type of function that is inside a class, this starts to make more sense. We can see that there is a parameter inside this method, and its taking in a variable <i>message</i> that we have assigned the type string. Therefore, if we tried to run this method by passing in something that wasn't a string, like <i>logMessage(true)</i>, it wouldnt work. We can see inside the curly braces that this method is console logging the result of that variable. So if we call this method, it will log whatever we pass to it in the console.</p>
+        <h3>What can you NOT put inside a class?</h3>
+        You are not allowed to have plain JS inside a class. Anything like a for loop, an if statement, a console.log, none of those will work. So the following will throw an <error:><div class="codebox">
+            <p>export class MyClass {</p>
+            <p class="ind1">public myVar:string;</p>
+            <p class="ind1">constructor() {</p>
+            <p class="ind2">console.log('This class has been constructed!!!1');</p>
+            <p class="ind1">}</p><br>
+            <p class="ind1">public logMessage(message:string):void {</p>
+            <p class="ind2">console.log(message);</p>
+            <p class="ind1">}</p><br>
+            <p class="ind1 highlight">console.log('I am going to cause an error');</p>
+            <p>}</p>
+        </div>
+        <p>Any functional code must be placed inside a method: If you want it to run right away, consider using the constructor or something like <b>OnInit</b>. If you want to control when it runs, put it inside a method that you create. Just know that you can <b>not</b> put that directly inside the class without any context.</p>
+        <div class="lucky-box">
+            <div class="lucky-why-bg"></div>
+            <p>But why?</p>
+        </div>
+        <p>This is a tricky question to answer. Remember that a class itself is just a blueprint; it doesn't actually do anything until we assign that class to a variable. You may have seen something similar in javascript. Behold the following:</p>
+        <div class="codebox">
+            <p>const myDude = {</p>
+            <p class="ind1">name: "J.R.",</p>
+            <p class="ind1">city: "Coarsegold",</p>
+            <p class="ind1">sfvMain: "Laura",</p>
+            <p class="ind1">owMain: "Zarya / Zenyatta",</p>
+            <p class="ind1">logMains: function() { console.log('Mains:', this.sfvMain, this.owMain) }</p>
+            <p>}</p>
+        </div>
+        <p>You may have seen this in Javascript before. We're giving an object properties, either as a string, for as a function inside a property. If I was to throw in a random console.log in there like so:</p>
+        <div class="codebox">
+            <p>const myDude = {</p>
+            <p class="ind1">name: "J.R.",</p>
+            <p class="ind1">city: "Coarsegold",</p>
+            <p class="ind1 highlight">console.log('I AM THE LOG'),</p>
+            <p class="ind1">sfvMain: "Laura",</p>
+            <p class="ind1">owMain: "Zarya / Zenyatta",</p>
+            <p class="ind1">logMains: function() { console.log('Mains:', this.sfvMain, this.owMain) }</p>
+            <p>}</p>
+        </div>
+        <p>That would clearly error, right? Try to keep that in mind when wondering why you cant just throw active code inside a class.</p>
+        <h3>Activating a Class</h3>
+        <p>So all this blueprint stuff doesn't actually mean anything if we don't <b>use</b> it right? So let's look at our example class, with one addition:</p>
+        <div class="codebox">
+            <p>export class MyClass {</p>
+            <p class="ind1 highlight">public myVar:string = 'I need healing!';</p>
+            <p class="ind1">constructor() {</p>
+            <p class="ind2">console.log('This class has been constructed!!!1');</p>
+            <p class="ind1">}</p><br>
+            <p class="ind1">public logMessage(message:string):void {</p>
+            <p class="ind2">console.log(message);</p>
+            <p class="ind1">}</p>
+            <p>}</p>
+        </div>
+        <p>So we have our class called <i>MyClass</i>. The only difference is that in addition to declaring the variable myVar, we gave it a value: 'I need healing!'. So now lets look at a component that will use this class.</p>
+        <div class="codebox">
+            <p>import { Component } from '@angular/core'</p>
+            <p>import MyClass from '../classes/myClass'</p><br>
+            <p>@Component({</p>
+            <p class="ind1">selector: 'app-mycomponent',</p>
+            <p class="ind1">templateUrl: './app-my.component.html'</p>
+            <p>})</p><br>
+            <p>export class MyComponent {</p>
+
+            <p>}</p>
+        </div>
+        <p>So we have our component here. Notice that we imported the class up top. This is a required step, but there's still one more thing we have to do. Don't woerry about the @Component stuff yet, we will get into decorators another time.</p>
+        <p>Remember that a class <b>won't do anything unless we put it inside a variable</b>. So lets do that:</p>
+        <div class="codebox">
+            <p>import { Component } from '@angular/core'</p>
+            <p>import MyClass from '../classes/myClass'</p><br>
+            <p>@Component({</p>
+            <p class="ind1">selector: 'app-mycomponent',</p>
+            <p class="ind1">templateUrl: './app-my.component.html'</p>
+            <p>})</p><br>
+            <p>export class MyComponent {</p>
+            <p class="ind1 highlight">private ourClass:MyClass = new MyClass;</p>
+            <p>}</p>
+        </div>
+        <p>So we've create a new variable named <i>ourClass</i>. We have made it private so that nothing outside of our component can access it. We have given it a type <i>MyClass</i> so that our IDE will be able to help autocomplete our code (and because set a type to things is very important). Finally, we used the <b>new</b> keyword to create a new instance of the class.</p>
+        <p>Remember that I said code inside a constructor is executed as soon as you create that class? By assigning our variable to be a new instance of that class, the code inside the constructor of the class runs <b>automatically</b> so you will have that console.log pop up immediately.</p>
+        <p>Now that we've created an instance of the class, we have access to the variables and methods inside of it, <b>as long as they are set to public</b>. So if I called for the value of <i>ourClass.myVar</i>, its going to look it the class for the value of that variable and find 'I need healing!'</p>
+        <p>We can also use it's methods too: We could call <i>ourClass.logMessage('Arf')</i> and it would execute the method <i>logMessage()</i> that we declared in the class, and we would get a console log displaying "Arf".</p>
+        <h3>Summary</h3>
+        <p>Classes will seem weird at first, but understanding the structure of a class is super important when we start building things in angular. It allows us to create blueprints for cool things that we can construct simply by calling those blueprints with the <b>new</b> keyword. It will take some practice knowing exactly where you can place code, where you can't, and most importantly how it is running, but understanding this is a significant step.</p>
+    </main>
+    <footer>
+        <a href="03-ngfor.html">&lt;&lt; 03 - *ngFor</a>
+        <a href="index.html">Back to list</a>
+        <a href="05-this.html">05 - this &gt;&gt; </a>
+    </footer>
+</body>
+</html>

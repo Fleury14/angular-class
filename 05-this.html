@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>05 - this</title>
+    <link rel="stylesheet" href="css/04style.css">
+</head>
+<body>
+    <header>
+        <h1>Lesson 5 - This and That</h1>
+    </header>
+    <p>The keyword <b>this</b> can be one of the most confusing aspects of Javascript. While I will link a more intricate example at the end of the lesson, it is important to go over how we will use it in our Angular classes, and the importance of the phat arrow => to retain our scope.</p>
+    <h3>Scope with classes</h3>
+    <p>One of the important aspects about classes is that when we declare a variable or method, they are passed the scope of the class, and only the class. This is known as <b>lexical scoping</b>, or also known as <b>static scoping</b>. Lets look at a sample class from earlier:</p>
+    <div class="codebox">
+        <p>export class MyClass {</p>
+        <p class="ind1">public myVar:string = 'I need healing!';</p>
+        <p class="ind1">constructor() {</p>
+        <p class="ind2">console.log('This class has been constructed!!!1');</p>
+        <p class="ind1">}</p><br>
+        <p class="ind1 highlight">public logMessage():void {</p>
+        <p class="ind2 highlight">console.log('From the beginning of the logMessage method:', this.myVar);</p>
+        <p class="ind1">}</p>
+        <p>}</p>
+    </div>
+    <p>You'll see that I changed the method up a bit. Instead of taking in a parameter, the <i>logMessage</i> console logs the value of the variable outside of the method that we declared called <i>myVar</i>. Remember earlier where I mentioned that because our scope is set to the entire class, we can access any method or variable <b>outside of the current method, but still inside the class</b> using the <b>this</b> keyword. If I were to call that method, the result in the console would read:</p>
+    <div class="result">
+        <p>From the beginning of the logMessage method: I need healing!</p>
+    </div>
+    <p>So that's cool, we can use this and call methods and variables that are part of our class. The problem you into into with the scope is that <b>you can break it</b>. Lets change up our example:</p>
+    <div class="codebox">
+        <p>export class MyClass {</p>
+        <p class="ind1">public myVar:string = 'I need healing!';</p>
+        <p class="ind1">constructor() {</p>
+        <p class="ind2">console.log('This class has been constructed!!!1');</p>
+        <p class="ind1">}</p><br>
+        <p class="ind1 highlight">public logMessage():void {</p>
+        <p class="ind2 highlight">setTimeout(function() {</p>
+        <p class="ind3 highlight">console.log('From the beginning of the logMessage method:', this.myVar);</p>
+        <p class="ind2 highlight">}, 2000);</p>
+        <p class="ind1">}</p>
+        <p>}</p>
+    </div>
+    <p>This seems innocent enough. We've added a timeout to give a second delay to the console.log. We used something in JS that you've probably seen before: an <b>anonymouse function</b>. Unfortunately, if we called this method, the result is not what we expect:</p>
+    <div class="result">
+        <p>From the beginning of the logMessage method: undefined</p>
+    </div>
+    <p>Well, thats a problem. What happened? The issue is that anonymous functions <b>change the scope</b>, and as a result, the <b>this</b> keyword no longer refers to the entire class, it now refers to the window, because the function is anonymous. Bummer.</p>
+    <p>So, how do we solve this problem? The first, and most common, is to use the arrow notation:</p>
+    <div class="codebox">
+        <p>export class MyClass {</p>
+        <p class="ind1">public myVar:string = 'I need healing!';</p>
+        <p class="ind1">constructor() {</p>
+        <p class="ind2">console.log('This class has been constructed!!!1');</p>
+        <p class="ind1">}</p><br>
+        <p class="ind1 highlight">public logMessage():void {</p>
+        <p class="ind2 highlight">setTimeout(() => {</p>
+        <p class="ind3 highlight">console.log('From the beginning of the logMessage method:', this.myVar);</p>
+        <p class="ind2 highlight">}, 2000);</p>
+        <p class="ind1">}</p>
+        <p>}</p>
+    </div>
+    <p>Result (after 2 seconds pass):</p>
+    <div class="result">
+        <p>From the beginning of the logMessage method: 'I need healing!'</p>
+    </div>
+    <p>So why did this work? Because <b>using the arrow function allows us to retain the scope that we had before.</b> The scope no longer breaks since we didn't use an anonymous function. There is another, less common method, and that is using <b>.bind</b>.</p>
+    <div class="codebox">
+        <p>export class MyClass {</p>
+        <p class="ind1">public myVar:string = 'I need healing!';</p>
+        <p class="ind1">constructor() {</p>
+        <p class="ind2">console.log('This class has been constructed!!!1');</p>
+        <p class="ind1">}</p><br>
+        <p class="ind1 highlight">public logMessage():void {</p>
+        <p class="ind2 highlight">setTimeout(function() {</p>
+        <p class="ind3 highlight">console.log('From the beginning of the logMessage method:', this.myVar);</p>
+        <p class="ind2 highlight">}.bind(this), 2000);</p>
+        <p class="ind1">}</p>
+        <p>}</p>
+    </div>
+    <p>In this example, we use <i>.bind</i> to <b>pass the scope</b> to the anonymous function. This ensures that we retain the scope of the entire class instead of resetting it to the windows. Personallly, I don't see <i>.bind</i> in the wild that often, but you will see arrow notation <b>all the time</b>. Therefore it would be a good idea to familiarize yourself with arrow notation so it becomes second nature.</p>
+    <div class="lucky-box">
+        <div class="lucky-lookat-bg"></div>
+        <p>Can I use the phat arrow in my vanilla Javascript as well?</p>
+    </div>
+    <p>Absolutely. This is part of ES6, so you can use it in vanilla JS as well.</p>
+    <div class="lucky-box">
+        <div class="lucky-right-bg"></div>
+        <p>I've got one more question that's been bugging me. When do I use <b>this</b> in front of variable names? Also, you need to order more treats.</p>
+    </div>
+    <p>Thats a good question. Check out this example:</p>
+    <img src="img/this-demo-1.jpg" alt="this var demonstration">
+    <p>Check out the variables declared up top with our fancy <i>public</i> keyword. Because we declared then up top like that, <b>they are available to the entire class</b>. That means any method I build inside the class can use that variable, <b>as long as you precede it with the keyword this</b>, like we did in the first console.log of <i>myMethod()</i></p>
+    <p>You can also declare variables the same way you do in Javascript as long as you do it <b>inside a method</b> like we do inside <i>myMethod()</i>. What you gotta remember is that when you declare variables like this, you can only use those variables <strong>inside the method which is was declared in.</strong>. If I made a second method called <i>mySecondMethod()</i>, I wouldn't be able to use the <i>lol</i> variable that I declared inside of <i>myMethod()</i>.</p>
+    <p>When you refer to variables that are declred inside a method, you do not need to use the keyword <i>this</i>, as demostrated in the second console.log.</p>
+    <p>Finally, why do I need to order more dog treats? I just ordered some last weekend.</p>
+    <div class="lucky-box">
+        <div class="lucky-left-bg"></div>
+        <p>...</p>
+    </div>
+    <a href="https://tylermcginnis.com/this-keyword-call-apply-bind-javascript/">A very detailed explanation of this, .call, .bind and .apply by Tyler McGinnins</a>
+    <p>Shout out to Ben Reckas for supplying the above link.</p>
+    <footer>
+        <a href="04-classes.html">&lt;&lt; 04 - Classes</a>
+        <a href="index.html">Back to list</a>
+        <a href="06-types.html">06 - Typing &gt;&gt; </a>
+    </footer>
+</body>
+</html>

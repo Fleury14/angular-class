@@ -135,36 +135,4 @@ h4 {
 .highlight {
   color: yellow;
 }
-
-body {
-  background: linear-gradient(#eee, #ddd);
-  font-family: 'Lato', sans-serif;
-  min-height: 100vh;
-  padding: 0px 30px;
-}
-
-header {
-  color: #600;
-  text-align: center;
-}
-
-h3 {
-  color: #009999;
-  font-weight: 300;
-}
-
-a {
-  color: #009999;
-  text-decoration: none;
-  transition: 0.3s all;
-}
-
-a:hover {
-  color: #00cccc;
-}
-
-footer {
-  display: flex;
-  justify-content: space-between;
-}
-/*# sourceMappingURL=01style.css.map */
+/*# sourceMappingURL=04style.css.map */
