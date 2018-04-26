@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>08 - Angular Files</title>
+    <link rel="stylesheet" href="css/04style.css">
+
+</head>
+<body>
+    <header>
+        <h1>Lesson 8 - Angular File Basics</h1>
+    </header>
+    <h3>Creating a new project</h3>
+    <p>We can use the Angular CLI to create a new project for us with the <b>ng new</b> command. Let's go over the example we used in class and break it down.</p>
+    <div class="example">
+        ng new (yourProjectName) --prefix (your-prefix) --style scss
+    </div>
+    <p>The <i>(yourProjectName)</i> is going to be the name of your project. The CLI will create a new project <b>in a subdirectory of the folder you execute the command in</b>. So if I create a new program called <i>lucky</i> and entered <i>ng new lucky</i> inside my desktop, it will create a folder named <i>lucky</i> inside my desktop.</p>
+    <p>The prefix will assign a small string that the linter will expect us to have on all of our created components. In Angular, we can create components that are represented by a custom HTML tag. For example, I can create a <i>TacoComponent</i> and it would be repesented in the html by the custom tag &lt;taco&gt;. This may seem all good, but what happens when you create an html tag that already exists? Bad things. Also, how would you be able to discern custom html tags from a stock html tag that you simply don't know about?</p>
+    <p>The answer is our prefix. We asign a very short string, usually 2-3 letters, that will be tacked on to the front of our custom html tag. If I set the prefix to <i>jr</i>, then all my custom tags will start with <i>jr-</i>, such as <i>&lt;jr-tacos&gt;</i>. Dont worry so much about <b>how</b> we create those custom tags, we will get to that. Just know that you will have to assign a prefix, and the prefix is assigned here. If you do not set a value, it defaults to <i>app</i></p>
+    <p>The <i>--style</i> tells the compiler what type of css compiling will need to be done, if any. You can leave this blank and just use normal CSS and that's okay, but if you want to use something like Sass or Less, you can totally use that here and not have to worry about compiling your scss into css. No more live sass compilers!</p>
+    <h4>Sassy Side note:</h4>
+    <p>While I cannot speak for Less, since I haven't used it, I highly recommend Sass. If you haven't tried it out before, it is absolutely worth the time, if for no other reason how much easier it is to nest CSS.</p>
+    <a href="https://sass-lang.com/" target="_blank">Check out Sass!</a>
+    <div class="lucky-box">
+        <div class="lucky-lookat-bg"></div>
+        <p>I just made a new project. What are all these files?!?!</p>
+    </div>
+    <p>Yes, there are quite a bit. Let's go over these files. Any files I don't cover that appear in this list you don't have to worry about, as we will not be messing with it inside our class.</p>
+    <h3>OMG FILES</h3>
+    <img class="remove-from-flow" src="img/ang-file-list.jpg" alt="Angular File List">
+    <p>So let's start from the bottom.</p>
+    <h4>tslint.json</h4>
+    <p>This is a json file that allows us to configure the behavior of our linter. This tends to have more semantic options, such as whether or not you prefer single quotes or double quotes, tabs or spaces, etc. It's perfectly okay, and even recommended to tailer the linter to your preferences, but understand that a linter exists mostly to protect you from yourself. Don't make a change simple because you find the warning annyoing, make sure you have a purpose behind the change.</p>
+    <p>Oh, and if you're not familiar with what a linter is, it's what causes those squiggly red lines and warnings inside your IDE.</p>
+    <h4>tsconfig.json</h4>
+    <p>The TS config affects out typescript compiler. It allows us to prevent certain things from happening such as auto-assinging the <i>any</i> type via inference. You shouldn't mess with this for now, but looking at the different compiler options is a good read.</p>
+    <a href="https://www.typescriptlang.org/docs/handbook/tsconfig-json.html" target="_blank">Official TypeScript document on tsconfig.json</a>
+    <h4>readme.md</h4>
+    <p>You may be familiar with this already from dealing with github; This is where the markdown is done that is displayed when you visit a repository. Helpful to give an overview of what is going on if you are writing a larger project, or just a nice summary page for your repo.</p>
+    <h4>package.json</h4>
+    <p>This file is a node staple: It has a list of all dependencies so that when we run <i>npm install</i>, it installs the correct file. You should notice that it has a bunch of angular stuff in there right now.</p>
+    <h4>package-lock.json</h4>
+    <p>This file is more or less a history of your node_modules folder and package.json file. Since we have a ton of packages that come with the angular CLI, I have been advised to simply delete this file, or at the very least gitignore it.</p>
+    <h4>.gitignore</h4>
+    <p>Another git file you may be familiar with, this contains a list of files and folders that git will not track and therefore not push to your repo. If you've ever accidentally pushed a nod_modules folder with a lot of packages, you probably know how useful this can be. The Angular CLi will populate your .gitignore with most of the essentials, but there is one exception I would like to note. You may want to get in the habit of adding your environments folder to your .gitignore. I will go into detail when we get to that folder.</p>
+    <h4>angular-cli.json</h4>
+    <p>This file is our roadmap to start our projects. It has the location of our base html and css files, the location of our main.ts, all our linter configs, and other fun stuff.  You should notice that there is an entry for <i>styles</i> and <i>scripts</i>. If you wanted to add external files such as CDNs for a framework like Bootstrap or Semantic UI, you should do it here.</p>
+    <h4>styles.css</h4>
+    <p>Hey look, a familiar face! If you open up this file, you'll notice that the angular CLI has given us a helpful comment up top to describe this file as it pertains to our project: This is a global styles file. Any component you make inside this project will have access to the classes and stylings inside this file. If you like to write your own helper classes, this is a great place to do it.</p>
+    <h4>main.ts</h4>
+    <p>A quite important file, this contains the instructions to start up our application. While it is nice to know the commands inside to know what it is doing, you are probably never going to change this file. We will go over what this is doing in a little more detail when we go over the structure of our basic application, but it is worth knowing that this file by default will always point to <i>AppModule</i> to start the app.</p>
+    <h4>index.html</h4>
+    <p>Our base HTML file. Unlike the base CSS, we generally don't want to add anything inside the body here other than the root of our application. You can, however, add and edit your metadata here so all those meta tags you would put in a normal static HTML page can go here. Using CDN's here with a link tag will usually have unexpected errors; it is recommended you utilize themm inside the <i>angular-cli.json</i></p>
+    <h4>favicon.ico</h4>
+    <p>The icon that appears next to the page description on the top of your browser.</p>
+    <h3>Environments folder</h3>
+    <p>The environemnts folder, while empty to start other than a production flag, would contain variables that are used globally throughout your application and would change between production and development. If you were developing a MEAN stack app for example and you were utilizing MongoDB, you would probably want to have a local database for you to use for testing, but when it's time for your app to run, you would point the database to your deployment location, such as mlab. It is also commonly used to store keys for services that you would be using that require keys, such as a Twitch API key. Because this file will possibly contain sensitive information such as keys to access private APIs, or database username/passwords, you should almost always git ignore these files, as someone could go into github and find your database or API information. There are actually bots designed to scour all of Github to find this sort of thing, (ironically hosted on github). Whether or not your app uses the variables inside the <i>environemnt.prod.ts</i> or the <i>environemnt</i> will depend on whether or not you use the <i>--prod</i> parameter in your <i>ng build</i> or <i>ng serve</i></p>
+</body>
+</html>
