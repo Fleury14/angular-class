@@ -79,6 +79,13 @@
   transform: rotate(90deg);
 }
 
+.lucky-box .lucky-lay-down-bg {
+  height: 100px;
+  width: 100px;
+  background: url("../img/lucky-lay-down.jpg");
+  background-size: cover;
+}
+
 .example {
   background-color: #336600;
   color: #eee;
