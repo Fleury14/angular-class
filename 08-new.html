@@ -58,5 +58,14 @@
     <p>The icon that appears next to the page description on the top of your browser.</p>
     <h3>Environments folder</h3>
     <p>The environemnts folder, while empty to start other than a production flag, would contain variables that are used globally throughout your application and would change between production and development. If you were developing a MEAN stack app for example and you were utilizing MongoDB, you would probably want to have a local database for you to use for testing, but when it's time for your app to run, you would point the database to your deployment location, such as mlab. It is also commonly used to store keys for services that you would be using that require keys, such as a Twitch API key. Because this file will possibly contain sensitive information such as keys to access private APIs, or database username/passwords, you should almost always git ignore these files, as someone could go into github and find your database or API information. There are actually bots designed to scour all of Github to find this sort of thing, (ironically hosted on github). Whether or not your app uses the variables inside the <i>environemnt.prod.ts</i> or the <i>environemnt</i> will depend on whether or not you use the <i>--prod</i> parameter in your <i>ng build</i> or <i>ng serve</i></p>
+    <h3>Assets folder</h3>
+    <p>This will contain files provided by you to link to in your program. Examples would be image files or sound files.</p>
+    <h1>App folder</h1>
+    <p>This is where our program will go. We'll talk in detail about the structure of the app soon, but let's focus on the first part of this directory, app.module.ts. In fact, it deserves it's own lesson</p>
+    <footer>
+        <a href="07-ngfor2.html">&lt;&lt; 07 - ngFor pt. 2</a>
+        <a href="index.html">Back to list</a>
+        <a href="09-modules.html">09 - Module &gt;&gt; </a>
+    </footer>
 </body>
 </html>
