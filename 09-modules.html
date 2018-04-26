@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>09 - Modules</title>
+    <link rel="stylesheet" href="css/04style.css">
+</head>
+<body>
+    <header>
+        <h1>Angular Modules</h1>
+    </header>
+    <p>Before we dive into our first app.module.ts, let's go over where you may have seen modules before...</p>
+    <h3>ESModules vs Angular Modules</h3>
+    <p>If you've worked in Node at all, you've probably seen the line <i>module.export</i>, or simply import/export. In node, you can have any lines of code in a module and export it. It can be variables, functions, whatever you want. Modules that we create in JS that contain vanilla JS code is usually known as an ESModule, or for older syntax, CommonJS module.</p>
+    <p>Angular modules, on the other hand, are far more specific. They contain a specific set of instructions that will only work in the Angular environment and nowhere else.</p>
+    <p>Think of modules in the angular environment as the specifications for your program. It will list instructions for all the components that are imported, all the other angular modules that we will import, and a whole bunch of other stuff that we haven't gone over yet. Lets take a look at the stock app.module.ts and I will explain what is going on:</p>
+    <h3>An example App.module</h3>
+    <img src="img/app-module-example.jpg" alt="app.module image example">
+    <h4>Imports</h4>
+    <p>On top, I import everything our app is going to use. The reason we do this is to help our program go faster; Sure, Angular could just give us access to everything everywhere, but then it would also have to <b>load everything everywhere</b>. And that would be a bummer. By importing what we need, our app only <b>loads what it needs</b>, ensuring our app runs as fast as possible.</p>
+    <p>Notice that we import both components and modules. It is good practice to organize them accordingly.</p>
+    <h4>The decorator</h4>
+    <p>You will see the decorator on quite a lot of things. This is how we tell our app that this is actually an angular module. Many decorators will require you do pass in information inside the decorator, it's the compilers way of saying, "Okay, you're a module, but what do you actually do? There are some things that modules do that you need to tell me about". So we pass in an object that gives specific instructions for this module.</p>
+    <ul>
+        <li>declarations: This lists all the components this app will use. Since my app only has one component, I only declared one thing. You eventually have more than 1. A lot more.</li>
+        <li>imports: A lot of the angular tools that we get are also in their own modules. My example has <i>FormsModule</i> because I utilize some of the cool tools inside it. <b>Any modules you bring in must be put inside the <i>imports</i> array.</b></li>
+        <li>bootstrap: This is declaring what component is going to initially be displayed when you start your application. You may see that it's in an array and think that you can bootstrap multiple components to display more than one. You can, but in my (limited) experience, I've never had to. Also worth of mention is that since there is only one starting point to our application, <b>you only bootstrap once</b> (YOBO?).</li>
+    </ul>
+    <h4>Export</h4>
+    <p>Lastly, we export our class. We do this in every class, otherwise, no one can import it.</p>
+    <div class="lucky-box">
+        <div class="lucky-left-bg"></div>
+        <p>Wow, your MS paint skills are terrible.</p>
+    </div>
+    <p>Well then, get ready for more.</p>
+    <h3>The chain of how our app is working.</h3>
+    <img src="img/ang-tree.jpg" alt="angular tree example">
+    <p>Here's an example of the flow of our app.</p>
+    <ul>
+        <li>The compiler starts at the <i>angular-cli.json</i> which holds the location of our main.ts</li>
+        <li>The main.ts file has the instructions for our startup which says what module will be <b>bootstrapped</b>, aka run when the program starts</li>
+        <li>Our AppModule, which has already imported all of our fun components and modules now needs to declare which component is shown on startup, which as we saw above is handled in the <b>bootstrap</b> property of our decorator array.</li>
+        <li>Since we bootstrapped AppComponent, that is the component that displays. Which is what shows up in the stock Angular application.</li>
+    </ul>
+    <h3>Conclusion: Practice</h3>
+    <p>This kind of program flow may seem foreign to you at first. The best way to pick this up is to build the important parts yourself. We haven't gone over what exactly goes in our components, so you won't be able to do that just yet (That's actually in the next lesson), but once we do, I cannot stress enough how important it is to <b>practice putting our base components together</b>. It truly is the best way to learn. You'll be seeing this reminder quite a bit.</p>
+    <footer>
+        <a href="08-new.html">&lt;&lt; 08 - ng new</a>
+        <a href="index.html">Back to list</a>
+        <a href="">10 -Components &gt;&gt; </a>
+    </footer>
+</body>
+</html>
