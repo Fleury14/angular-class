@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>12 - Interfaces</title>
+    <link rel="stylesheet" href="css/04style.css">
+</head>
+<body>
+    <header>
+        <h1>Lesson 12 - Building Our Navbar</h1>
+    </header>
+    <p>We have a navbar that we want to create, but we want our navbar to build dynamically. To do this, we will have to build our navbar as an array of objects with each navigation item being an object.</p>
+    <p>Lets talk about that for a second, you might be thinking, 'Why would we even need to do that? Can't I just type out my anchor tags manually?'. And sure, you can do that, but what happens when you want to change up what is on the nav bar? We don't wanna do that in vanilla JS, that would be a pain in the butt. Instead, if we utilize ngFor as we've seen from the card picker exercise, if our array of navigation items changes, our navbar will <b>change automatically with it</b>. This means no reloading, no redrawing, we can just use <i>*ngFor</i> on our array of navigation items and then not have to worry about anything else on the front end.</p>
+    <p>That alone justifies the need for an array, but remember that each navigation item will have two important properties: a destination that would go inside the <i>href</i> of our anchor tag, and a title to display to the end user. Because each navigation item has two properties, we have to use an object.</p>
+    <h3>Interfaces</h3>
+    <p>Remember that in Typescript we want to type things as much as possible to maintain the integrity of our code. We can create custom types utilizing <b>interfaces</b>. This creates a contract (not like Ghost Rider), that allows us to not only create custom types, but will make our IDE enforce those types as well. </p>
+    <p>Lets look at our navigation items. We know that each item will have a title, and a link to its page. Those will be both strings, so lets write our interface as such.</p>
+    <div class="codebox">
+        <p>export interface NavigationItem {</p>
+        <p class="ind1">title: string;</p>
+        <p class="ind1">link: string;</p>
+        <p>}</p>
+    </div>
+    <p>Two things to note here: First, unlike traditional object declarations, note that we are seperating our properties with a semicolon ( ; ). Secondly, you might b...</p>
+    <div class="lucky-box">
+        <div class="lucky-expect-bg"></div>
+        <p>Where do I put this file, and what do I name it?</p>
+    </div>
+    <p>That was going to be my second point. It is a good idea to have all your interfaces in a seperate folder away from your components called <i>interfaces</i>. The reason you want to keep them seperate is that one interface can and often will be used across several components, soit makes more sense to have one point of reference for all our interfaces.</p>
+    <p>In out example, we will name it <i>NavigationItem.ts</i></p>
+    <a href="https://www.typescriptlang.org/docs/handbook/interfaces.html">Official Typescript guide to interfaces</a><br>
+    <a href="https://angular.io/guide/styleguide#interfaces">Best practices with interfaces by John Papa</a>
+    <h3>Putting our Interface to Use</h3>
+    <p>Now that we have our interface, lets utilize it. Since this will be built in our Navigation component, we go to our <i>navigation.component.ts</i>. We import our interface to give us access to the custom type, and declare our array of navigation items. Here is the final result:</p>
+    <!-- IMAGE HERE-->
+    <p>So we've got our array of navigation items, now we want to iterate over this array in the html to display it dynamically. I hinted earlier what we use to accomplish this: <b>*ngFor</b>. Try getting this array to display on your own before reading on and seeing the answer.</p>
+    <p>Let's say our navlist is going to compose of list items <b>(li)</b>, that will be part of an unordered list <b>(ul)</b>. Those list items should be iterations of our array that we named navArray.</p>
+    <p>So we want to use <b>*ngFor</b> on our <i>li</i> tags since that's what we want repeated. We want to get iterations <b>of navArray</b>, so our for statement should read <b><i>let item of navArray</i></b>. We want a link for each of those items that will send us to the right page and we want to accurately display the title. Here is the final result of our html.</b></p>
+    <div class="codebox">
+        <p>&lt;div&gt;</p>
+        <p class="ind1">&lt;ul&gt;</p>
+        <div class="ind2">&lt;li *ngFor="let item of navArr"&gt;</div>
+        <p class="ind3">&lt;a href="{{item.link}}"&gt; {{ item.string }} &lt;/a&gt;</p>
+        <div class="ind2">&lt;/li&gt;</div>
+        <p class="ind1">&lt;/ul&gt;</p>
+        <p class="ind1">&lt;app-login&gt;&lt;/app-login&gt;</p>
+        <p>&lt;/div&gt;</p>
+    </div>
+    <p>And there ya go. Now our navbar is built dynamically according to the contents of the array <i>myArr</i>. Feel free to style your navbar however you like, as we will be introducing routing next.</p>
+    <footer>
+        <a href="11-newcomp.html">&lt;&lt; 11 - New Components</a>
+        <a href="index.html">Back to list</a>
+        <a href="">13 - ??? &gt;&gt; </a>
+    </footer>
+</body>
+</html>
