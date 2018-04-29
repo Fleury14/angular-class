@@ -96,11 +96,14 @@
   background-color: #006666;
   color: #eee;
   padding: 10px;
-  font-size: 10px;
 }
 
 .result p {
   margin: 3px;
+}
+
+.font-10 {
+  font-size: 10px;
 }
 
 a {

@@ -14,8 +14,38 @@
     <p>We have our stock app that was created using <b>ng-new</b>. Let's go over the process of creating some more components and starting creating our tree.</p>
     <h3>Our Goal</h3>
     <img src="img/component-map.jpg" alt="new components goal">
+    <h3>Creating the Welcome Component</h3>
     <p>We will create a Welcome component and a navigation component that will be direct children of the App component, and then a Login component that is a child of the Navigation component. Let's focus on creating the welcome component first.</p>
     <img src="img/new-component-files.jpg" alt="new component files">
-    <p>First things first, we created our files in a new folder. You should <b>never have files for multiple components in the same folder</b>. This is also a good place to mention </p>
+    <p>First things first, we created our files in a new folder. You should <b>never have files for multiple components in the same folder</b>. We have our TS file that will contain our component instructions, and the HTML and style sheet that we will link to.</p>
+    <p>Let's make sure our HTML has something in it so we can make sure our component is displaying correctly.</p>
+    <p><i>welcome.component.html</i></p>
+    <div class="codebox">
+        <p>&lt;h2&gt;This is my welcome component&lt;/h2&gt;</p>
+    </div>
+    <p>Now that we have our html all set, let's start building our our component instructions inside the TS file. Refer to the <a href="10-components.html">previous lesson</a> if you need a refresher on all the pieces.</p>
+    <p>We start with our imports. We definitely need <i>Component</i> from @angular/core, since that gives us access to our decorator. Therefore, our <i>welcome.component.ts</i> starts as so:</p>
+    <div class="codebox">
+        <p>import { Component } from '@angular/core';</p>
+    </div>
+    <p>Importing Component will now give us access to the <i>@Component({})</i> decorator, so let's use it. Remember that we designate the custom tag with the <i>selector</i> property, and link our html and style sheets with the <i>templateUrl</i> and <i>styleUrls</i> properties respectively.</p>
+    <div class="codebox">
+        <p>import { Component } from '@angular/core';</p><br>
+        <p>@Component({</p>
+        <p class="ind1">selector: 'app-welcome',</p>
+        <p class="ind1">templateUrl: './welcome.component.html',</p>
+        <p class="ind1">styleUrls: ['./welcome.component.css']</p>
+        <p>})</p>
+    </div>
+    <p>With our files linked, we need to create our class and export it.</p>
+    <div class="codebox">
+        <p>import { Component } from '@angular/core';</p><br>
+        <p>@Component({</p>
+        <p class="ind1">selector: 'app-welcome',</p>
+        <p class="ind1">templateUrl: './welcome.component.html',</p>
+        <p class="ind1">styleUrls: ['./welcome.component.css']</p>
+        <p>})</p><br>
+        <p>export class WelcomeComponent { }</p>
+    </div>
 </body>
 </html>
