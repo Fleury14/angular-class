@@ -48,8 +48,9 @@
         <p>export class WelcomeComponent { }</p>
     </div>
     <p>With our component made, we have two things left two do. Your VS Code may already be warning you about one of them: we need to add this component to our app.module. Remember that the app module will contain instructions for everything used on our app, so we will need to add our component by importing it and adding to the declarations.</p>
+    <img src="img/new-component-module.jpg" alt="app module example">
     <p>We've created our component, enabled it for use in the module, but we have one last step. We have to place our component somewhere in order to display it. But where does it go? How do we place the component?</p>
-    <p>If you look at our goal, you can see that the welcome component <b>is a child</b> of the AppComponent, so we will be putting our component in there. But what do we put? Was there something in our component instructions that designated how we call it? You may have guessed it: <b>it's what we put in that components decorator under <i>selector.</i></b> In this components case, it is <i>app-welcome</i>. Therefor our <i>app.component.html</i> should look like this.</b></p>
+    <p>If you look at our goal, you can see that the welcome component <b>is a child</b> of the AppComponent, so we will be putting our component in there. But what do we put? Was there something in our component instructions that designated how we call it? You may have guessed it: <b>it's what we put in that components decorator under <i>selector.</i></b> In this components case, it is <i>app-welcome</i>. Therefore our <i>app.component.html</i> should look like this.</b></p>
     <div class="codebox">
         <p>&lt;div&gt;</p>
         <p class="ind1">&lt;app-welcome&gt;&lt;/app-welcome&gt;</p>
