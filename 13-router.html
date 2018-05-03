@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>13 - Router</title>
+    <link rel="stylesheet" href="css/04style.css">
+</head>
+<body>
+    <header>
+        <h1>Lesson 13 - Routing</h1>
+    </header>
+    <p>Now that we've got down how to build a component, let's start building a super basic router.</p>
+    <h3>Angular Routing vs Links</h3>
+    <p>Before we do that, lets talk about what's different when it comes to using an Angular router. In a standard page, when you click on an href, the entire DOM reset and you load the page from scratch. This would be really bad for our application since when you load up an Abgular app on the browser, it is downloading <b>the entire app</b>. But when we use the Angular router properly, a link does not reboot the whole application. Instead it only loads what it needs to load. This gives us a huge benefit because now posting different links doesn't come with the same overhead that a standard page does.</p>
+    <p>Instead of thinking that a link takes you to a whole new page, it is a good idea for now to think as a link in router specifying <b>what component you want to load</b>. Furthermore, one of the nice parts about the router as we will see, is that <b>you can control where you want that component to appear.</b></p>
+    <h4>Preparing for our routes</h4>
+    <p>Since we're going to create a route that will display several different components, we need to create some more components. In class, we have an ErrorComponent (or FourOhFourComponent) and an AboutComponent.</p>
+    <h4>Editing our navbar to make a little more sense:</h4>
+    <p>Let's update our array of Navigation items to account for the routes we will be making. We want a link to our Welcome and About Component, and lets throw a link to the error page as well. We can remove it later. This is the final result:</p>
+    <img src="img/13-nav-array.jpg" alt="nav array example">
+    <p>You may notice that we are not adding <i>.html</i> in our link. This should reinforce the idea that <b>we are linking components, not entire pages</b></p>
+    <h3>Creating our Route Path</h3>
+    <p>So to create our route information, we will have to go into <i>app.module.ts</i>. First things first, we will have to import some new stuff. We will be importing <i>RouterModule</i> that will contain all of our Angular routing tools. The second item we will be importing is the interface <i>Route</i> that allow us to create a Route type. import both of these by placing the following line on the top of your app.module.ts:</p>
+    <div class="codebox">
+        <p>import { RouterModule, Route } from '@angular/core';</p>
+    </div>
+    <p>Do you remember where modules go inside our decorator in app.module?</p>
+    <div class="lucky-box">
+        <div class="lucky-sleep-bg"></div>
+        <p>zzzz...</p>
+    </div>
+    <p>Well, he's not much help. The correct answer is in the <b>imports</b> section of our AppModule. Adding <i>RouterModule</i> by itself is not enough, however, we need to tack on <i>forRoot()</i> immediately after. This tells the router module what kind of routes you are declaring. <b>You should always have one .forRoot, and only one.</b> When we create sub routes later on, we will get into <i>.forChild()</i>.</p>
+    <p>But as you type that in, you may notice that your linter is mad; it wants you to pass something in there, and if you hover over it, you'll notice it wasnts something of type <i>Route[]</i>. It wants an array of routes? Let's give it to.. it..</p>
+    <p>Above your decorator but below our imports is where we will declare our routes. Let me get you started and I'll explain whats going on:</p>
+    <div class="codebox">
+        <p>const routes:Route[] = [{</p>
+        <p class="ind1">path: 'welcome',</p>
+        <p class="ind1">component: WelcomeComponent</p>
+        <p>},{</p>
+        <p class="ind1">path: 'about',</p>
+        <p class="ind1">component: AboutComponent</p>
+        <p>}]</p>
+    </div>
+    <p>Let's break this down. We are declaring a variable named <i>routes</i> that is an array of type <i>Route</i>. This means that RouterModule will be happy when we pass it in. Thie array consists of objects and we are giving it the following properties:</p>
+    <ul>
+        <li><b>path:</b> This is checking the address bar to make sure the url is matching. So if someone links us to 'welcome' then we will activate this route. Note that we do not need the <b>/</b> character in front because we are already declaring this as our root route (say that 10 times fast).</li>
+        <li><b>component:</b> The compnent to be displayed if the <p>path</p> is a match. Since this is going to 'welcome', we want to display our welcome component, which is what we put in.</li>
+    </ul>
+    <p>We then repeat the process for about. So at the end of this, if the path is 'welcome', our welcome component is displayed. If that path is 'about', then the about component is displayed. Great!</p>
+    <p>But we're not stopping there. What if someone simply navigates to our app without a path. We can redirect them to the welcome component like so:</p>
+    <div class="codebox">
+        <p>const routes:Route[] = [{</p>
+        <p class="ind1">path: 'welcome',</p>
+        <p class="ind1">component: WelcomeComponent</p>
+        <p>},{</p>
+        <p class="ind1">path: 'about',</p>
+        <p class="ind1">component: AboutComponent</p>
+        <p>},{</p>
+        <p class="ind1 highlight">path: '',</p>
+        <p class="ind1 highlight">redirectTo: 'welcome',</p>
+        <p class="ind1 highlight">pathMatch: 'full',</p>    
+        <p>}]</p>
+    </div>
+    <p>A few things to go over here: We are specifying this path as being empty. Think of this as the difference between <i>localhost:4200</i> and <i>localhost:4200/welcome</i>. Also important is that in the <i>redirectTo</i> property, we are not telling it what Component to display, but the path we want to.. redirect to... hence the name. <i>pathmatch</i> ensure that our path match is exact.</p>
+    <div class="lucky-box">
+        <div class="lucky-right-bg"></div>
+        <p>But what if I go to somewhere that isn't <i>welcome</i> or <i>about</i>? What if I go to <i>treats</i> or <i>toys</i>?</p>
+    </div>
+    <p>Oh, now you're up. Fortunately, that is a good question. We can create what is called a <b>catch-all</b> that will select what component is displayed if none of the other match. We do that like so.</p>
+    <div class="codebox">
+        <p>const routes:Route[] = [{</p>
+        <p class="ind1">path: 'welcome',</p>
+        <p class="ind1">component: WelcomeComponent</p>
+        <p>},{</p>
+        <p class="ind1">path: 'about',</p>
+        <p class="ind1">component: AboutComponent</p>
+        <p>},{</p>
+        <p class="ind1 highlight">path: '',</p>
+        <p class="ind1 highlight">redirectTo: 'welcome',</p>
+        <p class="ind1 highlight">pathMatch: 'full',</p>
+        <p>},{</p>
+        <p class="ind1 highlight">path: '**',</p>
+        <p class="ind1 highlight">component: ErrorComponent,</p>    
+        <p>}]</p>
+    </div>
+    <p>The <b>**</b> acts as a <b>wildcard</b> that effectively calls everything. Now you may be thinking, "If that route catches everything, won't all our components go to ErrorComponent?". The answer lies in how the routes are read, angular will check the routes <b>from the top down</b>. Here's an illustration if we tried to go to <i>treats</i>:</p>
+    <div class="codebox">
+        <p class="highlight-red">(User goes to localhost:4200/treats)</p>
+        <p class="highlight-red">(Start checking from the top)</p>
+        <p>const routes:Route[] = [{</p>
+        <p class="ind1">path: 'welcome', <span class="highlight-red">(Is the path 'welcome'?)</span></p>
+        <p class="ind1">component: WelcomeComponent <span class="highlight-red">(No, on the the next...)</span></p>
+        <p>},{</p>
+        <p class="ind1">path: 'about', <span class="highlight-red">(Is the path 'about'?)</span></p>
+        <p class="ind1">component: AboutComponent <span class="highlight-red">(No, on the the next...)</span></p>
+        <p>},{</p>
+        <p class="ind1 highlight">path: '', <span class="highlight-red">(Is the path blank?)</span></p>
+        <p class="ind1 highlight">redirectTo: 'welcome', <span class="highlight-red">(No, on the the next...)</span></p>
+        <p class="ind1 highlight">pathMatch: 'full',</p>
+        <p>},{</p>
+        <p class="ind1 highlight">path: '**', <span class="highlight-red">(Is the path anything?)</span></p>
+        <p class="ind1 highlight">component: ErrorComponent, <span class="highlight-red">(Yes! Display ErrorComponent.)</span></p>    
+        <p>}]</p>
+    </div>
+    <p>So now that we've got our array, we have to pass it into the routerModule. Since we name our route array <i>routes</i>, we put <i>routes</i> inside the routerModule inside our imports like so: <i>routerModule.forRoot(routes)</i></p>
+    <p>Here's a screenshot of the final result:</p>
+    <img src="img/13-app-module.jpg" alt="app module">
+    <h3>Utilizing routerLink</h3>
+    <p>So we've made our route, now we have to make sure our links are taking advantage of the angular router and not using href which would reload the whole page. Lets head on over to our navigation component where the links lie. You'll notice that we were using href before. Lets use the Angular property <b>routerLink</b> instead.</p>
+    <div class="codebox">
+        <p>&lt;div&gt;</p>
+        <p class="ind1">&lt;ul&gt;</p>
+        <div class="ind2">&lt;li *ngFor="let item of navArr"&gt;</div>
+        <p class="ind3 highlight">&lt;a [routerLink]="item.link"&gt; {{ item.string }} &lt;/a&gt;</p>
+        <div class="ind2">&lt;/li&gt;</div>
+        <p class="ind1">&lt;/ul&gt;</p>
+        <p class="ind1">&lt;app-login&gt;&lt;/app-login&gt;</p>
+        <p>&lt;/div&gt;</p>
+    </div>
+    <p>By using <i>routerLink</i>, we are telling this link that it will now adhere to the Angular router. Also note that since we used an Angular property (i.e. we wrapped it in the [] square brackets), we no longer need to use the interpolation brackets {{ }} to use our variable name. Angular properties are cool with variables.</p>
+    <h3>One Last Step</h3>
+    <p>Recall that I had mentioned earlier that we think of links in Angular not as what page to load, but what component to load, and that we would be talking about where to display said component. Now is that time; as of right now, the router knows <b>what</b> component to display, but doesn't know <b>where</b> to put the result. That is what <b><i>&lt;router-outlet&gt;&lt;/router-outlet&gt;</i></b> is for.</p>
+    <p>Where do you put it? Good question, where do we want the result of our link displayed? Inside the AppComponent underneath the Navigation component. So go into your <i>app.component.html</i> and it should look like this:</p>
+    <img src="img/13-app-component.jpg" alt="app component">
+    <h3>We did it!</h3>
+    <p>Save our app, click on the links, and watch the magic happen! Here's a chart explaining how the architecture works:</p>
+    </body>
+</body>
+</html>
