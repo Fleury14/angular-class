@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>16 - Room Service</title>
+    <link rel="stylesheet" href="css/04style.css">
+</head>
+<body>
+    <header>
+        <h1>Lesson 16 - Room Service! Room Service!</h1>
+    </header>
+    <p>Earlier we used an interface to guide us through creating an array of navigation items. This time we want to create an array of rooms that will contain all the data necessary for each room in our room reservation app.</p>
+    <h3>Creating our Room Interface</h3>
+    <p>This part should be relatively easy. Create a file in your interfaces folder (you can decide whether or not you want to use the I prefix or not). You interface should look like this.</p>
+    <div class="codebox">
+        <p>export interface Room {</p>
+            <p class="ind1">id: string;</p>
+            <p class="ind1">title: string;</p>
+            <p class="ind1">picture: string;</p>
+        <p>}</p>
+    </div>
+    <p>Now we've created a type <i>Room</i> and anything using that type must have an id, a title, and a picture, all strings.</p>
+    <h3>Creating our Room Service</h3>
+    <p>We saw in the last lesson how we can inject services into our components to give us access to all their method/variables. This time, we're going to create our own service, and it will consist of a list of rooms that we will be taking reservations for.</p>
+    <p>The reason we want to keep the rooms array in a service as opposed to the roomm component is a great illustration about one of the awesome things about service: </p>
+    <ul>
+        <li>You can inject the same service into multiple components.</li>
+        <li>The values inside the service are retained through each component.</li>
+    </ul>
+    <p>This concept might be a little weird, but lets say in a service I have a variable called <i>numOfRooms</i> and it's set to 5. Now let's say I have multiple components each injecting that service. If they each pulled the <i>numOfRooms</i>, they would each get 5. Makes sense.</p>
+    <p>Now let's say one of our components does something to the value of numOfRoom and changes it to 4. Now <b>every component</b> that injects the service would get 4 if they called that value, not just the component making the change. Moral of the story: Components <b>share the same values amongst each other</b>, and the ability to do so is why a service is referred to as a <b>singleton</b>. This is one of the main differences between injecting a service and calling a new instance of a class like we did with the card picker.</p>
+    <div class="lucky-box">
+        <div class="lucky-lookat-bg"></div>
+        <p>Please tell me we don't have another MS paint chart coming...</p>
+    </div>
+    <p>Thought you'd never ask!</p>
+    <img src="img/16-service-chart.jpg" alt="service chart">
+    <p>Hopefully this illustrates the point a little better.</p>
+    <p>Now then, create a folder called <b>services</b> inside your <b>src</b> folder. Remember that since services aren't tied down by just one component, we want to keep them in a seperate folder. Create a file named <b>room.service.ts</b>. </p>
+    <p>The first thing we have to do is import a package called <b>Injectable</b> from @angular/core. Similar to Component and NgModule, this is what tells our compiler that the service is an <i>injectable</i>, i.e. we can inject it into other components.</p>
+    <div class="code-box">
+        <p>import { Injectable } from '@angular/core';</p>
+    </div>
+    <p>You will need to import our room interface that we just made. If you want to wait and let the VS code auto import it for you later, have at it.</p>
+    <p>Just like components and modules, we do need to put a decorator in. It is <b>@Injectable()</b>, and is empty.</p>
+    <h4>Angular 6 note:</h4>
+    <p>If you have Angular 6, <b>and only if you have angular 6</b>, you may have to put something inside your decorator. It would look like this:</p>
+    <div class="codebox">
+        <p>@Injectable({</p>
+        <p class="ind1">providedIn: 'root'</p>
+        <p>})</p>
+    </div>
+    <p>This tells the compiler where the service will be provided, which is explained in more detail below. If you are on older versions of the angular/cli, this may not work for you.</p>
+    <h3>Our Array of Rooms</h3>
+    <p>You should be familiar with this process: You want to create a public array of rooms, of type Room[], and then populate it with some rooms, making sure that we stick to the interface format that we declared earlier. Here is the final result of my service.</p>
+    <img src="img/16-room-service.jpg" alt="room service">
+    <h3>Providing our service</h3>
+    <p>There's one last thing we have to do. If we ran this code and tried to use this service we made, we would get an error saying that there was no <b>provider</b> listed for the service. Time to take another trip to our <i>app.module.ts</i>. In addition to our <i>declarations, imports, and bootstrap</i>, we now need to include an array for <i>providers</i>. Include your RoomService here (don't forget to import it up top!). Here's how mine looks:</p>
+    <img src="img/16-app-module.jpg" alt="app module">
+    <h4>Our app module is getting quite beefy</h4>
+    <p>It sure is. Even with our relatively small app, you can see how we already have quite a few thing in our app module. And as we add things, it's only going to get beefier. Keep this in mind as down the road we are going to refactor our code to try to de-beef our module.</p>
+    <h3>Service complete!</h3>
+    <p>We've made our service, and it now being provided. We can now inject this bad boy into any component we want. Our next goal is to add to our nav bar to include the rooms in our array. This was our class assignment and will be covered... in the next lesson!</p>
+    <footer>
+        <a href="15-param-map.html">&lt;&lt; 15 - ParamMap</a>
+        <a href="index.html">Back to list</a>
+        <a href="17-navbar-update.html">17 - Navbar Update &gt;&gt; </a>
+    </footer>
+</body>
+</html>
