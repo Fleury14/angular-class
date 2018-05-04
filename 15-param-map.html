@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>15 - Parammap</title>
+    <link rel="stylesheet" href="css/04style.css">
+</head>
+<body>
+    <header>
+        <h1>Lesson 15 - ParamMap: Introduction to Observables</h1>
+    </header>
+    <p>We were able to utilize parameters in our routes <a href="14-route-params.html">last lesson</a> but now we need to do something with it. Let's start by displaying the parameter on the screen.</p>
+    <h3>Importing our Activated Route Service</h3>
+    <p>You may recall that by importing Angular modules, it gives us access to a whole bunch of cool tools (that rhymed!) that we can use in our app. And one of those modules that we imported earlier was <i>RouterModule</i>. We are going to use one of those tools right now: <b>ActivatedRoute</b></p>
+    <p>ActivatedRoute is a service that is brought in through RouterModule. Now services are a whole other topic that we <b>will absolutely get to</b> but for right now, focus on the following things</p>
+        <ul>
+            <li>A service is something that we can inject into our component. We do so in the constructor</li>
+            <li>Injecting that service gives us access to all the methods inside that service</li>
+        </ul>
+    <p>There's more to it than that, of course, but for now, focus on that.</p>
+    <p>So we want this ActivatedRoute service, so first we have to import it. Let's go into our <i>room.component.ts</i> and add the following line up top:</p>
+    <div class="codebox">
+        <p>import { ActivatedRoute } from '@angular/router';</p>
+    </div>
+    <p>Sweet, we imported it, now we need to <b>inject it.</b> Remember that <b>all services need to be injected inside the parentheses of a constructor.</b> We assign it both a private/public designation (with services, you are almost always going to make it private), and a variable name. We give it a variable name so we have something to refer to it by later. Finally, we designate the service we are injecting by assigning the variable to be that type.</p>
+    <p>That was a juicy sentence. Let's see it in action:</p>
+    <div class="codebox">
+        <p>constructor (private _actRoute: ActivatedRoute) {}</p>
+    </div>
+    <p>There we go. We made our service private, gave it the variable name <i>_actRoute</i>, and gave it a type <i>ActivatedRoute</i> so it knows what service we're bringing in.</p>
+    <p>Whew! We got our service, now lets do something with it inside the curly braces of our constructor. Buckle up.</p>
+    <h3>Utilizing our newly injected service</h3>
+    <p>So we've now designated our service in the variable <i>_actRoute.</i> Go inside the curlybraces {} of our constructor and start to type in the variable: </p>
+    <img src="img/15-act-route-ss.jpg" alt="activated route screenshot">
+    <p>Cool, we can see a whole bunch of methods that have to do with our current route. The one we are looking for is paramMap. But we cannot simply get the value, because <i>paramMap</i> is an observable.</p>
+    <h4>What is an observable?</h4>
+    <p>An observable is a piece of <b>rxjs</b>. An observable is <b>subcribed</b> to by an observer. Then when the observable emits information, the observer can do something with it.</p>
+    <p>Think of an observable as an event listener for variables. In JS we add an eventListener, and we can tell JS to execute certain code when that event is triggered. Observables work in a similar fashion. We subscribe to it, and we declare a function inside that subscription which runs whenever the observable emits information.</p>
+    <p>You may be thinking as a follow up to that, "When does an observable emit that information? When will my code run?". The answer varies depending on the observable, but most will run the code at least once when you subscribe to it. For paramMap, it also triggers <b>any time there is a change in the data</b>, which in our case would be the parameter. We will talk more about when observable emit later on when we starting getting data from a database.</p>
+    <p>Enough of me talking, lets look at see what that data looks like. Your constructor should look like so.</p>
+    <div class="codebox">
+        <p>constructor (private _actRoute: ActivatedRoute) {</p>
+        <p class="ind1">this._actRoute.paramMap.subscribe( paramResponse => {</p>
+        <p class="ind2">console.log(paramResponse);</p>
+        <p class="ind1">});</p>
+        <p>}</p>
+    </div>
+    <p>Get familiar with this syntax, because you'll see it quite a bit. We call the <b>paramMap</b> method of the service we injected earlier. Since its an observable, we have to subscribe to it.</p>
+    <p>We know from eralier that an <b>observable will emit information</b>, so we passed that data into a function using phat arrow notation. We gave the data a variable name <i>paramResponse</i> and now we want to console.log it when the observable send us information.</p>
+    <p>Let's check it out. Navigate to <b>localhost:4200/room/1</b> in our app by typing it in the navbar, and check out your console. You should see the following:</p>
+    <img src="img/15-param-response.jpg" alt="param map response">
+    <p>Sweet! We can see that the response is giving us the paramater and its stored as the property "id". It's called id because <b>that's the name we gave that our paramter in our route array.</b></p>
+    <p>So we can see it, but how do we get it? Believe it or not, the response you get has its own methods too (brain explodes). Don't expect to know every method for every type of observable that you deal with, but if you use your intellisense on the paramResponse, you'll see a list: </p>
+    <img src="img/15-response-ss.jpg" alt="response intellisense">
+    <p>Awesome, we have both a get and getAll. You can infer from this that it is possible to have multiple parameters in a route, since theres a method to get all of them. In our example, though, we only need one. so let's call the get method.</p>
+    <p>Now we just need to tell it which paramter to get. Remember what name we gave our parameter? That's right, we called it "id". We can see this both in our route array and in the screen shot.</p>
+    <p>Finally, we want to put that param result in a variable so we can display it later. Here's the final result of our component:</p>
+    <img src="img/15-room-component-final.jpg" alt="">
+    <p>You can see up top I created a variable named <i>currentParam</i> and I assigned it to contain the value of our get method down below.</p>
+    <p>Almost there! Now we just want this displayed in our html so we can see the result of our work. So inside the html of your root component, you'll want something like this:</p>
+    <img src="img/15-room-html-first.jpg" alt="room component html 1st step">
+    <p>Save and lets go back to <b>localhost:4200/room/1</b>. You should be able to see your paramter in the html! Try entering different values instead of 1 and see what happens.</p>
+    <h3>Creating links with our paramaters</h3>
+    <p>That's all cool, but because we're typing it in the nav bar, we're reloading the app each time. Lets throw some links in our room component html like so:</p>
+    <img src="img/15-room-html-final.jpg" alt="room component html final">
+    <p>Let's examine this for a bit and note a few things:</p>
+    <ul>
+        <li>Remember that we are using <b>[routerLink]</b> to handle all of our links. Using href would load our whole page.</li>
+        <li>The reason we need all those dots is because the current route you are on is <b>room/whatever</b>. So we need to go back two levels in order to go to a new route, hence the double dot being in the link twice</li>
+    </ul>
+    <p>Now navigate back to your room component and click on those links. Notice how the whole page is <b>NOT</b> reloading when you click on the link. Amazing! Notice how that variable is changing each time you click on a link. That's because the paramMap observable is triggering an emit <b>any time there is a change in parameters</b>. And since inside our subscription we are reassigning our variable, the variable name changes with the parameters. Mind. Blown.</p>
+    <p>Now we need to create a list of rooms and add them to our nav bar. That will be another two-parter. Take your time to wrap your head around what we just discussed. It's a lot.</p>
+    <h4>rxjs Side Note</h4>
+    <p>rxjs is short for the ReactiveX JavaScript library. There is a LOT of stuff in rxjs and we will only be covering a small fraction of it. If you want to fill your brain with even more information, the link to the rxjs page is <a href="http://reactivex.io/rxjs/">here</a>. Be warned, rxjs is a deep topic. You may want to save this for later.</p>
+    <footer>
+        <a href="14-route-params.html">&lt;&lt; 14 - Route params</a>
+        <a href="index.html">Back to list</a>
+        <a href="16-room-service.html">16 - Room Service &gt;&gt; </a>
+    </footer>
+</body>
+</html>

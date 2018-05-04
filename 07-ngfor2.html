@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ngFor - part two</title>
+    <link rel="stylesheet" href="css/04style.css">
+</head>
+<body>
+    <header>
+        <h1>Lesson 7 - More *ngFor</h1>
+    </header>
+    <p>Before we move on to other things, I wanted to come back to one more thing about <b>*ngFor.</b> Knowing this is crucial if you want to complete parts of the card picker exercise, (namely step 3), so I decided to give this its own section.</p>
+    <h3>What can I do with the data inside ngFor?</h3>
+    <p>Lets take a look at an ngFor that loops over the following array:</p>
+    <div class="example">colors = ['orange', 'yellow', 'purple', 'pink'];</div>
+    <div class="codebox">
+        <p>&lt;div *ngFor="let color of colors"&gt;</p>
+        <p class="ind1">&lt;p&gt;Member of the colors array: {{ color }}&lt;/p&gt;</p>
+        <p>&lt;/div&gt;</p>
+    </div>
+    <p>We've seen this kind of format before. We're looping through the array <i>colors</i>, and assigning the value of each iteration to the variable <i>color</i>. We then use {{ }} to display that variable as part of the p tag. Since there are four items in the array, this div, along with the p tag inside, will be displayed 4 times.</p>
+    <p>What you may not have known is that you can pass the value of that variable back into your TS. Let's assume we have the following method in our TS:</p>
+    <div class="codebox">
+        <p>public exclaimColor(color:string):string {</p>
+        <p class="ind1">const result = color.toUpperCase() + '!';</p>
+        <p class="ind1">return result;</p>
+        <p>}</p>
+    </div>
+    <p>Now we got a method that takes in a string, capitalizes it, and adds an exclamation point. Now we can bind to the result of this method in our HTML while passing in data from our for loop. Behold:</p>
+    <div class="codebox">
+        <p>&lt;div *ngFor="let color of colors"&gt;</p>
+        <p class="ind1">&lt;p&gt;Member of the colors array: {{ <span class="highlight">exclaimColor(color)</span> }}&lt;/p&gt;</p>
+        <p>&lt;/div&gt;</p>
+    </div>
+    <p>Make sure you wrap your head around this, because it's important. We called the method <i>exclaimColor</i> and passed the value of the <i>color</i> variable that we declared in our loop. This means that we will be calling this method once <b>for each iteration of our array</b> and we are displaying the result of that method. The output looks like this:</p>
+    <div class="result">
+        <p>Member of the colors array: ORANGE!</p>
+        <p>Member of the colors array: YELLOW!</p>
+        <p>Member of the colors array: PURPLE!</p>
+        <p>Member of the colors array: PINK!</p>
+    </div>
+    <p>We can also pass the value of the iteration to events such as a click event. Check out the following:</p>
+    <div class="codebox">
+        <p>&lt;div *ngFor="let color of colors"&gt;</p>
+        <p class="ind1">&lt;button <span class="highlight">(click)="myMethod(color)"</span>&gt;{{ color }}&lt;/button&gt;</p>
+        <p>&lt;/div&gt;</p>
+    </div>
+    <p>In this instance, we are creating a set of buttons with our loop, and we are setting a click event to each button that will call the method <i>myMethod</i> and will <b>pass the value of our iteration into the method</b>.</p>
+    <p>It is quite important to understand this concept; you will need to pass data from an ngFor to complete stage 3 of the card picker exercise. but if you can understand how this is working, you are well on your way to being able to create pages with dynamically loaded content.</p>
+    <footer>
+        <a href="06-types.html">&lt;&lt; 06 - Types</a>
+        <a href="index.html">Back to list</a>
+        <a href="08-new.html">08 - ng new &gt;&gt; </a>
+    </footer>
+</body>
+</html>

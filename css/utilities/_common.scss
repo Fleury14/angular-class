@@ -77,6 +77,13 @@
         background-size: cover;
         transform: rotate(90deg);
     }
+
+    .lucky-lay-down-bg {
+        height: 100px;
+        width: 100px;
+        background: url('../img/lucky-lay-down.jpg');
+        background-size: cover;
+    }
 }
 
 .example {
@@ -89,10 +96,13 @@
     background-color: darken($color-2, 10);
     color: #eee;
     padding: 10px;
-    font-size: 10px;
     p {
         margin: 3px;
     }
+}
+
+.font-10 {
+    font-size: 10px;
 }
 
 a {
@@ -133,4 +143,8 @@ h4 {
 
 .highlight {
     color: yellow;
+}
+
+.highlight-red {
+    color: #e00;
 }

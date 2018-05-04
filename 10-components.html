@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>10 - components</title>
+    <link rel="stylesheet" href="css/04style.css">
+    <link rel="stylesheet" href="css/10style.css">
+</head>
+<body>
+    <header>
+        <h1>Lesson 10 - Components</h1>
+    </header>
+    <p>We've heard the term component thrown around quite a bit, but now it's time to go over what exactly components are, and how to build one. Let's look at a sample component and check out all the parts that go into to a component.</p>
+    <h3>Example Component</h3>
+    <img src="img/component-sample.jpg" alt="component sample">
+    <p>You may recognize some parts after we went over modules. Let's go over them in more detail.</p>
+    <ul>
+        <li><b>Imports:</b> By now we should be getting slightly more comfortable with imports. Any tools and files that we will use in the component, we need to import. Don't forget in the component we are only <b>importing the things we need for this component</b> as opposed to the module where we have to import all the tools for all the components.</li>
+        <li>Also notice that we are importing Component. This is because we want to tell Angular that we are actually building a component, and importing it gives us access to the next part...</li>
+        <li><b>Decorator:</b> Our decorator for a component will contain all ther pertinent instructions for a component. It does this by taking in an object that will contain values that allow us to do stuff like link our files.</li>
+        <ul>
+            <li><b>selector:</b> This is how we refer to this component when calling it from the outside. In this example, the component's selector is <i>app-root</i> so in a parent component, we would call this by using the custom html tag &lt;app-root&gt;. If I name a component <i>app-burger</i>, then anywhere I want to use that component, I would insert the html tag &lt;app-root&gt;
+                <p>One more thing worth mentioning, if you do not include the prefix that would declared earlier, your linter will complain. I used the default prefix, so every component I make has to start with 'app-'. </p>
+            </li>
+            <li><b>templateUrl:</b> This contains the location of the html file that we want this component to display. In the example, I call the file <i>app.component.html</i>. It is good practice to keep your html file the same name as your component, and you should always have it in the same folder that the component is in.</li>
+            <p>When you look at examples of component code, you made notice that instead of linking a file via <i>templateUrl</i>, they use <i>template</i>, and actually write the html inside the ts. <b>Don't do this</b>. It works fine for small examples, but in development you will almost never do this, and as you are starting out, the practice of linking your html is quite important.</p>
+            <li><b>styleUrls:</b> You probably guessed by now what this does: it links our css file. Since it is an array, if you want to link several css files, you can.</li>
+        </ul>     
+    </ul>
+    <div class="lucky-box">
+        <div class="lucky-right-bg"></div>
+        <p>How often do you use multiple css files in a component?</p>
+    </div>
+    <p>In my (still limited) experience, I have yet to do so. I tend to put any class names that I want to use over multiple components inside the global <i>styles.css</i>. When we get into parent/child components, I can see this being useful.</p>
+    <h3>Inside our class</h3>
+    <p>So all the fun TS we've been applying over the first few lessons go inside here. You'll see variable declaration, the constructor, and a method. Now we can import this component wherever we want.</p>
+    <p>Now if I want to call this component, it will display the HTML and apply the linked CSS and our TS to it. And since we gave the name <i>app-root</i> in the selector, we would call this component using the html tag &lt;app-root&gt;</p>
+    <p>In fact, if we look at the html of the stock app, you should see this...</p>
+    <img src="img/app-root-example.jpg" alt="app-root example">
+    <p>There's our component!</p>
+    <h3>Practice exercises</h3>
+    <p>I mentioned last lesson how important it is to practice some of these things because not only the concept can be daunting, but the concepts are fundamental to how Angular works. Try creating a new component, creating an HTML and CSS file, import the component in your module and finally use the custom tag to display your component. It may take 3, 4, or even ten tries, but make sure you feel comfortable with component creation.</p>
+    <div class="lucky-box">
+        <div class="lucky-lay-down-bg"></div>
+        <p>Can I have multiple components displaying on one page?</p>
+    </div>
+    <p>Yes, will become commonplace in more complex projects. Let's give that a shot... in the next lesson!</p>
+    <footer>
+        <a href="09-types.html">&lt;&lt; 09 - Modules</a>
+        <a href="index.html">Back to list</a>
+        <a href="">11 - ???? &gt;&gt; </a>
+    </footer>
+</body>
+</html>

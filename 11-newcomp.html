@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>11 - new component</title>
+    <link rel="stylesheet" href="css/04style.css">
+</head>
+<body>
+    <header>
+        <h1>Lesson 11 - Creating a New Component</h1>
+    </header>
+    <p>We have our stock app that was created using <b>ng-new</b>. Let's go over the process of creating some more components and starting creating our tree.</p>
+    <h3>Our Goal</h3>
+    <img src="img/component-map.jpg" alt="new components goal">
+    <h3>Creating the Welcome Component</h3>
+    <p>We will create a Welcome component and a navigation component that will be direct children of the App component, and then a Login component that is a child of the Navigation component. Let's focus on creating the welcome component first.</p>
+    <img src="img/new-component-files.jpg" alt="new component files">
+    <p>First things first, we created our files in a new folder. You should <b>never have files for multiple components in the same folder</b>. We have our TS file that will contain our component instructions, and the HTML and style sheet that we will link to.</p>
+    <p>Let's make sure our HTML has something in it so we can make sure our component is displaying correctly.</p>
+    <p><i>welcome.component.html</i></p>
+    <div class="codebox">
+        <p>&lt;h2&gt;This is my welcome component&lt;/h2&gt;</p>
+    </div>
+    <p>Now that we have our html all set, let's start building our our component instructions inside the TS file. Refer to the <a href="10-components.html">previous lesson</a> if you need a refresher on all the pieces.</p>
+    <p>We start with our imports. We definitely need <i>Component</i> from @angular/core, since that gives us access to our decorator. Therefore, our <i>welcome.component.ts</i> starts as so:</p>
+    <div class="codebox">
+        <p>import { Component } from '@angular/core';</p>
+    </div>
+    <p>Importing Component will now give us access to the <i>@Component({})</i> decorator, so let's use it. Remember that we designate the custom tag with the <i>selector</i> property, and link our html and style sheets with the <i>templateUrl</i> and <i>styleUrls</i> properties respectively.</p>
+    <div class="codebox">
+        <p>import { Component } from '@angular/core';</p><br>
+        <p>@Component({</p>
+        <p class="ind1">selector: 'app-welcome',</p>
+        <p class="ind1">templateUrl: './welcome.component.html',</p>
+        <p class="ind1">styleUrls: ['./welcome.component.css']</p>
+        <p>})</p>
+    </div>
+    <p>With our files linked, we need to create our class and export it.</p>
+    <div class="codebox">
+        <p>import { Component } from '@angular/core';</p><br>
+        <p>@Component({</p>
+        <p class="ind1">selector: 'app-welcome',</p>
+        <p class="ind1">templateUrl: './welcome.component.html',</p>
+        <p class="ind1">styleUrls: ['./welcome.component.css']</p>
+        <p>})</p><br>
+        <p>export class WelcomeComponent { }</p>
+    </div>
+    <p>With our component made, we have two things left two do. Your VS Code may already be warning you about one of them: we need to add this component to our app.module. Remember that the app module will contain instructions for everything used on our app, so we will need to add our component by importing it and adding to the declarations.</p>
+    <img src="img/new-component-module.jpg" alt="app module example">
+    <p>We've created our component, enabled it for use in the module, but we have one last step. We have to place our component somewhere in order to display it. But where does it go? How do we place the component?</p>
+    <p>If you look at our goal, you can see that the welcome component <b>is a child</b> of the AppComponent, so we will be putting our component in there. But what do we put? Was there something in our component instructions that designated how we call it? You may have guessed it: <b>it's what we put in that components decorator under <i>selector.</i></b> In this components case, it is <i>app-welcome</i>. Therefore our <i>app.component.html</i> should look like this.</b></p>
+    <div class="codebox">
+        <p>&lt;div&gt;</p>
+        <p class="ind1">&lt;app-welcome&gt;&lt;/app-welcome&gt;</p>
+        <p>&lt;/div&gt;</p>
+    </div>
+    <div class="lucky-box">
+        <div class="lucky-lookat-bg"></div>
+        <p>Is there a reason you wrapped that component in a div?</p>
+    </div>
+    <p>It's good practice, and allows me to manipulate how a component will display stylistically on the DOM. If I want a component to take up half the screen, I can target that div in my styles.</p>
+    <p>Now if you fire up our app, you should see the html inside our welcome component. </p>
+    <h3>Our Remaining components</h3> 
+    <p>I went ahead and repeated the process for our navigation component, leaving our <i>app.component.ts</i> to look like this.</p>
+    <div class="codebox">
+        <p>&lt;div&gt;</p>
+        <p class="ind1">&lt;app-navigation&gt;&lt;/app-navigation&gt;</p>
+        <p class="ind1">&lt;app-welcome&gt;&lt;/app-welcome&gt;</p>
+        <p>&lt;/div&gt;</p>
+    </div>
+    <p>Last up is our login component, which we see if a child of the navigation component. I sense a question coming...</p>
+    <div class="lucky-box">
+        <div class="lucky-why-bg"></div>
+        <p>Should I put my <i>login</i> folder insider the <i>navigation</i> folder?</p>
+    </div>
+    <p>It's actually a very good question. If we want our file structure to mirror our html structure, then the answer would be yes. But if you didn't want to and just wanted to make a login folder next to our welcome component, that's okay too, it's really personal preference. As long as you don't have files for multiple components in one folder, its techinically okay, but keep the following in mind: Most of your projects are going to be quite big and have a lot of components and if those components aren't organized well, your structure gets <b>very unreadable, very fast</b></p>
+    <p>This would be a good point to direct you to the <a href="https://angular.io/guide/styleguide">Angular Style Guide written by John Papa</a> for best practice with this, or any sort of thing. This page may make more sense as you get more familiar with Angular's feature, but there is plenty of good info here.</p>
+    <p>In this example, I am not going to put it inside the navigation folder because while it is a child of that component, I do not see it as a direct feature of our navigation. Also, because I tend to find any login and authentication stuff rather important, I like to give it its own folder.</p>
+    <p>I do not, however, get to choose where I put the login component's selector. Because that is a direct child of <i>NavigationComponent</i>, <b>I must put a components selector inside the html of it's parent</b>, which in our case, is NavigationComponent. So our <i>navigation.component.html</i> looks like this:</p>
+    <div class="codebox">
+        <p>&lt;div&gt;</p>
+        <p class="ind1">&lt;app-login&gt;&lt;/app-login&gt;</p>
+        <p>&lt;/div&gt;</p>
+    </div>
+    <p>Here's another chart explaining the layout of our components as they are now:</p>
+    <img src="img/new-component-flow.jpg" alt="">
+    <p>Now that we have our components, next lesson let's talking about preparing our nav-bar utilizing <b>interfaces</b></p>
+    <footer>
+        <a href="10-components.html">&lt;&lt; 10 - Components</a>
+        <a href="index.html">Back to list</a>
+        <a href="12-interfaces.html">12 - interfaces &gt;&gt; </a>
+    </footer>
+</body>
+</html>
