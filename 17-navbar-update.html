@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>17 - Navbar update</title>
+    <link rel="stylesheet" href="css/04style.css">
+</head>
+<body>
+    <header>
+        <h1>Lesson 17: Updating our Navbar</h1>
+    </header>
+    <p>Earlier we tackled creating a navbar in our navigation component. Now our goal is to take the rooms we declared in the room service and add them to our navbar.</p>
+    <h3>Making sure our navbar is prepared</h3>
+    <p>Let's go into our <i>navgiation.component.ts</i>. You'll see the testing nav points we added earlier. Change those up to include both a welcome page and about page. Make sure you have both the title and our link.</p>
+    <h3>Our problem</h3>
+    <p>So lets discuss the issue first. We want to bring in rooms from our room service, and add them to our navigation bar. We know we have access to them through injection, which is neat, but there's a type problem. Our nav bar array requires a type <b>NavigationItem</b> as we declared earlier. Everything in the array is a type <b>Room.</b></p>
+    <p>And therein lies the problem. If we could somehow morph our Rooms into NavigationItems, then we can easily push them to our navArr. Fortunately, there are a few methods to do so.</p>
+    <h3>Injecting our service</h3>
+    <p>So before we get to our magical transformation spell, we need to import and inject our service. We should be used to importing things up top by now so you may not see me mention it as much from this point on. Injecting our service, however, we've only done once. Hopefully, you remember how we did it with <b>activatedRoute</b> earlier. If not, here's the answer.</p>
+    <div class="codebox">
+        <p>constructor (private _roomService: RoomService) { }</p>
+    </div>
+    <p>All service injections should be handled in tyhe parentheses of our constructor. So we've got our service, which gives us access to the rooms, but we're going to transform them into NavigationItems. Since we don't want to do any changes to the actual service, we need an empty array of NavigationItems to put our transform result into: <p>
+    <div class="codebox">
+        <p>public transformedData:NavigationItem</p>
+    </div>
+    <p>Now we have access to the room data and an array to put the result in...</p>
+    <h3>It's morphing time?</h3>
+    <p>First step: We will be executing this in our constructors curly braces, since we'll be dealing with injected data. There will be some logic here which is not always suggested, but for the point of t his lesson it will suffice.</p>
+    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map" target="_blank">Array.map on MDN</a>
+    <p>There are plenty of ways to do this and by no means is mine the best, but I chose to utilize .map. The array version of .map allows us to go through every iteration of an array, do something to the values of each item, and return it as a new array. That sounds perfect for what we want.</p>
+    <p>We are going to put the result in the array we created earlier, so we start with this:</p>
+    <div class="codebox">this.transformedData = ??????.map()</div>
+    <p>We know we want to apply map to our rooms array, but how do we call it? Recall that when we injected our service inside the constructor, we assigned it to a private variable. We can now access that variable whenever we need access to things the service makes available, such as our nav array!</p>
+    <div class="codebox">this.transformedData = this._roomService.rooms.map()</div>
+    <p>Hopefully you noticed after entering <i>this._roomService</i> that your autocomplete suggested that variable in the first place. Cool. Now let's get to mapping. Notation for .map will be using the phat arrow (I told you to get used to it), and we will be passing each iteration of our rooms array as the variable named <b><i>eachRoom</i></b>.</p>
+    <div class="codebox">
+        <p>this.transformedData = this._roomService.rooms.map( eachRoom => {</p>
+        <p class="ind1"></p>
+        <p class="">});</p>
+    </div>
+    <p>Now things get juicy. You may notice at this point our linter getting pissed off and throwing red bars at us like crazy. Because we're assigning this to an array of type <i>NavigationItem</i>, its expecting us to <b>return an object that fits our navigation item interface</b>. Fair enough, so we know we will be returning an object, lets set that up:</p>
+    <div class="codebox">
+        <p>this.transformedData = this._roomService.rooms.map( eachRoom => {</p>
+        <p class="ind1">const newObj:NavigationItem = {</p>
+        <p class="ind1">}</p>
+        <p class="ind1">return newObj</p>
+        <p class="">});</p>
+    </div>
+    <p>There, we created an object, specifically gave it a NavigationItem type and said we would return it. But the linter is still mad. Remember our interface: what does every NaigationItem need? A property of title, and a property of link!</p>
+    <div class="codebox">
+        <p>this.transformedData = this._roomService.rooms.map( eachRoom => {</p>
+        <p class="ind1">const newObj:NavigationItem = {</p>
+        <p class="ind2 highlight">title: '????',</p>
+        <p class="ind2 highlight">link: '????'</p>
+        <p class="ind1">}</p>
+        <p class="ind1">return newObj</p>
+        <p class="">});</p>
+    </div>
+    <p>Our linter is no longer painting our .map red, but obviously ???? is not the correct answer. Let's think about our room item and where we could get our answer. We know what the room object looks like, because we made the interface for it. Where would you get the title for a room?</p>
+    <img src="img/17-room-interface.jpg" alt="room interface">
+    <p>Hey, look! It has a property called title. So that easy enough, make it's title name <b>eachRoom.title</b> because we declared each iteration to be called <b>eachRoom</b> with our phattest of arrows:</p>
+    <div class="codebox">
+        <p>this.transformedData = this._roomService.rooms.map( eachRoom => {</p>
+        <p class="ind1">const newObj:NavigationItem = {</p>
+        <p class="ind2 highlight">title: eachRoom.title,</p>
+        <p class="ind2 highlight">link: '????'</p>
+        <p class="ind1">}</p>
+        <p class="ind1">return newObj</p>
+        <p class="">});</p>
+    </div>
+    <p>Title is done, but what about link? Lets remember, when we navigate to a room, <b>as defined by our route array</b>, it will be going to 'room/:id', with id being our parameter. Check out that room interface, it has an id too! So we will add the string 'room/', and then add whatever the id of the room is: </p>
+    <div class="codebox">
+        <p>this.transformedData = this._roomService.rooms.map( eachRoom => {</p>
+        <p class="ind1">const newObj:NavigationItem = {</p>
+        <p class="ind2 highlight">title: eachRoom.title,</p>
+        <p class="ind2 highlight">link: 'room/' + eachRoom.id</p>
+        <p class="ind1">}</p>
+        <p class="ind1">return newObj</p>
+        <p class="">});</p>
+    </div>
+    <p>With that, our morph is complete! Sadly, we do not get a Power Ranger as a result, but we do get an array of navigation items inside <b>this.transformedData</b>. Now we need to think of a way to add that array into our existing one.</p>
+    <h3>Joining two arrays</h3>
+    <p>I should mention that this part is rather JavaScripty. In other words, there are several ways to do that, and how efficient you are at this mostly depends on your aptitude with JavaScript. As it pertains to Angular, knowing how to join two arrays isn't the most Angular-ish of topics (and for that matter, neither is .map), but it is important that you understand the concept of mutating your data to conform to a type. And if you aren't familiar with .push, you really should be. You will need it in the future.</p>
+    <p>I guess that served as a spoiler as to how I went about joining the arrays. I just looped through our new array and pushed each iteration to the latter. There are other ways to do it. If you have a better way, fantastic. I did this because I wanted to show off something we introduced waaaaay back..</p>
+    <div class="codebox">
+        <p>for (const navItem of this.transformedData) {</p>
+        <p>{</p>
+    </div>
+    <p>Yo, it's our good friend <b>for..of.</b> We can use it here too! Since we are declaring each iteration as <i>navItem</i>, all we gotta do now is <b>.push</b> our iteration to the old array:</p>
+    <div class="codebox">
+        <p>for (const navItem of this.transformedData) {</p>
+        <p class="ind1">this.navArr.push(navItem);</p>
+        <p>{</p>
+    </div>
+    <p>Sweet, we got our navigation array with both the stuff we typed out, and our rooms.</p>
+    <h3>Displaying our rooms</h3>
+    <p>Now we need to go into our html and edit the data, right? NOPE. Remember, our navigation.component.html uses <b><i>*ngFor</i></b> to iterate over the <i>navArr</i> array. All we did was just add to it. Therefore if we load up our app, we should see our room links in the navigation bar. And that is why building stuff is dynamically is awesome; we changed our array but didn't have to change how we display it, we did the work for that early on.</p>
+    <h3>We're done!</h3>
+    <h4>FINALLY</h4>
+    <p>That was a handful. Below I have a screenshot of my project, with slightly different variable names. I also through some comments in to try to summarize what we just did. Don't feel bad if you didn't know anything about using a .map in an array, just understand <b>WHY</b> we had to do it.</p>
+    <img src="img/17-nav-component.jpg" alt="">
+    <p>Next lesson we will go back to our paramMap and discuss using <i>map</i> within rxjs to transform data in an observable.</p>
+    <div class="lucky-box">
+        <div class="lucky-why-bg"></div>
+        <p>You couldn't even sneak in an appearance from me!</p>
+    </div>
+    <p>My bad.</p>
+    <footer>
+        <a href="16-room-service.html">&lt;&lt; 16 - RoomService</a>
+        <a href="index.html">Back to list</a>
+        <a href="">18 - .map with observables &gt;&gt; </a>
+    </footer>
+</body>
+</html>
