@@ -60,6 +60,7 @@
         <p class="">});</p>
     </div>
     <p>Our linter is no longer painting our .map red, but obviously ???? is not the correct answer. Let's think about our room item and where we could get our answer. We know what the room object looks like, because we made the interface for it. Where would you get the title for a room?</p>
+    <img src="img/17-room-interface.jpg" alt="room interface">
     <p>Hey, look! It has a property called title. So that easy enough, make it's title name <b>eachRoom.title</b> because we declared each iteration to be called <b>eachRoom</b> with our phattest of arrows:</p>
     <div class="codebox">
         <p>this.transformedData = this._roomService.rooms.map( eachRoom => {</p>
@@ -70,5 +71,31 @@
         <p class="ind1">return newObj</p>
         <p class="">});</p>
     </div>
+    <p>Title is done, but what about link? Lets remember, when we navigate to a room, <b>as defined by our route array</b>, it will be going to 'room/:id', with id being our parameter. Check out that room interface, it has an id too! So we will add the string 'room/', and then add whatever the id of the room is: </p>
+    <div class="codebox">
+        <p>this.transformedData = this._roomService.rooms.map( eachRoom => {</p>
+        <p class="ind1">const newObj:NavigationItem = {</p>
+        <p class="ind2 highlight">title: eachRoom.title,</p>
+        <p class="ind2 highlight">link: 'room/' + eachRoom.id</p>
+        <p class="ind1">}</p>
+        <p class="ind1">return newObj</p>
+        <p class="">});</p>
+    </div>
+    <p>With that, our morph is complete! Sadly, we do not get a Power Ranger as a result, but we do get an array of navigation items inside <b>this.transformedData</b>. Now we need to think of a way to add that array into our existing one.</p>
+    <h3>Joining two arrays</h3>
+    <p>I should mention that this part is rather JavaScripty. In other words, there are several ways to do that, and how efficient you are at this mostly depends on your aptitude with JavaScript. As it pertains to Angular, knowing how to join two arrays isn't the most Angular-ish of topics (and for that matter, neither is .map), but it is important that you understand the concept of mutating your data to conform to a type. And if you aren't familiar with .push, you really should be. You will need it in the future.</p>
+    <p>I guess that served as a spoiler as to how I went about joining the arrays. I just looped through our new array and pushed each iteration to the latter. There are other ways to do it. If you have a better way, fantastic. I did this because I wanted to show off something we introduced waaaaay back..</p>
+    <div class="codebox">
+        <p>for (const navItem of this.transformedData) {</p>
+        <p>{</p>
+    </div>
+    <p>Yo, it's our good friend <b>for..of.</b> We can use it here too! Since we are declaring each iteration as <i>navItem</i>, all we gotta do now is <b>.push</b> our iteration to the old array:</p>
+    <div class="codebox">
+        <p>for (const navItem of this.transformedData) {</p>
+        <p class="ind1">this.navArr.push(navItem);</p>
+        <p>{</p>
+    </div>
+    <p>Sweet, we got our array.</p>
+    <img src="img/17-nav-component.jpg" alt="">
 </body>
 </html>
