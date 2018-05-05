@@ -95,7 +95,23 @@
         <p class="ind1">this.navArr.push(navItem);</p>
         <p>{</p>
     </div>
-    <p>Sweet, we got our array.</p>
+    <p>Sweet, we got our navigation array with both the stuff we typed out, and our rooms.</p>
+    <h3>Displaying our rooms</h3>
+    <p>Now we need to go into our html and edit the data, right? NOPE. Remember, our navigation.component.html uses <b><i>*ngFor</i></b> to iterate over the <i>navArr</i> array. All we did was just add to it. Therefore if we load up our app, we should see our room links in the navigation bar. And that is why building stuff is dynamically is awesome; we changed our array but didn't have to change how we display it, we did the work for that early on.</p>
+    <h3>We're done!</h3>
+    <h4>FINALLY</h4>
+    <p>That was a handful. Below I have a screenshot of my project, with slightly different variable names. I also through some comments in to try to summarize what we just did. Don't feel bad if you didn't know anything about using a .map in an array, just understand <b>WHY</b> we had to do it.</p>
     <img src="img/17-nav-component.jpg" alt="">
+    <p>Next lesson we will go back to our paramMap and discuss using <i>map</i> within rxjs to transform data in an observable.</p>
+    <div class="lucky-box">
+        <div class="lucky-why-bg"></div>
+        <p>You couldn't even sneak in an appearance from me!</p>
+    </div>
+    <p>My bad.</p>
+    <footer>
+        <a href="16-room-service.html">&lt;&lt; 16 - RoomService</a>
+        <a href="index.html">Back to list</a>
+        <a href="">18 - .map with observables &gt;&gt; </a>
+    </footer>
 </body>
 </html>
