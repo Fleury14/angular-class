@@ -28,7 +28,7 @@
     </div>
     <p>Now we have access to the room data and an array to put the result in...</p>
     <h3>It's morphing time?</h3>
-    <p>First step: We will be executing this in our constructors curly braces, since we'll be dealing with injected data. There will be some logic here which is not always suggested, but for the point of t his lesson it will suffice.</p>
+    <p>First step: We will be executing this in our constructors curly braces, since we'll be dealing with injected data. There will be some logic here which is not always suggested, but for the point of this lesson it will suffice.</p>
     <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map" target="_blank">Array.map on MDN</a>
     <p>There are plenty of ways to do this and by no means is mine the best, but I chose to utilize .map. The array version of .map allows us to go through every iteration of an array, do something to the values of each item, and return it as a new array. That sounds perfect for what we want.</p>
     <p>We are going to put the result in the array we created earlier, so we start with this:</p>
@@ -41,7 +41,7 @@
         <p class="ind1"></p>
         <p class="">});</p>
     </div>
-    <p>Now things get juicy. You may notice at this point our linter getting pissed off and throwing red bars at us like crazy. Because we're assigning this to an array of type <i>NavigationItem</i>, its expecting us to <b>return an object that fits our navigation item interface</b>. Fair enough, so we know we will be returning an object, lets set that up:</p>
+    <p>Now things get juicy. You may notice at this point our linter getting ticked off and throwing red bars at us like crazy. Because we're assigning this to an array of type <i>NavigationItem</i>, its expecting us to <b>return an object that fits our navigation item interface</b>. Fair enough, so we know we will be returning an object, lets set that up:</p>
     <div class="codebox">
         <p>this.transformedData = this._roomService.rooms.map( eachRoom => {</p>
         <p class="ind1">const newObj:NavigationItem = {</p>
