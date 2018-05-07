@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>14 - Routes: parameters</title>
+    <link rel="stylesheet" href="css/04style.css">
+</head>
+<body>
+    <header>
+        <h1>Lesson 14 - Routes: Now With 100% More Parameters</h1>
+    </header>
+    <p>Las lesson we created our route array to handle tying one component to one route. In this lesson we will discuss how to set up a route using <b>parameters</b>. This lesson will be short because next lesson we will talk about how to actually <b>use</b> those parameters using an <b>observable</b>.</p>
+    <h4>Room Component</h4>
+    <p>In preparation for this lesson, please make a Room Component. A standard base component will do.</p>
+    <h3>Adding our Room Component to our Route Array</h3>
+    <p>Inside our app.module, you should have already added your RoomComponent to your <b>declarations</b> inside your app module. But now we need to add our room component to the route array. I will demonstrate how that should look: </p>
+    <img src="img/14-newroute.jpg" alt="new route">
+    <p>This creates a new route at <i>/room/</i> and <b>anything after the /room/ is a paramater that we declare with :id</b>. So in the following examples:</p>
+    <div class="example">
+        <p>http://localhost:4200/room/2</p>
+        <p>http://localhost:4200/room/3</p>
+        <p>http://localhost:4200/room/bob</p>
+    </div>
+    <p>The <b>parameters</b> are 2, 3, and 'bob', respectively. We are not loading a seperate component for 2, 3, and bob, instead that parameter can be treated as a variable that we can pull.</p>
+    <h3>Side note: Parameter required (?)</h3>
+    <p>As of the time of this writing, and I could be completely wrong about this, but when you create a parameter on a route, you MUST specify a parameter in the address. You cannot go just to <i>http://localhost:4200/room</i> and display th eroom component, it will not work. You can alternatively create another router that goes to room without the parameter if you <i>reeeeally</i> want to have something there.</p>
+    <h3>Using that Param</h3>
+    <p>Having the parameters are nice, but if we cant get the data of that parameter, it doesn't do us any good: We would just be displaying the exact same thing over and over again. We can do that, but that its getting its own lesson, and it's next!</p>
+    <footer>
+        <a href="13-router.html">&lt;&lt; 13 - Router</a>
+        <a href="index.html">Back to list</a>
+        <a href="15-param-map.html">15 - ParamMap &gt;&gt; </a>
+    </footer>
+</body>
+</html>
