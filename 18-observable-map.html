@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>18 - observable map</title>
+    <link rel="stylesheet" href="css/04style.css">
+</head>
+<body>
+    <header>
+        <h1>Lesson 18 - using map with our Observable</h1>
+    </header>
+    <p>So we got a little bit into using <i>.map</i> as it involves array to mutate one array into another in order to conform to types. This also works with observables, and is a very important concept pick up; we can take data from a subscription, use map to mutate the data, and then subscribe to actually do something with it.</p>
+    <h3>Using .pipe</h3>
+    <p><b>.pipe</b> is a little bit of a new thing in rxjs, also known as a <b>lettable operator</b>. It allows us to pass data through a set of functions, acting a pipeline of sorts, hence the name.</p>
+    <p>Hopefully description should sound familiar with what we are trying to do, so lets get started. Let's head into our room.component.ts where the observable lies inside the constructor. Begin by importing <b><i>map</i></b> up top from 'rxjs/operators/map'. Then insert a .pipe just before your .subscribe with your observable:</p>
+    <div class="codebox">
+        <p>this._route.paramMap</p>
+        <p class="highlight">.pipe()</p>
+        <p>.subscribe( paramResponse => {</p>
+        <p class="ind1">this.currentParam = paramResponse.get('id');</p>
+        <p>});</p>
+    </div>
+    <p>Notice how the <b>pipe</b> is in the middle of our subscription. Hopefully coding it out like this illustrates how pipe tends to act as a <b>middle-man</b> for our subscription.</p>
+    <p>Now we gotta throw our map in there. Let's keep the following in mind.</p>
+    <ul>
+        <li>Our map will also be using the phat arrow notation.</li>
+        <li>Our map MUST return something since it is editing incoming data.</li>
+        <li>If we change the type of our data being returned, we will need to keep that in mind for our subscription. (more on that later)</li>
+    </ul>
+    <h4>What should we do to our data?</h4>
+    <p>Lets add a simple text string onto our parameter.</p>
+    <div class="codebox">
+        <p>this._route.paramMap</p>
+        <p class="highlight">.pipe(</p>
+        <p class="highlight ind1">map( paramData => {</p>
+        <p class="highlight ind2">const mapResult: string = paramData.get('id') + ' is the paramter we are on!';</p>
+        <p class="highlight ind2">return mapResult;</p>
+        <p class="highlight ind1">})</p>
+        <p class="highlight">)</p>
+        <p>.subscribe( paramResponse => {</p>
+        <p class="ind1">this.currentParam = paramResponse.get('id'); <span class="highlight-red"><-- This is probably giving you an error</span></p>
+        <p>});</p>
+    </div>
+    <p>A couple of things are happening here: We are using map inside our pipeline. We pass our paramMap service as the cleverly titles <i>paramData</i>. A new string variable is created by the name <i>mapResult</i> that takes our get command we used in our subscription to get the parameter name and tacked on a text string. We then return that variable as the result.</p>
+    <p>But this has a consequence: Because we returned a string, the data passing out of the pipeline is now of type <b>string</b>, not the type <b>paramMap</b> that we got from the interface. As a result, <b>the <i>paramResponse</i> inside our subscription is now a string.</b> And as you can see, we are trying to .get on a string. That's a no-no, so lets fix that error.</p>
+    <div class="codebox">
+        <p>this._route.paramMap</p>
+        <p class="">.pipe(</p>
+        <p class="ind1">map( paramData => {</p>
+        <p class="ind2">const mapResult: string = paramData.get('id') + ' is the paramter we are on!';</p>
+        <p class="ind2">return mapResult;</p>
+        <p class="ind1">})</p>
+        <p class="">)</p>
+        <p>.subscribe( paramResponse => {</p>
+        <p class="highlight ind1">this.currentParam = paramResponse;</p>
+        <p>});</p>
+    </div>
+    <p>The error should be gone, and check out the result. We successfully tacked on a string to our parameter. Superb!</p>
+    <div class="lucky-box">
+        <div class="lucky-why-bg"></div>
+        <p>Why do we need to do any of this? Couldn't I just add that string in our .subscribe?</p>
+    </div>
+    <p>A good question. Here's a couple of reasons:</p>
+    <ul>
+        <li>Organization: We're keeping our logic seperate. In this this case, our logic was super simple: set it to a variable. Our mutation was also simple: add eye beams and telekinesis. Okay, we didn't do that, we just tacked on a string. In the wild, any mutations and subsequent logic is going to be <b>much more complex</b>. Organizing your data manipulation in one spot and your logic in another is always a good idea.</li>
+        <li>Syntax practice: If you aren't familiar with phat arrow notation and handling maps and subscriptions in general, it is good practice because you will be using such things even outside of angular.</li>
+        <li>rxjs: Being competent in using .pipe opens up an entirely new world of rxjs operators such as <i>take</i> and <i>tap</i>. I'm not going to go over them because rxjs is a course in itself, but there's a lot of stuff that is handy and if you want to use it, you will need to be familiar with pipe.</li>
+    </ul>
+    <p>Here's a final look at my room component for reference:</p>
+    <img src="img/18-room-final.jpg" alt="room component final">
+    <footer>
+        <a href="17-navbar-update.html">&lt;&lt; 17 - updating our navbar</a>
+        <a href="index.html">Back to list</a>
+        <a href="">19 - ???? &gt;&gt; </a>
+    </footer>
+</body>
+</html>
