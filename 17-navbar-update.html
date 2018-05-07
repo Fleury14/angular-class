@@ -22,9 +22,9 @@
     <div class="codebox">
         <p>constructor (private _roomService: RoomService) { }</p>
     </div>
-    <p>All service injections should be handled in tyhe parentheses of our constructor. So we've got our service, which gives us access to the rooms, but we're going to transform them into NavigationItems. Since we don't want to do any changes to the actual service, we need an empty array of NavigationItems to put our transform result into: <p>
+    <p>All service injections should be handled in the parentheses of our constructor. So we've got our service, which gives us access to the rooms, but we're going to transform them into NavigationItems. Since we don't want to do any changes to the actual service, we need an empty array of NavigationItems to put our transform result into: <p>
     <div class="codebox">
-        <p>public transformedData:NavigationItem</p>
+        <p>public transformedData:NavigationItem[]</p>
     </div>
     <p>Now we have access to the room data and an array to put the result in...</p>
     <h3>It's morphing time?</h3>
