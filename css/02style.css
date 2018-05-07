@@ -88,6 +88,7 @@
 
 .example {
   background-color: #336600;
+  font-family: monospace;
   color: #eee;
   padding: 10px;
 }
