@@ -37,6 +37,19 @@
     <p>Two things that I want you guys to note of: Because we put all of our work into a seperate room module, if we want to add all the features of that module, we only have to import the room module, and thats it! Now all we gotta do is throw that in the imports and we're good. That's one of the main benefits of breaking everything up: once you created those building blocks for your feature module, importing that module is super easy.</p>
     <p>But there's a catch...</p>
     <h3>The Order of Your Imports MATTERS</h3>
-    <p></p>
+    <p>Unlike our declarations, the order of imports is super important. Remember that we are now bringing in two sets of routing instructions: Our base router instructions from <i>app.routing.module.ts</i> and our routes inside our <i>room.module.ts</i>. Also, don't forget that our base router has a catch-all ('**'). If AppRoutingModule is imported before RoomModule, it will read the instructions for our base router, hit that catch-all, and <b>ignore all subsequent instructions.</b> We don't want that. A good rule of thumb is order your imports from <b>most specific to least specific</b>.</p>
+    <h3>Our App Flow</h3>
+    <img src="img/20-app-flow.jpg" alt="app flow">
+    <div class="lucky-box">
+        <div class="lucky-lookaway-bg"></div>
+        <p>...</p>
+    </div>
+    <p>I'll take that as a compliment.</p>
+    <p>So go through and make sure everything is working with these code changes. Common hangups include forgetting forChild, not putting RoomModule first (I made this one again even after we made the same mistake in class lol), too many things in declaration. Once you get that going, we can move on to the next lesson, child routes.</p>
+    <footer>
+        <a href="19-app-routing-module.html">&lt;&lt; Refactoring our app module</a>
+        <a href="index.html">Back to list</a>
+        <a href="21-child-routes.html">21 - Child Routes &gt;&gt; </a>
+    </footer>
 </body>
 </html>
