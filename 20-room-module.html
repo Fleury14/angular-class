@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>20 - Room Module</title>
+    <link rel="stylesheet" href="css/04style.css">
+</head>
+<body>
+    <header>
+        <h1>Lesson 20 - Creating our Room Module</h1>
+    </header>
+    <p>In addition to creating routing modules, it is also very common practice for individual features to get their own module. It holds all the components it will use, any child routes, and any other things we need to bring in. Then we simply import that module into our app.module.</p>
+    <p>Our room component is the perfect candidate for this. It will contain a form component to enter new reservations, and a list to display all the current reservations for each room. It's also going to need child routes to navigate to both that room and list. So let's get started.</p>
+    <h3>Refactoring our Room Stuffs</h3>
+    <p>Create a file inside the room folder called <b><i>room.module.ts</i></b>. Since we're going to be putting everything room related in its own module, <b>we need to remove everything room related that is anywhere else.</b> Before we do that, we're going to need one more file to create. This room module is going to have its own child routes, so it will need its own routing module. Create a file named <b><i>room.routing.module.ts</i></b> inside your room folder.</p>
+    <p>Now we're are going to be adding and removing things from multiple files here. I think the most efficient way to explain this will be to start at the top of the tree and work our way down, since in real time, that's generally how you will be developing. So let's start with our <i>room.routing.module.ts</i></p>
+    <h3>room.routing.module.ts</h3>
+    <img src="img/20-room-routing-module-first.jpg" alt="">
+    <p>This is more or less a rehash of our previous lesson. We brough in NgModule and all our router toys. We created our route that is <b>only relevant to the feature we are working on</b>, which in this case, is our room route. We did not add child routes yet, that will be later. Let's get everything working first.</p>
+    <p>We still have our decorator, and on the bottom we created an array of what our routing components will contain, just like last time. But there's one difference in our decorator. Did you catch it?</p>
+    <p>Remember with our main routing module, <i>app.router.module.ts</i>, which I will refer to as the <b>base router</b>, we used <b>forRoot</b> on our RouterModule inside the imports to pass in our routing array. But <b>you can only have one route</b>. Any routes that are child routes must be passed into the Router module with <b>forChild()</b>.</p>
+</body>
+</html>
