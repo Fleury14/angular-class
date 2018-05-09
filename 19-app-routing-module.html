@@ -22,6 +22,44 @@
     <h3>Creating our App Routing Module</h3>
     <p>So let's start by putting all of our route information in one file. Let's create a file called <i>app.routing.module.ts</i>. We want to throw all of our routing information in this file, so we can remove it from our app.module.</p>
     <p>I would <b>strongly</b> recommend when doing an operation like this that you utilize the split screen functionality of your IDE and have both your new file and the file we are refactoring open side by side. (Both Atom and VS Code can do this).</p>
-    <p>You can Cut/Paste a lot here, or you can copy/paste and comment out what you dont need in the old file first, so you have something to go back to if something breaks. I will show what my app.routing.module looks like now and explain all the parts we removed.</p>
+    <p>You can Cut/Paste a lot here, or you can copy/paste and comment out what you dont need in the old file first, so you have something to go back to if something breaks. I will show what my app.routing.module looks like now and explain all the parts we moved.</p>
+    <h4>Warning: Big pictures incoming. This may be rough on a phone.</h4>
+    <img src="img/19-app-routing-module.jpg" alt="app routing module">
+    <p>As you might be able to tell, Ctrl-C, Ctrl-V was my friend. Let's go over each piece of this.</p>
+    <ul>
+        <li>Because we are making a module, it needs <i>ngModule</i> imported.</li>
+        <li>Since we're writing a routing module, we import the same <i>RouterModule</i> and <i>route</i> that we used before.</li>
+        <li>We imported all the components that are affected by our router, and <b>only those components</b>. Note that we did not bring the Navigation component here. The reason is because our navigation component is not a destination of our router. A handy way to remember is that <b>if it appears in the router-outlet, it needs to be moved. If it doesn't, then it can stay.</b></li>
+        <li>We copied our entire route array over. This contains our routing instructions, so that's pretty important</li>
+        <li>Inside the decorator, we are importing RouterModule the same way we did before as well.</li>
+        <li>Remember that since we passed in our routing array inside our <i>RouterModule</i> via <i>.forRoot</i>, our RouterModule now contains our Routing instructions. We want to make that exportable when we bring in this app routing module. This is why there is a new property in our decorator called <b>exports</b>, and it contains our <i>RoutingModule</i>. We will see the effect of that later.</li>
+        <li>Our declarations is empty</li>
+    </ul>
+    <div class="lucky-box">
+        <div class="lucky-lookat-bg"></div>
+        <p>Wait, what? Don't all of our components go in a declarations array? Why are you tricking me?</p>
+    </div>
+    <p>It's no trick. Instead of putting our components in our declarations array, we are going to put them in an array that we will be exporting. Peep that last line:</p>
+    <div class="codebox">
+        <p>export const routingComponents = [ WelcomeComponent, RoomComponent, AboutComponent, ErrorComponent ];</p>
+    </div>
+    <p>We create an array of components, and because we are exporting it, we can <b>import that array in our app.module and throw that in our declarations.</b></p>
+    <p>Now this can still beg the question, why use the array at all? Remember that our app right now is relatively small, larger apps can reach 100 components. Imagine declaring 100 different components in that declarations array. That doesn't sound like fun. Instead, if we put ten of those in an array, now we can just have a bunch of array in our declarations, condensing our code and making it cleaner.</p>
+    <h3>What should our App Module look like now?</h3>
+    <p>Lets take a look at all the thing we can now get rid of in our app.module, and a couple lines we added as well. I apologize for the smaller print, it was all I could do to fit everything in one picture.</p>
+    <h4>Warning: Another big picture incoming:</h4>
+    <img src="img/19-app-module-first.jpg" alt="app module first ss">
+    <p>First thing, wow look at all those things commented out! We don't need the <i>RouterModule</i> anymore, we also don't need our components affected by our router anymore (Note that NavigationComponent is still there), and we don't need our routing array. Cool!</p>
+    <p>But since we made that routing module, we do need to bring that module in. First we imported our <i>app.routing.module</i> and that array of our routed components in. Make sure you import these both in the same line, doing them seperately caused some tomfoolery in our class.</p>
+    <p>Now before I give the answer, think about the following, where in our decorator do we put our routing module, and our array of components. Got it yet? Remember, declarations contains components, so we just slapped our array in there. Now you can see how much easier this can get when we start filling an app up with components.</p>
+    <p>Our routing module now goes in the same spot all our modules go: imports. Two things to note: We do not need to bring in router module since we <b>exported</b> it earlier. Secondly, the order you put your modules in the <i>imports</i> array <b>absolutely matters</b>. We will get into that in the next lesson.</p>
+    <p>Double check and make sure the app is still working the same way it did before. Mine did with the above code, hopefully yours does to. There will be mistakes made, don't sweat them and try to figure it out. Common mistakes include routing things twice, moving components you didn't need to move, typos, etc. Once you've verified it works, delete the commented out lines in the app.module.ts. Let's see how it looks now.</p>
+    <img src="img/19-app-module-final.jpg" alt="app module final ss">
+    <p>Much better! And now you've successfully refactored your code and made your own routing module. But we're not done. Next lesson, we're going to refactor further and start creating child routes.</p>
+    <footer>
+        <a href="18-observable-map.html">&lt;&lt; 18 - .map with observables</a>
+        <a href="index.html">Back to list</a>
+        <a href="">20 - Room Module &gt;&gt; </a>
+    </footer>
 </body>
 </html>
