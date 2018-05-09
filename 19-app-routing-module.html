@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>19 - Refactor: app.module</title>
+    <link rel="stylesheet" href="css/04style.css">
+</head>
+<body>
+    <header>
+        <h1>Lesson 19: Trimming our App Module</h1>
+    </header>
+    <p>By now, you may have noticed that we've taken plenty of trips to our <i>app.module.ts</i>. I even made a sidenote in an earlier lesson that our module wasa getting pretty beefy. And that can be a problem.</p>
+    <div class="lucky-box">
+        <div class="lucky-left-bg"></div>
+        <p>Why can't I have everything inside app.module? Isn't it nice to have everything in one place?</p>
+    </div>
+    <p>Early on, yes, it's very convenient to have everything in one file to look at. But keep in mind the reserve project is barely off the ground and we can already see that app.module get a little heavier than we'd like. Any larger project that puts everything in one module will get <b>massive</b>. And things will go wrong.</p>
+    <p>Secondly, it makes it very difficult to read. Imagine what happens when this application gets more fleshed out. What if I want to check which components are being properly declared. How about if I check for a particular route that may not be working? What about organizing all my imports? This all becomes increasingly more difficult as we create larger and larger projects. If we keep things in several files categorized by feature, then we can <b>only look at the files relevant to said feature when we have to debug.</b> (And you will. Likely in this exercise.)</p>
+    <p>Finally, lets also make a point that we want to stick to the guideline of <b>Object Oriented Programming</b>. In a nutshell, this means creating our code in such a way that we can add stuff in small blocks and it will not affect the rest of our code. Conversely, we can take features, without breaking the rest of the code. What happens if everything is in one file and the one file is broken? Everything breaks, and it leaves your code very brittle.</p>
+    <h3>Creating our App Routing Module</h3>
+    <p>So let's start by putting all of our route information in one file. Let's create a file called <i>app.routing.module.ts</i>. We want to throw all of our routing information in this file, so we can remove it from our app.module.</p>
+    <p>I would <b>strongly</b> recommend when doing an operation like this that you utilize the split screen functionality of your IDE and have both your new file and the file we are refactoring open side by side. (Both Atom and VS Code can do this).</p>
+    <p>You can Cut/Paste a lot here, or you can copy/paste and comment out what you dont need in the old file first, so you have something to go back to if something breaks. I will show what my app.routing.module looks like now and explain all the parts we removed.</p>
+</body>
+</html>
