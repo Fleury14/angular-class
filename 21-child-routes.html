@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>21 - Child Routes</title>
+    <link rel="stylesheet" href="css/04style.css">
+</head>
+<body>
+    <header>
+        <h1>Lesson 21 - Child Routes!</h1>
+    </header>
+    <p>Now that we finished our refactoring, we can get to adding child routes.</p>
+    <p>Our room component will contain a List Component and a Form Component. The list will display our reservations and the form will be used to add them. Begin by creating the two components inside the room folder. It is important that you keep these inside our room folder since they are going to be children of our room component.</p>
+    <p>Don't worry about what goes inside the component, just have a simple p tag inside the html so you can see that the component has loaded.</p>
+    <h3>Adding our child route</h3>
+    <p>Since we did the refactoring of our room routing, we know that we will need to be inputting the child routes inside the <i>room.routing.module.ts</i></p>
+    <p>Our room form and room list are going to be <b>child routes</b> of our RoomComponent route. Because of this, inside our route for our RoomComponent, we go inside our object and insert a property <b>children</b> and give it an array of routes. Here's an example of that in action.</p>
+    <img src="img/21-room-routing-module.jpg" alt="room-routing ss">
+    <p>So remember to add our imports on top, and add the components to the array of routing components down below.</p>
+    <p>Let's check out our new array of routes; they're declared in the same way as our standard routes, they're just inside a <b>children</b> array of our room route. We added a redirect so if someone goes to a room without a child route, it will default to the list. This is because when you room loads, we will probably want to display a list of reservations immediately. If you want to add different functionality to your room component, feel free to do so, although you may want to tackle that a little bit later on.</p>
+    <p>One cool thing about this? Because we properly refactored everything, we don't need to go into any module to add anything else. We only have one thing left that you might be able to figure out...</p>
+    <h3>We have our routes, but where will the route display?</h3>
+    <p>We have our route definition telling Angular which app to display, but where exactly is it placed? We expect our result to display inside the Room Component, since that's the parent element, but where in the room component does it display? Did you guess that we need a <b>router-outlet?</b> If so, you are correct! A router-outlet tag needs to be placed inside the room component.</p>
+    <div class="lucky-box">
+        <div class="lucky-left-bg"></div>
+        <p>Will this conflict with our router-outlet in our app component?</p>
+    </div>
+    <p>No, it will not, because it will expect that router outlet inside the route where we declared our children.</p>
+    <p>You can add a <i>name</i> attribute to your router-outlet if you ever come across the scenario where you have multiple router-outlets on one page and need to dictate whhich routes apply to which router. We won't be doing that here, so I'm not going to go over that to avoid confusion, but if you want to read up on the topic, here's a link:</p>
+    <a href="http://onehungrymind.com/named-router-outlets-in-angular-2/">Named Router Outlets in Angular 2 by by Lukas Ruebbelke</a>
+    <p>After adding the router outlet, check out the result! Navigate to your room component and it should automatically take us to /room/:id/list. You can try manually typing in the link to the room form component to make sure that works as well. You just made a child route. Congrats!</p>
+    <footer>
+        <a href="20-room-module.html">&lt;&lt; 20 - Room Module</a>
+        <a href="index.html">Back to list</a>
+        <a href="">22 - ??? &gt;&gt; </a>
+    </footer>
+</body>
+</html>
