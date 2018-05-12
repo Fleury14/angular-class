@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>20 - Room Module</title>
+    <link rel="stylesheet" href="css/04style.css">
+</head>
+<body>
+    <header>
+        <h1>Lesson 20 - Creating our Room Module</h1>
+    </header>
+    <p>In addition to creating routing modules, it is also very common practice for individual features to get their own module. It holds all the components it will use, any child routes, and any other things we need to bring in. Then we simply import that module into our app.module.</p>
+    <p>Our room component is the perfect candidate for this. It will contain a form component to enter new reservations, and a list to display all the current reservations for each room. It's also going to need child routes to navigate to both that room and list. So let's get started.</p>
+    <h3>Refactoring our Room Stuffs</h3>
+    <p>Create a file inside the room folder called <b><i>room.module.ts</i></b>. Since we're going to be putting everything room related in its own module, <b>we need to remove everything room related that is anywhere else.</b> Before we do that, we're going to need one more file to create. This room module is going to have its own child routes, so it will need its own routing module. Create a file named <b><i>room.routing.module.ts</i></b> inside your room folder.</p>
+    <p>Now we're are going to be adding and removing things from multiple files here. I think the most efficient way to explain this will be to start at the top of the tree and work our way down, since in real time, that's generally how you will be developing. So let's start with our <i>room.routing.module.ts</i></p>
+    <h3>room.routing.module.ts</h3>
+    <img src="img/20-room-routing-module-first.jpg" alt="room routing module initial ss">
+    <p>This is more or less a rehash of our previous lesson. We brough in NgModule and all our router toys. We created our route that is <b>only relevant to the feature we are working on</b>, which in this case, is our room route. We did not add child routes yet, that will be later. Let's get everything working first.</p>
+    <p>We still have our decorator, and on the bottom we created an array of what our routing components will contain, just like last time. But there's one difference in our decorator. Did you catch it?</p>
+    <p>Remember with our main routing module, <i>app.router.module.ts</i>, which I will refer to as the <b>base router</b>, we used <b>forRoot</b> on our RouterModule inside the imports to pass in our routing array. But <b>you can only have one route</b>. Any routes that are child routes must be passed into the Router module with <b>forChild()</b>.</p>
+    <p>Make sure you remembered your export, and that your routing components are cool, and we can move on to the next file: our room.module.ts</p>
+    <h3>room.module.ts</h3>
+    <img src="img/20-room-module.jpg" alt="room module ss">
+    <p>This looks like a relatively simple version of our app module: We're pulling in our NgModule, and our room routing module. We threw our components array into the declarations part of our decorator, and the routing module into our imports. Excellent.</p>
+    <p>We did end up putting our room service in here. We simply imported our service up top, and added it to the providers array like we did in our decorator. We just have to remember to take it out of our app module when we get there.</p>
+    <p>It is worth noting that just because we provided our service in our room module does not mean that we can only use it in our app module. There are ways to create services that are feature only but we won't be going into that (and also Angular 6 handles it a bit differently). Just know that even though our room service is in our room module, it's okay for us to call it in our navigation component like we did a few lessons ago.</p>
+    <p>So that wasn't so bad. We've handled all the files we added, so lets look and see what we subtract. Remember, we want to get rid of anything room related.</p>
+    <h3>app.routing.module</h3>
+    <img src="img/20-app-routing-module.jpg" alt="app routing module">
+    <p>Remember that we are getting rid of anything room related? We got rid of the room component declaration up top, we removed the route containing our room component, and finally we removed RoomComponent from our routing components array on the bottom. Don't forget that step, components don't like to be declared twice. We put all this in our room routing module, so we can get rid of it here.</p>
+    <p>Three down, one to go, lets check out our app module.</p>
+    <img src="img/20-app-module.jpg" alt="app module ss">
+    <p>Thanks to all the refactoring work we did last lesson, there's a lot less to do here. We put the RoomService in our room module, so we got rid of the import and the reference in the providers array in the decorator.</p>
+    <p>Two things that I want you guys to note of: Because we put all of our work into a seperate room module, if we want to add all the features of that module, we only have to import the room module, and thats it! Now all we gotta do is throw that in the imports and we're good. That's one of the main benefits of breaking everything up: once you created those building blocks for your feature module, importing that module is super easy.</p>
+    <p>But there's a catch...</p>
+    <h3>The Order of Your Imports MATTERS</h3>
+    <p>Unlike our declarations, the order of imports is super important. Remember that we are now bringing in two sets of routing instructions: Our base router instructions from <i>app.routing.module.ts</i> and our routes inside our <i>room.module.ts</i>. Also, don't forget that our base router has a catch-all ('**'). If AppRoutingModule is imported before RoomModule, it will read the instructions for our base router, hit that catch-all, and <b>ignore all subsequent instructions.</b> We don't want that. A good rule of thumb is order your imports from <b>most specific to least specific</b>.</p>
+    <h3>Our App Flow</h3>
+    <img src="img/20-app-flow.jpg" alt="app flow">
+    <div class="lucky-box">
+        <div class="lucky-lookaway-bg"></div>
+        <p>...</p>
+    </div>
+    <p>I'll take that as a compliment.</p>
+    <p>So go through and make sure everything is working with these code changes. Common hangups include forgetting forChild, not putting RoomModule first (I made this one again even after we made the same mistake in class lol), too many things in declaration. Once you get that going, we can move on to the next lesson, child routes.</p>
+    <footer>
+        <a href="19-app-routing-module.html">&lt;&lt; Refactoring our app module</a>
+        <a href="index.html">Back to list</a>
+        <a href="21-child-routes.html">21 - Child Routes &gt;&gt; </a>
+    </footer>
+</body>
+</html>
