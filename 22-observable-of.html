@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>22 - More Observables</title>
+    <link rel="stylesheet" href="css/04style.css">
+</head>
+<body>
+    <header>
+        <h1>Lesson 22: More Observable fun!</h1>
+    </header>
+    <p>When we are pulling data from our service, we are simply grabbing an array. Nothing fancy about it, just calling one variable and bringing it in.</p>
+    <p>But many of your calls to a service won't be like that. Quite often, especially when you start to deal with HTTP requests, the result will be an Observable. So let's create one.</p>
+    <h3>Transforming our array into an Observable</h3>
+    <p>The process of transforming our array of rooms in our room service into an observable is actually very easy. First, make sure you import the RxJS operator we will be using: <b><i>of</i></b>.</p>
+    <div class="codebox">   
+        <p>import { of } from 'rxjs/observable/of';</p>
+    </div>
+    <p>Next, let's change the type of our array from an array of rooms to an Observable array of rooms.</p>
+    <!-- image of type -->
+    <p>Our linter gets mad now because it's expecting our array to be an observable, but it's not. Let's fix that.</p>
+    <p>Finally, wrap our array in the rxjs <b>of</b> operator like so.</p>
+    <p>That's it. Yes, by just wrapping our data in an <b>of</b>, we've transformed it from a static value into an observable.</p>
+    <div class="lucky-box">
+        <div class="lucky-up-bg"></div>
+        <p>That's it? Is the next part gonna be this easy?</p>
+    </div>
+    <p>Sorry to disappoint you, but no. Because we changed our room data in our service into an observable, that means anywhere we are injecting that data into needs to now handle that data properly like an observable. Where are we pulling in room data from our room service? Our nav bar.</p>
+    <h3>Handling our data correctly</h3>
+    <p>Go to the navigation component. You can see where we grabbed our room data as a plain array, used <i>Array.map()</i> to change it from a type <i>Room</i> to a type <i>NavigationItem</i> and then adding it on to our static array.</p>
+    <p>We still want to do that, but because it's an observable, how we do it is different.</p>
+    <ul>
+        <li>Because this an observable, we will not be putting the result into a variable. We will just call it by its name</li>
+        <li>We begin a <b>.pipe</b>. That operator acts as sort of an rxjs conveyor belt, allowing us to apply several different rxjs operators. We're only going to apply 1 (maybe 2 later).</li>
+        <li>Inside that <b>.pipe</b> we are going  to use the rxjs <b>map</b> operator. This is almost the exact same thing as what the old Observable.map did: It acts as a middle-man where we can transform our data before assigning it somewhere and displaying it. Sounds like the perfect place for us to change the Rooms into Navigation Items.</li>
+        <li>Inside the <b>map</b> we will morph our data the same way we did before.</li>
+        <li>After our data is morphed, we can now end our .pipe</li>
+        <li>After the .pipe, we can then <b>.subscribe</b> to the result and do things with it.</li>
+    </ul>
+</body>
+</html>
