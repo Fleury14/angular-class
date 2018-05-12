@@ -39,5 +39,26 @@
         <li>After our data is morphed, we can now end our .pipe</li>
         <li>After the .pipe, we can then <b>.subscribe</b> to the result and do things with it.</li>
     </ul>
+    <p>This is admittedly not the easiest topic to wrap your head around, so take your time with it. Let's go step by step.</p>
+    <h4>Begin the Pipe</h4>
+    <p>Let's call the observable and begin our pipe:</p>
+    <div class="codebox">
+        <p>this._roomService.rooms.pipe()</p>
+    </div>
+    <p>So farm so good. Lets begin our <b>rxjs map</b> and get ready to transform our rooms into navItems.</p>
+    <div class="codebox">
+        <p>this._roomService.rooms.pipe(</p>
+        <p class="ind1 highlight">map()</p>
+        <p>)</p>
+    </div>
+    <p>So inside our <b>rxjs map</b> will go our transformation, where we utilized <b>Array.map:</b></p>
+    <div class="codebox">
+        <p>this._roomService.rooms.pipe(</p>
+        <p class="ind1">map( <span class="highlight">rooms => {</span></p>
+        <p class="ind2 highlight">rooms.map(eachRoom => {</p>
+        <p class="ind2">})</p>
+        <p class="ind1">})</p>
+        <p>)</p>
+    </div>
 </body>
 </html>
