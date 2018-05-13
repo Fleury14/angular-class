@@ -60,5 +60,101 @@
         <p class="ind1">})</p>
         <p>)</p>
     </div>
+    <p>Our transformation technique will be the same thing:</p>
+    <p>So inside our <b>rxjs map</b> will go our transformation, where we utilized <b>Array.map:</b></p>
+    <div class="codebox">
+        <p>this._roomService.rooms.pipe(</p>
+        <p class="ind1">map(rooms => {</p>
+        <p class="ind2">rooms.map(eachRoom => {</p>
+        <p class="ind3 highlight">return {</p>
+        <p class="ind4 highlight">title: eachRoom.title</p>
+        <p class="ind4 highlight">title: 'room/' + eachRoom.id</p>
+        <p class="ind3 highilght">}</p>
+        <p class="ind2">})</p>
+        <p class="ind1">})</p>
+        <p>)</p>
+    </div>
+    <p>That consolues our transformation. It's a little weird to look at because we are using <i>Array.map</i> inside <i>rxjs/map</i>. With all these maps, you'd think I was building an atlas. Bad map jokes aside, we've handled our transformation. Lets throw some types on our variables inside there to help us understand what is going on:</p>
+    <div class="codebox">
+        <p>this._roomService.rooms.pipe(</p>
+        <p class="ind1">map( (rooms<span class="highlight">:Room[]</span>) => {</p>
+        <p class="ind2">rooms.map( (eachRoom<span class="highlight">:Room</span>) => {</p>
+        <p class="ind3">return {</p>
+        <p class="ind4">title: eachRoom.title</p>
+        <p class="ind4">title: 'room/' + eachRoom.id</p>
+        <p class="ind3">}</p>
+        <p class="ind2">})</p>
+        <p class="ind1">})</p>
+        <p>)</p>
+    </div>
+    <p>So we take our initial value going into the pipe as an array of rooms, then array.map it passing the value of each room. We <b>should</b> have a value type Navigation Item if we subscribe after the pipe. Lets check it out:</p>
+    <div class="codebox">
+        <p>this._roomService.rooms.pipe(</p>
+        <p class="ind1">map( (rooms:Room[]) => {</p>
+        <p class="ind2">rooms.map( (eachRoom:Room) => {</p>
+        <p class="ind3">return {</p>
+        <p class="ind4">title: eachRoom.title</p>
+        <p class="ind4">title: 'room/' + eachRoom.id</p>
+        <p class="ind3">}</p>
+        <p class="ind2">})</p>
+        <p class="ind1">})</p>
+        <p>)<span class="highlight">.subscribe( (navItems:NavigationItem[]) => {</span></p>
+        <p class="highlight">});</p>
+    </div>
+    <p>So if you're linter isn't bugging out on the navItems being of a type navigation item, you're good! We did the transformation and typed our result just to make sure the result is exactly what we wanted. Now that we have our two array, we can use the same for..of technique to combine them.</p>
+    <div class="codebox">
+        <p>this._roomService.rooms.pipe(</p>
+        <p class="ind1">map( (rooms:Room[]) => {</p>
+        <p class="ind2">rooms.map( (eachRoom:Room) => {</p>
+        <p class="ind3">return {</p>
+        <p class="ind4">title: eachRoom.title</p>
+        <p class="ind4">title: 'room/' + eachRoom.id</p>
+        <p class="ind3">}</p>
+        <p class="ind2">});</p>
+        <p class="ind1">});</p>
+        <p>).subscribe( (navItems:NavigationItem[]) => {</p>
+        <p class="ind1 highlight">for (const eachItem of navItems) {</p>
+        <p class="ind2 highlight">this.navArr.push(eachItem);</p>
+        <p>});</p>
+    </div>
+    <p>Check out your navbar now, we should have the same navbar, this time with observables.</p>
+    <div class="lucky-box">
+        <div class="lucky-hi-bg"></div>
+        <p>O-M-G. My brain hurts.</p>
+    </div>
+    <p>Yeah, this rxjs business can be tricky to learn but it is really important. When you start dealing with data that you get from a database (and you will), then you will <b>need</b> to know how to deal with observables, how to manage the data it is emitting, and how to display it.</p>
+    <p>Lastly, one thing that is worth mentioning with observables, you can do all the .pipe you want, <b>if you do not subscribe to an observable, the code will not execute</b>. There is one example of an exception to this, but that will be in our next lesson.</p>
+    <h4>We're Not Done</h4>
+    <div class="lucky-box">
+        <div class="lucky-what-bg"></div>
+        <p>WHAT</p>
+    </div>
+    <p>Don't worry, this won't be nearly as bad. I promise</p>
+    <h3>When you Subscribe, you must Unsubscribe</h3>
+    <p>One rule you should remember, if you create a subscription, you need to unsubscribe somewhere. You can either use <b>rxjs/take</b>, or throw an unsubscribe inside a method like <b>onDestroy</b>. Since we're using a bunch of rxjs already, I'll go with take.</p>
+    <div class="codebox">
+        <p>this._roomService.rooms.pipe(</p>
+        <p class="ind1">map( (rooms:Room[]) => {</p>
+        <p class="ind2">rooms.map( (eachRoom:Room) => {</p>
+        <p class="ind3">return {</p>
+        <p class="ind4">title: eachRoom.title</p>
+        <p class="ind4">title: 'room/' + eachRoom.id</p>
+        <p class="ind3">}</p>
+        <p class="ind2">});</p>
+        <p class="ind1">});</p>
+        <p class="ind1 highlight">take(1); <span class="highlight-red"><--- I imported take up top. You should too.</span></p>
+        <p>).subscribe( (navItems:NavigationItem[]) => {</p>
+        <p class="ind1">for (const eachItem of navItems) {</p>
+        <p class="ind2">this.navArr.push(eachItem);</p>
+        <p>});</p>
+    </div>
+    <p>Now we're done! Whew! One nice thing about all that business we just did is that when we implement firebase, since we're already handling an observable of rooms from our service, it'll be a breeze.</p>
+    <p>Here is a screenshot of my navigation.component.ts, just to make sure we're square.</p>
+    <!-- nav component ss -->
+    <footer>
+        <a href="21-child-routes.html">&lt;&lt; 21 - Child Routes</a>
+        <a href="index.html">Back to list</a>
+        <a href="">23 - async pipe &gt;&gt; </a>
+    </footer>
 </body>
 </html>

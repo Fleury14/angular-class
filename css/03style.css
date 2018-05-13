@@ -23,6 +23,10 @@
   text-indent: 60px;
 }
 
+.codebox .ind4 {
+  text-indent: 80px;
+}
+
 .lucky-box {
   background-color: #600;
   color: #eee;
@@ -97,6 +101,20 @@
   height: 100px;
   width: 100px;
   background: url("../img/lucky-up.jpg");
+  background-size: cover;
+}
+
+.lucky-box .lucky-hi-bg {
+  height: 100px;
+  width: 100px;
+  background: url("../img/lucky-hi.jpg");
+  background-size: cover;
+}
+
+.lucky-box .lucky-what-bg {
+  height: 120px;
+  width: 120px;
+  background: url("../img/lucky-what.jpg");
   background-size: cover;
 }
 
