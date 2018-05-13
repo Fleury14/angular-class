@@ -21,6 +21,10 @@
     .ind3 {
         text-indent: 60px;
     }
+
+    .ind4 {
+        text-indent: 80px;
+    }
 }
 
 .lucky-box {
@@ -91,6 +95,29 @@
         background: url('../img/lucky-look-away.jpg');
         background-size: cover;
 
+    }
+
+    .lucky-up-bg {
+        height: 100px;
+        width: 100px;
+        background: url('../img/lucky-up.jpg');
+        background-size: cover;
+
+    }
+    
+    .lucky-hi-bg {
+        height: 100px;
+        width: 100px;
+        background: url('../img/lucky-hi.jpg');
+        background-size: cover;
+
+    }
+
+    .lucky-what-bg {
+        height: 120px;
+        width: 120px;
+        background: url('../img/lucky-what.jpg');
+        background-size: cover;
     }
 }
 
