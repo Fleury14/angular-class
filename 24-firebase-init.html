@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>24 - firebase init</title>
+    <link rel="stylesheet" href="css/04style.css">
+</head>
+<body>
+    <header>
+        <h1>Lesson 24 - Preparing for our Login Service: Installing Firebase</h1>
+    </header>
+    <p>Our next objective will be to get a functioning login service. We will be utilizng the Firebase authentication tools, so we will need to install them. Fortunately there is a package out there that allows us to import them in Angular: <b>angularfire2</b></p>
+    <a href="https://github.com/angular/angularfire2/blob/master/docs/install-and-setup.md">Installation instructions from the source</a>
+    <p>If we check out the instructions, they want us to create a new project. No thanks. All we need to do is utilize npm to install (make sure you are in your projects directiory when you run this from your terminal):</p>
+    <div class="codebox">
+        <p>npm install angularfire2 firebase --save</p>
+    </div>
+    <h4>Make sure your are installing angularfire2, not plain angularfire. Plain old angular file deals with Angular1. That is not us.</h4>
+    <p>So that handles the npm side of things, but before we bring the modules into Angular, we have to configure our connection to firebase. You will often find configuration for databases inside your <b>environments</b> folder, so let's go there. We are looking for the file <b>environment.ts</b>.</p>
+    <p>If you are with the Geekwise Academy Angular class, you should have recieved the firebase data on slack as an object. It will look something like this.</p>
+    <div class="codebox">
+        <p>firebase: {</p>
+        <p class="ind1">apiKey: 'awholelottacharacters',</p>
+        <p class="ind1">authDomain: 'some location',</p>
+        <p class="ind1">databaseURL: 'some other location',</p>
+        <p class="ind1">projectId: 'something with geekwise in it',</p>
+        <p class="ind1">storageBucket: 'something about buckets?',</p>
+        <p class="ind1">messagingSenderId: 'another weird string',</p>
+        <p>}</p>
+    </div>
+    <p>Sadly, I can not make that information public facing. If you are doing this on your own, and would like your own project on firebase, you can do so, and its free! Once you create an application on firebase and you go to the firebase console, the 'Get Started here' welcoming page should have a link that reads, 'Add Firebase to your web app'. The same object should be in there.</p>
+    <h3>Keep Your Environments to Yourself</h3>
+    <p>You might be able to figure out why I wouldn't want to post our class information: It would give absolutely anyone who comes across this page access to our Angular project. That's not cool. You should ALWAYS keep API keys private, and no one should be able to see them ever. For this reason, <b>if you store your keys inside your environments folder, make absolutely sure that it is being .gitignore'd</b>. If you choose to incorporate it some other way, that's fine, as long as the public can't see it. There are programs designed to comb through github and retrieve keys that may have been accidentally posted to github.</p>
+    <h3>Bring the Fiyah to Angular</h3>
+    <p>So we got our firebase setup complete, but now we need to bring all this stuff into Angular. Fortunately, firebase has Angular modules for us to work with. Can you guess where we would go to bring in modules?</p>
+    <p>The answer to that question would be our <i>app.module.ts</i>. Let's go there now.</p>
+    <img src="img/24-app-module.jpg" alt="app module ss">
+    <p>Here are the changes to note:</p>
+    <ul>
+        <li>Up top we brough in <b>AngluarFireModule</b> (our general firebase instructions), <b>AngularFireAuthModule</b> (our firebase authorization goodies), and our environment folder.</li>
+        <li>When we bring in other modules into our app.module, where do they go? Yup, into the imports array. The general module <b>AngularFireModule</b> should be first.</li>
+        <li>Similar to our RouterModule, the AngularFireModule requires up to pass in a configuration object. We just threw one in our environment file under the name 'firebase', so that's where the <b>environment.firebase</b> comes from.</li>
+    </ul>
+    <div class="lucky-box">
+        <div class="lucky-left-bg"></div>
+        <p>Is that it?</p>
+    </div>
+    <p>Yes, we are all set. Now we can use our firebase authentication goodies in the next lesson.</p>
+    <footer>
+        <a href="23-async-pipe.html">&lt;&lt; 23 - async pipe</a>
+        <a href="index.html">Back to list</a>
+        <a href="25-login-service.html">25 - Login Service &gt;&gt; </a>
+    </footer>
+</body>
+</html>

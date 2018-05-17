@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>23 - Async pipe</title>
+    <link rel="stylesheet" href="css/04style.css">
+</head>
+<body>
+    <header>
+        <h1>Lesson 23 - The Async Pipe</h1>
+    </header>
+    <p>This should be a quick one, I mentioned earlier that when it comes to observables, if you don't subscribe to them, nothing will happen, but there is an exception to the rule. I'm gonna talk about it now very briefly, and it involves the async pipe.</p>
+    <h3>Applying it to our example: sort of</h3>
+    <p>Mild warning: We will me making some superfluous changes and then immediately reverting them just to demonstrate how the async pipe works. If you don't feel comfortable messing with your code for now and just wanna read along, that's cool.</p>
+    <p>Otherwise, let's go into the navigation component and comment out our <b><i>.subscribe</i></b> portion of the area where we called our observable.
+    <img src="img/23-nav-component.jpg" alt="nav component ss">
+    <p>Since we commented our our subscribe, this is essentially dead code. What we're going to do is instead of putting the result of our observable in a variable, we are going to display the observable itself in the html. To do so, we will need to put our observable that we mapped inside a variable so that we can bind to it in the html:</p>
+    <img src="img/23-nav-html.jpg" alt="">
+    <p>Now things get neat. We're going to display the results in our html by binding to it with our interpolation brackets {{ }} and after the variable name we will add the <b>| async</b>, which is our async pipe.</p>
+    <p>Check out the result. Our array of navigation items is displaying inside that <i>*ngFor</i> loop we made, and we didn't have to subscribe to it.</p>
+    <div class="lucky-box">
+        <div class="lucky-right-bg"></div>
+        <p>Is it REALLY not being subscribed to?</p>
+    </div>
+    <p>Awfully good intuition for a 1 year old. The async pipe <b>automatically subscribes to the result and handles the unsubscription for you.</b> The catch here is two fold: You have to me comfortable handling your data inside a <i>map</i> since any logic will have to happen in there. Secondly, <b>you can only use the async pipe on observables you haven't already subscribed to.</b></p>
+    <p>All of that said, the async pipe is super useful and you should try to use it wherever you can.</p>
+    <h4>Any changes you made in this lesson should be reverted once you finish</h4>
+    <footer>
+        <a href="22-observable-of.html">&lt;&lt; 22 - Observables and of</a>
+        <a href="index.html">Back to list</a>
+        <a href="24-firebase-init.html">24 - Firebase Init &gt;&gt; </a>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>25 - Login Service</title>
+    <link rel="stylesheet" href="css/04style.css">
+</head>
+<body>
+    <header>
+        <h1>Lesson 25 - Creating our Login Service</h1>
+    </header>
+    <p>So now that we have our firebase stuff ready, we can start making our login service. Let's talk about how the flow of our login is going to go:</p>
+    <img src="img/25-login-flow.jpg" alt="login flow">
+    <p>We want our login methods and data inside a service because by putting it into a service, we can inject it into any component we want. We will be creating a login and lgout method for sure, and only one component is likely to make use of this: Our login component.</p>
+    <p>But we're also going to create an observable that will contain the info of the user who is logged in. Sure, we can display that in our login component (and we will), but what if you want to also display that information in another component? We can just inject the service into whatever component we want to display that information and subscribe to it there. Remember that one of the main benefits of a service is that <b>it can be injected into multiple components and share the same information</b>.</p>
+    <div class="lucky-box">
+        <div class="lucky-lookat-bg"></div>
+        <p>That's pretty cool. Your paint skills, however, are still lacking.</p>
+    </div>
+    <p>Um, thanks?</p>
+    <h3>Creating our Service</h3>
+    <p>So we'll be making a service, so lets put it inside our services folder that we made for our room service. We shall name it <i>login.service.ts</i></p>
+    <p>If you want to look at your room.service to see some of the required imports, you can, but I'll still go over them. We need to import <b>{ Injectable }</b> from @angular/core to let angular know this is a service. We will also need some firebase stuffs, as well as Observable from rxjs to let us type our observable. Here's my list of imports:</p>
+    <div class="codebox">
+        <p>import { Injectable } from '@angular/core';</p>
+        <p>import { AngularFireAuth } from 'angularfire2/auth';</p>
+        <p>import * as firebase from 'firebase';</p>
+        <p>import { Observable } from 'rxjs';</p>
+    </div>
+    <p>Next, remember that we need an injectable decorator and that we can leave it blank.</p>
+    <div class="codebox">
+        <p>@Injectable()</p>
+    </div>
+    <p>Finally, we will export our class, and we shall name in <b>LoginService</b></p>
+    <div class="codebox">
+        <p>export class LoginService { }</p>
+    </div>
+    <p>Our base work is done. Now we need to bring in the <b>AngularFireAuth</b> service. By now, hopefully you remember where it is in our class that we inject our service: The parentheses () of our constructor:</p>
+    <div class="codebox">
+        <p>constructor(private _afAuth: AngularFireAuth) { }</p>
+    </div>
+    <p>This line injects our AngularFireAuth and assigns it to the variable _afAuth. We made it private because only our login service should have access to that variable.</p>
+    <h3>Logging in and Loggin out</h3>
+    <p>Next up, we will be creating methods that we can call to log someone in, and a second one to log someone out. These will both be public since we want any component to have access to these methods.</p>
+    <p>One nice thing is that our intellisense will kick in and show us all the stuff we can use. Start typing <b>this._afAuth.auth.</b> and then you can see all the different ways we can sign in. The one be are looking for is <b>signInWithPopup.</b></p>
+    <p>The last part is that this signInWithPopup method wants a provider. We can supply one using the firebase we imported earlier: <b>new firebase.auth.GoogleAuthProvider()</b></p>
+    <p>Here is the end result:</p>
+    <div class="codebox">
+        <p>public login() {</p>
+        <p class="ind1">this._afAuth.signInWithPopup(new firebase.auth.googleAuthProvider());</p>
+        <p>}</p>
+    </div>
+    <p>Login on one line? Sweet. Our logout should be even simpler, instead of calling <b>signInWithPopup</b>, we can just call <b>signOut</b> instead. And signOut will not require to pass in anything, it just signs us out from whatever provider we previously chose. Here's the end result of that:</p>
+    <div class="codebox">
+        <p>public logout() {</p>
+        <p class="ind1">this.afAuth.signOut();</p>
+        <p>}</p>
+    </div>
+    <p>That wasn't so bad. Now we want to create a method to return the information of whoever is logged in. We know it will return an Observable, so we should dictate that in the method. Fortunately, our _afAuth service provdes this observable for us: <b>authState</b>. All we have to do is return it:</p>
+    <div class="codebox">
+        <p>public getLoggedInUser() :Observable&lt;firebase.User&gt; {</p>
+        <p class="ind1">return this._afAuthState;</p>
+        <p>}</p>
+    </div>
+    <p>Note that we declared this would be returning an observable of type <i>firebase.User</i> that we brough in up top.</p>
+    <h3>One more step to... provide</h3>
+    <p>We've done what we set out to do: created methods for logging in and out, and a method for returning our user info. This is all good, but there's one more step we need to complete our service, it has to be registered in our app.module like most things. Do you remember where it goes?</p>
+    <p>It belongs in the <b>providers</b> array of our app.module decorator. We used to have our RoomService here, but we moved it out when we refactored our rooms. Now we can put our LoginService here. Failing to do so will igve us an error when we try to inject this service in the console about not having a provider.</p>
+    <p>Our service is now ready to go. Next lesson we will apply that service in our login component. Here's a screenshot of my login service to help you out.</p>
+    <img src="img/25-login-service-ss.jpg" alt="login service ss">
+    <footer>
+        <a href="24-firebase-init.html">&lt;&lt; 24 - Firebase Init</a>
+        <a href="index.html">Back to list</a>
+        <a href="26-login-component.html">26 - Login Component &gt;&gt; </a>
+    </footer>
+</body>
+</html>
