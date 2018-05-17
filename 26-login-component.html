@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>26 - Login Component</title>
+    <link rel="stylesheet" href="css/04style.css">
+</head>
+<body>
+    <header>
+        <h1>Lesson 26 - Our Login Component</h1>
+    </header>
+    <p>We got our service done, now it's time to use it! You should already have a login component made, and it should be displayed inside your navigation component. If you haven't done that yet, do so now. You may want to have a login and logout button as well, but we'll go over that part.</p>
+    <h3>Injecting our Service</h3>
+    <p>Inside our login component, you should already have <b>{ Component }</b> imported. We will need to bring in two things: Our login service we just made, and since we'll be using the firebase.User type we declared earlier, we should bring that in.</p>
+    <div class="codebox">
+        <p>import { LoginService } from '../../services/login.service;</p>
+        <p>import * as firebase from 'firebase';</p>
+    </div>
+    <p>Your folder structrure may be different than mine so copying the file location of the service word for word may not work, use your intellisense if need be.</p>
+    <p>We have two steps we need before we prepare our methods: First we have to inject our service into this component. This will be the last time I go over how to do this, so you should know where we do that at this point: Inside the parentheses of our constructor:</p>
+    <div class="codebox">
+        <p>constructor( private _login:LoginService ) { }</p>
+    </div>
+    <p>Injection complete. Now remember that we had a method in our service that will return our logged in user info as an observable with the type firebase.User. Therefore, we need to create a variable that will hold the resulting user once we subscribe to it:</p>
+    <div class="codebox">
+        <p>public authState: firebase.User</p>
+    </div>
+    <h4>Side note:</h4>
+    <p>We did not make this an observable because we are going to execute the .subscribe in our login method. If you are taking the Async Pipe Challenge (it's the hottest thing these days), then we will need to change the type since we wouldn't be doing the .subscribe. That's all I will give you for the challenge, refer to the async pipe lesson if you need it.</p>
+    <h3>Our Login Method</h3>
+    <p>The first part should be easy. We simply need to call the login method from our service that we created. We gave injected our login service via the <b>_login</b> variable. Now we can call our login method by simply calling <b>this._login.login()</b>.</p>
+    <p>But that's not all. We want to get the login information after we logged in. We have a variable that can hold the result, all be have to do is subscribe to the result and assign it to our variable. Here's the end result:</p>
+    <div class="codebox">
+        <p>public login() {</p>
+        <p class="ind1">this._login.login()</p>
+        <p class="ind1">this._login.getLoggedInUser().subscribe(user => this.authState = user);</p>
+        <p>}</p>
+    </div>
+    <p>That subscribe line may look a litte weird; I called the loggedInUser method we created. Since it returns an observable I have to subscribe to it in order to get the results. Inside I used shorthand for the phat arrow notation to pass the result as the variable <i>user</i> and then assign that to our variable <i>this.authState</i></p>
+    <h3>Introduction to async shenanigans</h3>
+    <p>One important thing to go over here briefly is that our login and the getting of our login user are happening <b>asynchronously</b>. This means that our code is not waiting for one line to finish to go over to the next. Initially, I had believed that this would cause a problem because the app my try to get a loggedInUser before the login has actually completed. To my surprise, it worked anyway. I was anticipating having to use newer tools such as <b>async and await</b>.</p>
+    <p>But there is one excellent way to demonstrate how this problem can occur. Once we get our login buttons logging in, I will demonstrate this.</p>
+    <h3>Time to logout</h3>
+    <p>So we have a method for logging in, but now we need one to log out. Just like before, we can call the logout method from our service quite easily. We would also need to empty out our authstate variable since we won't have a logged in user, so we can set it to null.</p>
+    <div class="codebox">
+        <p>public logout() {</p>
+        <p class="ind1">this._login.logout();</p>
+        <p class="ind1">this.authState = null;</p>
+        <p></p>
+    </div>
+    <p>Easy enough. So we have our login methods, now we just need to make a click event inside our html to actually login:</p>
+    <div class="codebox">
+        <p>&lt;button (click)="login()"&gt;Login&lt;/button&gt;</p>
+        <p>&lt;button (click)="logout()"&gt;Logout&lt;/button&gt;</p>
+    </div>
+    <p>I know it's been a little bit since we worked on our html stuff, so here's a good reminder: Click events in angular use the notation <b>(click)</b>. Any time you see something in parentheses inside an html, it is almost always referring to some kind of <b>event</b>. Also, don't forget the () at the end of the function to indicate that we are to actually invoke it.</p>
+    <h4>Try saving now and clicking on your login and logout buttons.</h4>
+    <p>That's pretty cool. Now we also are getting that user information, and its set to the variable <b>authState</b> of our ts. We should be able to simply bind to that variable in the html, right? Lets put it inside a &lt;pre&gt; tag and use the <b>| json</b> pipe since we know the result should be a json.</p>
+    <div class="codebox">
+        <p>&lt;pre&gt; {{ authState }} &lt;/pre&gt;</p>
+    </div>
+    <p>Save and checkout your results, yours may vary depending on whether or not you are logged in at the time of refresh. If you aren't logged in, please do so we can see the result of our authstate.</p>
+    <h4>Whew, that's a hefty object</h4>
+    <p>It sure is, but if you study it, theres a lot of userful information in there. For now, lets only focus on the users name. There's an property in there called displayName, that seems to have the information we want. Lets adjust our html:</p>
+    <div class="codebox">
+        <p>&lt;pre&gt; {{ authState.displayName }} &lt;/pre&gt;</p>
+    </div>
+    <p>Now save and check out the result and y...</p>
+    <div class="lucky-box">
+        <div class="lucky-up-bg"></div>
+        <p>I'm getting console errors when I'm not logged in! It does seem to work otherwise though...</p>
+    </div>
+    <p>I was going to get to that.</p>
+    <div class="lucky-box">
+        <div class="lucky-lookaway-bg"></div>
+        <p>Sorry :(</p>
+    </div>
+    <p>It's all good. So now we run into a problem. when we are not logged in, we set our authState to null. Or even worse, if we load the page without doing any logging whatsovere, authState is undefined. And the console doesn't like when you try to find a property of undefined or null.</p>
+    <p>There are two solutions two this. First, do you remember what we used in our html if we wanted to bind to something that may not be there, but we want the console to not get mad at us if it isn't? It was quite some time ago, but you can use the question mark ? on our variable name to make sure it doesn't throw an error:</p>
+    <div class="codebox">
+        <p>&lt;pre&gt; {{ authState?.displayName }} &lt;/pre&gt;</p>
+    </div>
+    <p>Notice that we didn't put the ? on the display name. The part of the data that we aren't sure is going to be there is the actual authState, so we have to put our mark there.</p>
+    <p>Now if we aren't log in, it should show null. Tht's okay, but it isn't what we want. We don't want our app displaying 'null' or 'undefined' if they aren't logged in. Therefore we only want that name to display <b>if</b> that authState variable as long as it has something in it? How do we do that? All the way back from lesson 1, it's our pal <b>*ngIf</b>!</p>
+    <div class="codebox">
+        <p>&lt;pre *ngIf="authState"&gt; {{ authState.displayName }} &lt;/pre&gt;</p>
+    </div>
+    <p>Now if that authstate contains a false value such as null or undefined, the entire &lt;pre&gt; tage won't even show up. This also removes the need for the ? on authState, because that code won't even attempt to display if there's nothing in our authState.</p>
+    <h3>Making our Buttons a Little Smarter</h3>
+    <p>Our buttons should work, but you probably noticed one issue: If we're logged in, we can still click the login button. We don't want to be logging in twice, so lets disable those buttons. We just used our authState as a condition as to whether or not to display the names, we can also use it as a condition to disable our buttons:</p>
+    <div class="codebox">
+        <p>&lt;button (click)="login()" [disabled]="authState"&gt;Login&lt;/button&gt;</p>
+        <p>&lt;button (click)="logout()" [disabled]="!authState"&gt;Logout&lt;/button&gt;</p>
+    </div>
+    <p>As a reminder, much like how parentheses () around a word in an html element generally refers to an <b>event</b>, square brackets [] around a word in our html generally refers to a <b>property</b>. In this case, we are disabling our login button if our authState contains anything, and disabling the logout if there's nothing there.</p>
+    <h4>Try it out. Your buttons should now disable appropriately.</h4>
+    <p>Now we have a fully working login service, a component that handles the logging in and out, and we can now use that service to display login information and check our login status anywhere we want. Sweet!</p>
+    <div class="lucky-box">
+        <div class="lucky-right-bg"></div>
+        <p>You said you would go back to that async business...</p>
+    </div>
+    <h3>The async problem in action</h3>
+    <p>I sure did. Remember how I mentioned earlier that the subscription to our authState is happening asynchronously. This means that it is not waiting for that code to finish before executing the next line of code. For example, let's say we wanted to console log our authState so we can see what we are working with like we mentioned before. Let's say I entered the code like this:</p>
+    <img src="img/26-async-login.jpg" alt="async login example 1">
+    <p>After we execute our subscribe, we console log out our user. Makes sense looking at it, right? But look at the console.log result:</p>
+    <img src="img/26-async-console.jpg" alt="async console example 1">
+    <div class="lucky-box">
+        <div class="lucky-what-bg"></div>
+        <p>What is that madness?!</p>
+    </div>
+    <p>Right? What happened is that the subscribe started and then while the browser was doing it's subscribe business, it immediately went on to the console.log before our subscribe was finished.</p>
+    <p>So how would we solve this problem? In this case, we would have to make sure our code is executed inside our subscribe. It would come out looking like this:</p>
+    <img src="img/26-async-login-2.jpg" alt="async login example 2">
+    <p>I added some text to our logs so you can see where in the code this is taking place. Check out the result:</p>
+    <img src="img/26-async-console-2.jpg" alt="async login example 2">
+    <p>Pretty wild right? Our code on the inside executed last because it didn't run until our subscription was complete.</p>
+    <p>This means whenever you want to execute code that is handling data from a subscription and only after that subscription is complete, you may find yourself needing to call a method inside a the .subscribe portion of your code. A function that is to be run immediately after an asynchronous task is complete is commonly referred to as a <b>callback</b>. In the strictest sense, the code inside the curly braces is technically our callback function, since () => {} is shorthand for a function.</p>
+    <p>If you look into <b>promises</b> in javascript, you will be dealing with this sort of thing quite a bit. I won't cover it in detail yet (maybe in the future), but since Angular has us dealing with observables quite a bit, it's important to understand the sequence and flow of your code.</p>
+    <h4>Some more challenges if you want extra work (and I know you do)</h4>
+    <p>Tryout the Async Pipe Challenge and see if you can get the user info display with the <b>| async</b> pipe in your html. Don't forget that this will require adjusting some things in your ts.</p>
+    <p>If thats not enough, try using <b>.pipe</b> and <b>map</b> from rxjs to shrink that huge object we're getting from google into a smaller object that only contains the data we want.</p>
+    <footer>
+        <a href="25-login-service.html">&lt;&lt; 25 - Login Service</a>
+        <a href="index.html">Back to list</a>
+        <a href="">27 - ??? &gt;&gt; </a>
+    </footer>
+</body>
+</html>
