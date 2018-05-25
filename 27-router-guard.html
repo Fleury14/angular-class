@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>27 - Router guard</title>
+    <link rel="stylesheet" href="css/04style.css">
+</head>
+<body>
+    <header>
+        <h1>Lesson 27 - Router Guard: You Shall Not Pass!</h1>
+    </header>
+    <p>Now that our login is functional, we can start to close off some portions of our application unless someone is logged in. We don't want anyone to be able to visit our room page if they aren't logged in, and there is a tool we can use to accomplish that: A router guard.</p>
+    <h3>Building our Router Guard (It's a service)</h3>
+    <p>As mentioned in the subtitle, our router guard will be a service that we can inject into any of our router modules and force a condition that a user has to pass in order to access that route. Let's create a new file in our services folder called <b>login.guards.service.ts</b> and let's get to building.</p>
+    <p>First off, we will have quite a few things to import:</p>
+    <ul>
+        <li>We need to grab Injectable since this is a service</li>
+        <li>The router service we'll be implementing is CanActivate, so we'll need that</li>
+        <li>This will depend on our login status, so we'll need the login service</li>
+        <li>Since we'll be using Observables and our rxjs/map, lets get that too.</li>
+    </ul>
+    <p>Here's how the code of imports look:</p>
+    <div class="codebox">
+        <p>import { Injectable } from '@angular/core';</p>
+        <p>import { CanActivate } from '@angular/router';</p>
+        <p>import { LoginService } from 'login.service';</p>
+        <p>import { Observable } from 'rxjs';</p>
+        <p>import { map } from 'rxjs/operators';</p>
+    </div>
+    <p>Next will come our injectable decorator to tell Angular that this is really a service:</p>
+    <div class="codebox">
+        <p>@Injectable()</p>
+    </div>
+    <p>Since we are <b>implementing</b> <i>CanActivate</i>, we need to declare as such:</p>
+    <div class="codebox">
+        <p>export class LoginRouterGuard implements CanActivate {</p>
+        <p>}</p>
+    </div>
+    <p>Our linter is salty because we've said we are going to implement CanActivate, but haven't done so yet. We'll fix that soon.</p>
+    <p>Next up is injecting our login service so we can get our user info:</p>
+    <div class="codebox">
+        <p>constructor( private _login: LoginService ) {}</p>
+    </div>
+    <p>Now it's time for the meat of our service. We need to utilize a method called <b>canActivate</b>.</p>
+    <h3>Let's Talk About canActivate</h3>
+    <p>canActivate is a method that will return one of three things: A boolean, and observable of a boolean, and a promise of a boolean. I won't go over promises, and a straight boolean won't do us any good since it would only run once and that's it. And observable, however, would suit us just fine.</p>
+    <div class="codebox">
+        <p>canActivate(): Observable&lt;boolean&gt; {</p>
+        <p>}</p>
+    </div>
+    <p>Now we know that we will need to grab our login info from our login service, but simply returning that won't do us any good. Thats an observable of a firebase.User, and we need a boolean. Therefore, we need to transform that data into a boolean that will tell our router whether or not it's okay to activate that route. Do you remember how we transformed data that we get from an observable? I know you tried to forget, but it's time to use <b>.pipe</b> and <b>map</b> again:</p>
+    <div class="codebox">
+        <p>canActivate(): Observable&lt;boolean&gt; {</p>
+            <p class="ind1 highlight">return this._login.getLoggedInUser().pipe(</p>
+            <p class="ind2 highlight">map(user => {} )</p>
+            <p class="ind1 highlight"></p>
+        <p>}</p>
+    </div>
+    <p>Oof. Let's take this step by step. We start off with a return since we have to return something as stated up top. We call the <b>getLoggedInUser</b> method from our login service. Cool, now we have our login info. We begin the transformation with .pipe, and start our map. We pass in the data as the variable user. If you've been following along, you should know that the user is a type firebase.User, because thats what our login service gave us.</p>
+    <p>But that's not what we want to finish. We want to make sure that user exists. If there's no user, the result should be undefined, and if the result has data, we're getting an object. If only there was a way to make a boolean based off the existence of that user. Have no fear:</p>
+    <div class="codebox">
+        <p>canActivate(): Observable&lt;boolean&gt; {</p>
+            <p class="ind1">return this._login.getLoggedInUser().pipe(</p>
+            <p class="ind2">map(user => { <span class="highlight">return Boolean(user)</span> } )</p>
+            <p class="ind1"></p>
+        <p>}</p>
+    </div>
+    <p>Using the <b>Boolean()</b> allows us to apply a similar condition as if we were using this in an if statement. For example <b>if(user)</b> would return true if there was any actual data inside <i>user</i>, and return false if it was a falsy value like undefined or null. And that's exactly what we want.</p>
+    <p>Now our canActivate returns true if a user is logged in and false if not. Almost there, now we have to apply it. Here's the end result of my router guard:</p>
+    <img src="img/27-login-guard-service-ss.jpg" alt="router guard ss">
+    <h3>Applying our Router Guard</h3>
+    <p>Since this is a router guard, it would make sense that we would apply this anywhere we are declaring routes that we want to guard. Since we want to block off the room component, we know where our room routes are being handled: <b>room.routing.module.ts</b>. Let's go there.</p>
+    <p>Go ahead and make a new line inbetween the <b>component</b> and the <b>children</b> properties of our room route; we're going to add something new. If you try to kick in your intellisense, you may find the answer first, but if not, we are looking for <b>canActivate</b>. The result is an array because you can actually apply multiple routing guards if you want. In our case, we're adding just the one we made, and we called it LoginRouterGuard. Your auto-import may kick in if you didn't already import it already.</p>
+    <p>But we have one more step. Remember that <b>all services need to be provided</b>. Because we are only applying this particular guard to this room routing module, I decided to add to the providers array in our room routing module. If you chose to provide in in your app.module.ts, that's perfectly okay.</p>
+    <p>Here's what my room rouing module looks like.</p>
+    <img src="img/27-room-routing-module-ss.jpg" alt="room routing module ss">
+    <h4>Try it out, save and load your app. You should not be able to visit your room component if you are not logged in. Success!</h4>
+    <div class="lucky-box">
+        <div class="lucky-expect-bg"></div>
+        <p>But if I go to a room component when I'm logged in and logg of while I'm in the room component, I can still do things while not being logged in. I have circumvented your silly router guard! Hahahaha!</p>
+    </div>
+    <p>True, so we want to kick someone off the room component if they logoff while being on a room component. Sounds like a topic.. for the next lesson!</p>
+    <footer>
+        <a href="26-login-component.html">&lt;&lt; 26 - Login Component</a>
+        <a href="index.html">Back to list</a>
+        <a href="28-router-guard-part-2.html">28 - Router Guard, part 2&gt;&gt; </a>
+    </footer>
+</body>
+</html>

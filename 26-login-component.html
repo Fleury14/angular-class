@@ -29,25 +29,29 @@
     </div>
     <h4>Side note:</h4>
     <p>We did not make this an observable because we are going to execute the .subscribe in our login method. If you are taking the Async Pipe Challenge (it's the hottest thing these days), then we will need to change the type since we wouldn't be doing the .subscribe. That's all I will give you for the challenge, refer to the async pipe lesson if you need it.</p>
-    <h3>Our Login Method</h3>
-    <p>The first part should be easy. We simply need to call the login method from our service that we created. We gave injected our login service via the <b>_login</b> variable. Now we can call our login method by simply calling <b>this._login.login()</b>.</p>
-    <p>But that's not all. We want to get the login information after we logged in. We have a variable that can hold the result, all be have to do is subscribe to the result and assign it to our variable. Here's the end result:</p>
+    <h3>Getting our User Info</h3>
+    <p>The first thing we are going to set up is our subscription to our user information. We want to subscribe to this as soon as the component loads. Because this is a subscription, if there are any changes to our authstate such as logging in and out, it will update automatically. Let's create an ngOnInit if you haven't done so already:</p>
     <div class="codebox">
-        <p>public login() {</p>
-        <p class="ind1">this._login.login()</p>
+        <p>ngOnInit() {</p>
         <p class="ind1">this._login.getLoggedInUser().subscribe(user => this.authState = user);</p>
         <p>}</p>
     </div>
-    <p>That subscribe line may look a litte weird; I called the loggedInUser method we created. Since it returns an observable I have to subscribe to it in order to get the results. Inside I used shorthand for the phat arrow notation to pass the result as the variable <i>user</i> and then assign that to our variable <i>this.authState</i></p>
+    <p>I'm using arrow notation shorthand here: I take the result of the subscription, pass it as the variable <i>user</i> and then throw it into our variable <i>this.authState.</i></p>
+    <p>If you didn't previously have an <i>ngOnInit</i>, remember you will need to import it up top as a part of <b>@angular/core</b> and you will need to add the <b>implements OnInit</b> after your class declaration.</p>
     <h3>Introduction to async shenanigans</h3>
-    <p>One important thing to go over here briefly is that our login and the getting of our login user are happening <b>asynchronously</b>. This means that our code is not waiting for one line to finish to go over to the next. Initially, I had believed that this would cause a problem because the app my try to get a loggedInUser before the login has actually completed. To my surprise, it worked anyway. I was anticipating having to use newer tools such as <b>async and await</b>.</p>
-    <p>But there is one excellent way to demonstrate how this problem can occur. Once we get our login buttons logging in, I will demonstrate this.</p>
+    <p>One important thing to go over here briefly is that our login and the getting of our login user are happening <b>asynchronously</b>. This means that our code is not waiting for one line to finish to go over to the next. Fortunately we are running our subscription in our OnInit and we aren't immediately calling that data anywhere else. But sometimes when dealing with asynchronous code, you will run into some shenanigans. I will explain them later.</p>
+    <h3>Our Login Method</h3>
+    <p>The first part should be easy. We simply need to call the login method from our service that we created. We gave injected our login service via the <b>_login</b> variable. Now we can call our login method by simply calling <b>this._login.login()</b>.</p>
+    <div class="codebox">
+        <p>public login() {</p>
+        <p class="ind1">this._login.login()</p>
+        <p>}</p>
+    </div>
     <h3>Time to logout</h3>
-    <p>So we have a method for logging in, but now we need one to log out. Just like before, we can call the logout method from our service quite easily. We would also need to empty out our authstate variable since we won't have a logged in user, so we can set it to null.</p>
+    <p>So we have a method for logging in, but now we need one to log out. Just like before, we can call the logout method from our service quite easily. We do not need to change out authState to null manually here, that's the power of subscriptions. When someone logs out, that user information will change, and that change will trigger the code for anyone who is subscribed to it. Since we are subscribed, and we updated our variable inside our subscription, it will update on its own.</p>
     <div class="codebox">
         <p>public logout() {</p>
         <p class="ind1">this._login.logout();</p>
-        <p class="ind1">this.authState = null;</p>
         <p></p>
     </div>
     <p>Easy enough. So we have our login methods, now we just need to make a click event inside our html to actually login:</p>
@@ -102,7 +106,8 @@
         <p>You said you would go back to that async business...</p>
     </div>
     <h3>The async problem in action</h3>
-    <p>I sure did. Remember how I mentioned earlier that the subscription to our authState is happening asynchronously. This means that it is not waiting for that code to finish before executing the next line of code. For example, let's say we wanted to console log our authState so we can see what we are working with like we mentioned before. Let's say I entered the code like this:</p>
+    <p>I sure did. Remember how I mentioned earlier that the subscription to our authState is happening asynchronously. This means that it is not waiting for that code to finish before executing the next line of code. For example, let's say we did not subscribe in our OnInit, and instead subscribed when we logged in, and then wanted to console log our authState so we can see what we are working with like we mentioned before. Let's say I entered the code like this:</p>
+    <h4>You don't have to edit your code to fit this example. If you do, please make sure to change it back.</h4>
     <img src="img/26-async-login.jpg" alt="async login example 1">
     <p>After we execute our subscribe, we console log out our user. Makes sense looking at it, right? But look at the console.log result:</p>
     <img src="img/26-async-console.jpg" alt="async console example 1">
@@ -121,10 +126,13 @@
     <h4>Some more challenges if you want extra work (and I know you do)</h4>
     <p>Tryout the Async Pipe Challenge and see if you can get the user info display with the <b>| async</b> pipe in your html. Don't forget that this will require adjusting some things in your ts.</p>
     <p>If thats not enough, try using <b>.pipe</b> and <b>map</b> from rxjs to shrink that huge object we're getting from google into a smaller object that only contains the data we want.</p>
+    <p>Here's a screenshot of our login component:</p>
+    <h4>I made an update to the lesson on 5/18 at 5:00pm. I previously implemented the login subscription incorrectly. My apologies.</h4>
+    <img src="img/26-login-component.jpg" alt="login component ss">
     <footer>
         <a href="25-login-service.html">&lt;&lt; 25 - Login Service</a>
         <a href="index.html">Back to list</a>
-        <a href="">27 - ??? &gt;&gt; </a>
+        <a href="27-router-guard.html">27 - Router Guard &gt;&gt; </a>
     </footer>
 </body>
 </html>
