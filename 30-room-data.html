@@ -11,5 +11,117 @@
     <header>
         <h1>Lesson 30 - Grabbing our Room Data</h1>
     </header>
+    <p>We're currently getting data from our rooms, but its just the room list for the purpose of our navigation items. We will need to bring the data into our room component so we can utilize it in our room list and room form. This requires two stages: First we have to get the data, and then secondly we have to make sure that the data is kept in such a way that we can accomplish everything we want to. I know that second part sounds weird, but it will make sense later. Let's focus on the first problem:</p>
+    <h3>When Do We Get Our Data?</h3>
+    <p>The easy answer would be to use the OnInit for our room component, but there's a problem with that. Each room we click on uses the same component. The only difference is in the data we're getting. Because of this, if we clicked on the Starfox room from our welcome screen, we would get our data as expected. But if we then clicked on the Zelda room, the ngOnInit wouldn't fire because we're staying in the same component.</p>
+    <p>So how do we solve this problem. We would need a subscription, that much we can probably deduce, but is there any subscription we have that fires any time the address changes, even going from room to room?</p>
+    <p>We do, our subscription to the <b>params</b> that we did a while back. Remember that observable triggers off of any address change, we can make our data call right there.</p>
+    <p>Now that we know <b>where</b> to place the call for our data, we need to make a method that returns the data. Since the data will vary based on the parameter that we're getting from our paramMap, we know this method will have to take in an id, and return an observable that has our data. Let's get crackin'.</p>
+    <h3>Our Method in the Room Service</h3>
+    <p>Let's start by naming our method <b>getRoomByID</b> since that what we want the method to do. It's going to take in a string that should be our room id. We will then need to grab our list from the database list, and then do <b>two</b> seperate maps.</p>
+    <ul>
+        <li>The first one will take the list of rooms and only select the room that has an id that matches what we are passing in. This way we only get the room we want.</li>
+        <li>Secondly we need to go through that one room and edit the result. We need to make sure its an array and not an object so we can properly loop through it, and then we need to make sure that the id key that firebase gives each reservation is retained.</li>
+    </ul>
+    <p>Could we do everything in one map? Sure, but it makes the code a little harder to look at and for the sake of this demonstration, we'll be using the one that looks easier. When you get more comfortable with using map, feel free to try to get everything done at once.</p>
+    <p>Let's start by tackling the first part. We're going to make our method, and inside we will return the observable that we called earlier to get our list of rooms. We then tack on a .pipe to get ready to work our magic.</p>
+    <div class="codebox">
+        <p>public getRoomById(id:string) {</p> 
+        <p class="ind1">return this._db.list&lt;Room&gt;('rooms).valueChanges().pipe()</p>
+        <p>}</p>
+    </div>
+    <p>Nothing too crazy so far. I mentioned earlier how in services you generally don't assign the value of a service to a variable and then jjust give anyone access to it; We usually call a method and just return the value that we want. That's what we're doing here.</p>
+    <p>Also the <b>_db</b> refers to the AngularFireDatabase I Injected via the constructor a couple lessons ago. Your variable name may.. vary.</p>
+    <p>So we've got our pipe ready to go. Our first map will pass in an array of rooms. We want to return just one room out of that. We can use <b>.find</b> to help us out here.</p>
+    <div class="codebox">
+        <p>public getRoomById(id:string) {</p> 
+        <p class="ind1">return this._db.list&lt;Room&gt;('rooms).valueChanges().pipe(</p>
+        <p class="ind2 highlight">map( roomsFromDB => {</p>
+        <p class="ind3 highlight">return roomsFromDB.find(room => room.id === id)</p>
+        <p class="ind2 highlight">}),</p>
+        <p class="ind1">)</p>
+        <p>}</p>
+    </div>
+    <p>We used arrow notation inside our .find to pass each room and it only returns the resulting room if the property <b>id</b> of our room matches the <b>id</b> we pass in via our method.</p>
+    <div class="lucky-box">
+        <div class="lucky-left-bg"></div>
+        <p>I know it's not likely to happen, but what if I passed in the value 'Zelda' and I actually had two rooms in the database named 'Zelda'. Would that not return an array and mess up the rest of this mapping business?</p>
+    </div>
+    <p>A solid question, and the answer is that <b>.find()</b> only returns <b>the first matching result.</b> So in your example, a second Zelda room would simply never be found.</p>
+    <p>Now we've got the one room we want. Sweet. The result is an object, and that's fine, but lets look at how the data is stored in firebase.</p>
+    <img src="img/30-room-data-ss.jpg" alt="room data firebase screenshot">
+    <p>Hopefully our issues become more apparent looking at this: Our reservations list is not an array: It is an object that has a property for each firebase generated key, and inside that is an object with all our room data. We can't use a for loop on data like this, we need our reservations list to be an array.</p>
+    <p>Thats the first issue, but look at how the firebase-assigned id is stored: It's not a property lined up with all our other reservation data. We want a property in our reservation list named <b>id</b> and it needs to contain that key.</p>
+    <p>Lets start off our second map and begin by creating a blank array that will eventually hold our reservations:</p>
+    <div class="codebox">
+        <p>public getRoomById(id:string) {</p> 
+        <p class="ind1">return this._db.list&lt;Room&gt;('rooms).valueChanges().pipe(</p>
+        <p class="ind2">map( roomsFromDB => {</p>
+        <p class="ind3">return roomsFromDB.find(room => room.id === id)</p>
+        <p class="ind2">}),</p>
+        <p class="ind2 highlight">map ( (selectedRoom:Room) => {</p>
+        <p class="ind3 highlight">const reservationList:Reservation[] = [];</p>
+        <p class="ind2 highlight">})</p>
+        <p class="ind1">)</p>
+        <p>}</p>
+    </div>
+    <p>We began second map and passed in the result of our first map, now calling it <b>selectedRoom</b>. We gave it a type of Room, since thats what it should be. We also typed our blank array as an array of <b>Reservation</b>s. You will need to import the reservation interface we made earlier, and if you didn't make one, you will need to do so before continuing.</p>
+    <p>So how can we go through all these reservations? Fortunately for..in can help us out here. <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...in">Here is an explanation of how for..in works.</a> The short version is that it allows us to iterate over object properties.</p>
+    <div class="codebox">
+        <p>public getRoomById(id:string) {</p> 
+        <p class="ind1">return this._db.list&lt;Room&gt;('rooms).valueChanges().pipe(</p>
+        <p class="ind2">map( roomsFromDB => {</p>
+        <p class="ind3">return roomsFromDB.find(room => room.id === id)</p>
+        <p class="ind2">}),</p>
+        <p class="ind2">map ( (selectedRoom:Room) => {</p>
+        <p class="ind3">const reservationList:Reservation[] = [];</p>
+        <p class="ind3 highlight">for (let reservationKey in selectedRoom.reservations) {</p>
+        <p class="ind3 highlight">}</p>
+        <p class="ind2">})</p>
+        <p class="ind1">)</p>
+        <p>}</p>
+    </div>
+    <p>We now have a loop that will go over each key in our reservation list. Great. Now bear with me as this is where things get a little dicey. I will show how we got our array and then explain in further detail:</p>
+    <div class="codebox">
+        <p>public getRoomById(id:string) {</p> 
+        <p class="ind1">return this._db.list&lt;Room&gt;('rooms).valueChanges().pipe(</p>
+        <p class="ind2">map( roomsFromDB => {</p>
+        <p class="ind3">return roomsFromDB.find(room => room.id === id)</p>
+        <p class="ind2">}),</p>
+        <p class="ind2">map ( (selectedRoom:Room) => {</p>
+        <p class="ind3">const reservationList:Reservation[] = [];</p>
+        <p class="ind3">for (let reservationKey in selectedRoom.reservations) {</p>
+        <p class="ind4 highlight">const reservation:Reservation = selectedRoom.reservations[reservationKey];</p>
+        <p class="ind4 highlight">reservation.id = reservationKey;</p>
+        <p class="ind4 highlight">reservationList.push(reservation);</p>
+        <p class="ind3">}</p>
+        <p class="ind2">})</p>
+        <p class="ind1">)</p>
+        <p>}</p>
+    </div>
+    <p>Oof. So first, we create a new variable called <b>reservation</b>. We give it a type Reservation, which should make sense. We then assign its value to the reservation that corresponds to they key that is being iterated.</p>
+    <p>So that means <b>reservation</b> now holds email, endTime, reason, and all that business. That's cool, but now we need to give it a property id. Remember when we created our reservation interface that we <b>added an optional property: id</b>? This is what is allowing the next line to happen. We take that new reservation we made, and assigned its property <b>id</b> to be the value of the key we're using to iterate over our room list. If we did not designated the id field, we would not be able to do this. In fact, if we didn't give our variable <b>reservation</b> a type <i>Reservation</i> our linter would probably get mad at us because it doesn't recognize the property id. This is why types are our friends!</p>
+    <p>Now that we have our reservation object and we added an id, we push it to that blank reservation array we created earlier. Since this happens inside our for..in loop, once the loop finishes our <b>reservationList</b> will now be an array of reservations, complete with an id. Superb!</p>
+    <p>Now we can just overwrite the old reservations property value which previously held an object with our shiny new array, and return the resulting room.</p>
+    <div class="codebox">
+        <p>public getRoomById(id:string) {</p> 
+        <p class="ind1">return this._db.list&lt;Room&gt;('rooms).valueChanges().pipe(</p>
+        <p class="ind2">map( roomsFromDB => {</p>
+        <p class="ind3">return roomsFromDB.find(room => room.id === id)</p>
+        <p class="ind2">}),</p>
+        <p class="ind2">map ( (selectedRoom:Room) => {</p>
+        <p class="ind3">const reservationList:Reservation[] = [];</p>
+        <p class="ind3">for (let reservationKey in selectedRoom.reservations) {</p>
+        <p class="ind4">const reservation:Reservation = selectedRoom.reservations[reservationKey];</p>
+        <p class="ind4">reservation.id = reservationKey;</p>
+        <p class="ind4">reservationList.push(reservation);</p>
+        <p class="ind3">}</p>
+        <p class="ind3 highlight">selectedRoom.reservation = reservationList;</p>
+        <p class="ind3 highlight">return selectedRoom;</p>
+        <p class="ind2">})</p>
+        <p class="ind1">)</p>
+        <p>}</p>
+    </div>That.. is a lot of code. But now with this method, we pass in the id of a room, and we get the corresponding rooms data all nicely formatted.
+    <p></p>
 </body>
 </html>
