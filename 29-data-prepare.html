@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>29 - Data preparation</title>
+    <link rel="stylesheet" href="css/04style.css">
+</head>
+<body>
+    <header>
+        <h1>Lesson 29: Preparing to use our database</h1>
+    </header>
+    <p>It's about that time: We're going to begin integration our firebase database into our app, but we will need to make some preparations first:</p>    
+    <h3>Bringing in the AngularFire Module</h3>
+    <p>Make sure in your <b>app.module.ts</b> that you are importing the AngularFireDatabaseModule, both up top, and in your imports array. Also, since the order of our imports array matters, make sure that it comes after your general AngularFireModule.</p>
+    <p>You should now have three firebase modules inside your app module: <b>AngularFireModule (first), AngularFireAuthModule, and AngularFireDatabaseModule.</b></p>
+    <h3>Creating a Reservation Interface</h3>
+    <p>Each of our rooms inside the database will also have a list of reservations, and we will be dealing with that data eventually, so we may as well make that interface now.</p>
+    <img src="img/28-reservation-ss.jpg" alt="reservation interface ss">
+    <p>This might be your first time seeing a question mark inside an interface; this means that particular property (in our case, id) is optional, and an object of type <i>Reservation</i> can exist without an id.</p>
+    <p>The reason we do this is because not all of our reservations will have an id at all times; when you look at how the data is stored, you will notice that the id is not one of the values, but instead is the value of its parent. This isn't terribly uncommon. We will work some magic later to append that id.</p>
+    <p>Having optional properties can be useful in scenarios like this where you may have to append data on to an object, just make sure that you are only using optional properties if it makes sense within the context of the application. Remember that type safety is important, and keeping things optional just adds more variance to our types.</p>
+    <h3>Lets Start Bringing in our Data</h3>
+    <p>Now it's time for the first phase, bringing in a list of rooms for our navigation component. If you remember how we organized our flow, our navigation component is currently bring in a list from the room service that is an observable and then mutates that data in order to display it. Since the data is grabbed from the room service, let's start there.</p>
+    <h4>Inside our Room Service</h4>
+    <p>Earlier, we were manually typing our an array and using <b><i>of()</i></b> to transform it to an observable. We won't need to do that anymore. We just need two steps:</p>
+    <ul>
+        <li>Bring in the AngularFireDatabase and inject it</li>
+        <li>Assign our list of rooms as an observable that the nav component can work with</li>
+    </ul>
+    <p>First part we should be used to by now: Bring in <b>AngularFireDatabase</b> from <b>'angularfire2/database'</b>. Inject the database inside our constructor:</p>
+    <div class="codebox">
+        <p>constructor(private _db: AngularFireDatabase) {</p>
+        <p>}</p>            
+    </div>
+    <p>Now for the magic: We already have a variable set up to be an Observable array of rooms. Now let's assign the value of that variable to our database list:</p>
+    <div class="codebox">
+        <p>constructor(private _db: AngularFireDatabase) {</p>
+        <p class="ind1 highlight">this.rooms = this._db.list&lt;Room&gt;('rooms').valueChanges();</p>
+        <p>}</p>            
+    </div>
+    <p>Let's break down that line: We call the <b>.list</b> method of our Database and have a weird notation of <i>Room</i> immediately after. This is a <b>generic</b>. We couldl probably do a whole lesson on generics (and I might), but essentially generics allow us to write methods that can deal with any time, but still retain the type throughout the method. For example, if I used a paramter of type any on a method, there will be no information on that paramter whatsoever. Generics allow us to retain it. The typescript page on generics explains this much better than I can:</p>
+    <a href="https://www.typescriptlang.org/docs/handbook/generics.html">Official Typescript Generic Documentation</a>
+    <p>After the generic, we call <b>'rooms'</b>, this is referring to the <b>directory inside the database.</b> The valueChanges() method afterwards is a special format of the data and returns an observable that emits <b>every time the data is changed</b>.</p>
+    <p>Awesome, that's exactly what we want. Assuming we have no errors, we are setting that rooms variable to an observable array of Rooms, just like before. If you check out your nav component, you should see the room list. If you hooked up your own firebase database, you will need to make sure that your rooms list is populated on the database, but the bonus is that you can watch the nav component change in realtime as you edit your data.</p>
+    <p>This was the primary reason we did all that <b>rxjs/of</b> business and the .pipe.subscribe in the component: Because we already set up our app to deal with observables, the act of plugging in one observable in place of another is trivial.</p>
+    <p>Here's how my room service looks:</p>
+    <img src="img/29-room-service.jpg" alt="room service ss">
+    <p>It is worth noting that it's generally rare to pull variables directly from a service; It's more common to have a method that returns a service variable, even if that's the only thing that method does. For example, I probably should have wrote a method called getRooms() whos only function is to return the observable we made. I didn't do that here because that would require a little bit of editing of our components, and I didn't want to throw too much at you guys, but if you want to do so, or already did, then good work.</p>
+    <div class="lucky-box">
+        <div class="lucky-right-bg"></div>
+        <p>My data isn't updating. It shows up just fine, but when I change the data, the app doesn't change.</p>
+    </div>
+    <p>This happened to me too, and also happened to us in class. This is a byproduct of using 'rxjs/take' inside our nav component. Open up the file.</p>
+    <h3>Making sure our Nav Component Updates</h3>
+    <p>If you remember when we talked about our subscriptions inside our navigation component we did bring up that in addition to subscribing, you must always make sure to unsubscribe when appropriate to avoid memory leaks and other side effects. There were a couple of solutions we had.</p>
+    <ul>
+        <li>Assign the subscription to a variable and then implement <b>onDestroy</b> to unsubscribe. This will be our fix, so if you did this, you shouldn't have this refresh bug.</li>
+        <li>You completed the Async Pipe Challenge and didn't even have a .subscribe inside your component and used <b> | async</b>. Like above, you shouldn't have the bug if you did this, so your hard work is rewarded!</li>
+        <li>You imported <b>take</b> from rxjs and thre a <b>take(1)</b> into our .pipe. That is where our problem lies.</li>
+    </ul>
+    <p>Do you remember what <b>take(1)</b> does? It makes a subscription emit once, <b>and only once</b>. That's great for our memory concerns, but in this case we want our data to be persistent, so let's switch to the onDestroy method. Go ahead and remove the <b>take(1)</b> as well as the take import up top. Here is a screenshot detailing the changes:</p>
+    <img src="img/29-nav-component-ss.jpg" alt="nav component ss">
+    <p>We pull in the subscription for typing purposes, create a variable of that type, and assign it to the result of our .subscribe. We then implement OnDestroy, create an ngOnDestroy method, and unsubscribe in there so in the event someone leaves our navigation component, the subscription will be removed.</p>
+    <p>Now you may note that our navigation component is always there, so is there really a need to unsubscribe to a component that is always displaying and will never be destroyed? The answer to that is no, it's not necessary, but it's still good practice to do. You never know what features you may add to a application that would require not displaying our nav component, and should we choose to do that, our unsubscribes are already taken care of and we have nothing to worry about.</p>
+    <h3>What's Next</h3>
+    <p>Next one's a big one, not just because its lesson 30, but we're going to start getting actual data from our rooms. Getting a room list is one thing, but we're going to want to have our reservation list displaying information so we will need to bring in all the pertinent room info whenever someone visits a room component. That is the bulk of what we will be tackling in the next lesson.</p>
+    <footer>
+        <a href="28-router-guard-part-2.html">&lt;&lt; 28 - Router Guard pt. 2</a>
+        <a href="index.html">Back to list</a>
+        <a href="30-room-data.html">30 - Getting our room data &gt;&gt; </a>
+    </footer>
+</body>
+</html>
