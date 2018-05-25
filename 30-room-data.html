@@ -66,7 +66,7 @@
         <p>}</p>
     </div>
     <p>We began second map and passed in the result of our first map, now calling it <b>selectedRoom</b>. We gave it a type of Room, since thats what it should be. We also typed our blank array as an array of <b>Reservation</b>s. You will need to import the reservation interface we made earlier, and if you didn't make one, you will need to do so before continuing.</p>
-    <p>So how can we go through all these reservations? Fortunately for..in can help us out here. <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...in">Here is an explanation of how for..in works.</a> The short version is that it allows us to iterate over object properties.</p>
+    <p>So how can we go through all these reservations? Fortunately for..in can help us out here. <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...in" target="_blank">Here is an explanation of how for..in works.</a> The short version is that it allows us to iterate over object properties.</p>
     <div class="codebox">
         <p>public getRoomById(id:string) {</p> 
         <p class="ind1">return this._db.list&lt;Room&gt;('rooms).valueChanges().pipe(</p>
@@ -121,7 +121,32 @@
         <p class="ind2">})</p>
         <p class="ind1">)</p>
         <p>}</p>
-    </div>That.. is a lot of code. But now with this method, we pass in the id of a room, and we get the corresponding rooms data all nicely formatted.
-    <p></p>
+    </div>
+    <p>That.. is a lot of code. But now with this method, we pass in the id of a room, and we get the corresponding rooms data all nicely formatted.</p>
+    <p>Here's a look at my final result. As usual, your variable names may be different: </p>
+    <img src="img/30-get-room-by-id.jpg" alt="get room by id method">
+    <p>I added a couple of typings to make sure the data is exactly what I think it should be. I didn't put the returning <b>:Observable&lt;Room&gt;</b> in our initial explanation because the entrire function would have red bars for days because our linter is expecting us to return an Observable. Now that our method is finished, go ahead and add that on. If you are receiving errors, your data result may not be what you think it is.</p>
+    <p>So now that we have our method, where do we call it? We discussed this at the beginning of the lesson: We will put this in our paramMap subscription since we know thta code will be fired every time we change address, even if it's from room to room.</p>
+    <h3>Now Let's See if it Works</h3>
+    <p>Let's now head into our room component and look for where we are subscribing to our paramMap. I'm going it in the constructor, yours may be inside an <b>ngOnInit</b>.</p>
+    <p>We will need to do two things:</p>
+    <ul>
+        <li>Create a variable of type <i>Room</i> that will hold the information of the room that we're on.</li>
+        <li>Inside the subscription to our paramMap we will need to subscribe to our room data and assign it to the variable we just created. Let's console log it to for fun. Because logging is fun.</li>
+    </ul>
+    <p>Yeah, we will be doing a subscription inside a subscription. This may seem a little dirty at first, and there are better ways to handle multiple subscription. If you start to have 3 or more, I would suggest looking into rxjs <b>forkJoin</b> or something similar. We <i>could</i> also just not subscribe to it in our component and use the async pipe on the observable instead, which would be fine. I'm choosing not to do that because I want to console log the info.</p>
+    <p>Here's how my paramMap subscription looks now:</p>
+    <img src="img/30-parammap-ss.jpg" alt="param map update">
+    <p>I noticed that I was tacking on a string to my paramData earlier in a map function. This is not only unnecessary, but would break our functionality, so if your map is tacking on a string like <i>' is the parameter we are on!', then remove it.</i></p>
+    <p>So now when we click on a room, we should have all the information from the database on that room being console logged:</p>
+    <img src="img/30-room-data-log.jpg" alt="room data console log">
+    <p>Hooray! We got our room info! Our reservation list is an array! And it has the firebase as a key! Yeeeeeah! And no, that is not my email. Thats <a href="https://www.github.com/koalavc" target="_blank">a certain student</a> being funny.</p>
+    <h4>You got the data, now do some things with it.</h4>
+    <p>If you've been ignoring styling your project (like I have), now is a good time to start on it, particularly as it applies to your room component. If you didn't get the pictures made by Mark Rogers, they are posted in the class slack channel. If you'd rather use your own, great! Just make sure that the name matches up. Try displaying the user's google photo somewhere. Also don't forget your layout for your room component: That router-outlet will contain either a list or a form. I ended up putting the room info on the left half and the router outlet on the right half, but do what works for you. Next up, we'll start tackling that room list. I will let you decide what, if anything, you want to display from that room data.</p>
+    <footer>
+        <a href="29-data-prepare.html">&lt;&lt; 29 - Data preparation</a>
+        <a href="index.html">Back to list</a>
+        <a href="">31 - Building our room list &gt;&gt; </a>
+    </footer>
 </body>
 </html>
