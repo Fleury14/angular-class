@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>34 - Writing</title>
+    <link rel="stylesheet" href="css/04style.css">
+</head>
+<body>
+    <header>
+        <h1>Lesson 34 - Write and Wrong</h1>
+    </header>
+    <p>Now that our form and list look the way we want, its time to give them some functionaity. We want our form to write to our database and add to our reservations list. We also want our list to be able to delete reservations. While we could write the actual database call inside the component, it would make more sense for us to put the database methods inside our room service. This way, if we ever want to have another component to be able to write or delete, we can just call the method inside the service.</p>
+    <h3>Adding our service methods</h3>
+    <p>Let's go into our <b>room.service.ts</b>. We're going to create two methods, one to write and one to delete. We should have our AngularFireDatabase already brought in and injected in our constructor, so we can go right into our method creation:</p>
+    <div class="codebox">
+        <p>public addReservation(reservation: Reservation, roomId: string) {</p>
+        <p>}</p>
+    </div>
+    <p>Easy stuff so far. Our method will take in two items, a roomId to let us know what room we're posting to and a reservation to actually push to the database. Now we can return our database call. Let's take a look at how our data is stored:</p>
+    <img src="img/30-room-data-ss.jpg" alt="room data">
+    <p>We can see the path that we need to follow: We start in the rooms directory, go into the room of our choosing (covered by the variable <b>roomId</b> that we're taking in), then the reservations subdirectory and push to that. Thankfully, our database call is that simple:</p>
+    <div class="codebox">
+        <p>public addReservation(reservation: Reservation, roomId: string) {</p>
+            <p class="ind1 highlight">return this._db.list('rooms/' + roomId + '/reservations').push(reservation);</p>
+        <p>}</p>
+    </div>
+    <p>Yep, all it takes is a .push with the data that we are going to push. We may as well do the delete method while we are here, but this is going to take in different values. Instead of taking in an entire reservation, we need to find one value that can reference a whichever reservation we want to delete.</p>
+    <p>And what value covers that? That's right, it's our id. You can see in the data tree that each reservation is preceded by a firebase key, and remember what we did with that key back in lesson 30? We tacked it onto our reservation as an id. That will come in handy later:</p>
+    <div class="codebox">
+        <p>public deleteReservation(roomId: string, reservationId: string) {</p>
+        <p>}</p>
+    </div>
+    <p>We're taking in different values; now we're just taking in the id. We can use that id in our database call and just use <b>.remove()</b> on our firebase list:</p>
+    <div class="codebox">
+        <p>public deleteReservation(roomId: string, reservationId: string) {</p>
+        <p class="ind1 highlight">return this._db.list('/rooms/' + roomId + '/reservations').remove(reservationId);</p>
+        <p>}</p>
+    </div>
+    <p>That completes our method in the service. You probably already know this, but <b>_db</b> is the variable we assigned to our database when we injected it in the constructor. Your variable name may differ. Here's a screenshot of my two methods:</p>
+    <img src="img/34-service-methods.jpg" alt="service methods">
+    <p>Now that we have our service methods, we need to call them in an appropriate place. We add reservations from our form, so that's a good place to start. Let's check out our submit method in our <b>room.form.component.ts</b></p>
+    <h3>Applying our Write Method</h3>
+    <p>So we know on submit that we want to add our reservation to the database, but is there anything else we want to do in addition to that? Is there any action you can imagine we might need after we click the submit button?</p>
+    <p>If we do nothing, we will stay at our form, allowing the user to spam the submit button. So let's navigate back to the list after a successfull add. Let's start with the service call first, comment out your console logs if you like, then add the following: </p>
+    <div class="codebox">
+        <p>this._room.addReservation(reservation, this.roomName)</p>
+    </div>
+    <p>Our service method required two values. The first is the reservation that we are being passed from the form. Our roomId is being handled by the variable <b>roomName</b>, but have we set the value of that variable to actually hold our room?</p>
+    <p>You may have noticed in the earlier form lesson that there was a header that inside says *** INSERT ROOM NAME HERE ***. If you went ahead and completed that part, then you will have already done what we're about to do, good on you.</p>
+    <p>By now you should be familiar with how we get our room id, through paramMap. Remember that we need to use <b>.parent</b> to get the parameter from the <b>base router</b> since we are on a child route, similar to what we did in our room list. Here's the method I put inside the OnInit of our room form component:</p>
+    <img src="img/34-getting-our-room.jpg" alt="how i got the room">
+    <p>I threw a console log in there just to verify that we are getting the room id, you don't have to put it in if you dont want.</p>
+    <p>Now we have our write method in the component passing the reservation from the form into our service. That takes care of the first half, but now we need to navigate away from our form upon completion.</p>
+    <p>Highlight the <b>addReservation</b> inside our room component and look at what VS Code gives you as far as information: It's not telling us what its returning (such as an observable), but it does mention that the function is <b>Thenable</b>. That may sound weird, but it means we can apply a <b>.then</b> and create a callback that executes whenever the database request is done. You may be familiar with <b>.then</b> if you have worked with promises; just know that this is behaving in a simlar fashion.</p>
+    <h3>Utilizing Router</h3>
+    <p>The .then handles the when part, but how do we navigate to another route? You might remember how from looking at our router guard, we use <b>.navigate from the Router</b>. We previously used navigateUrl, but we will be using navigate here.</p>
+    <p>You will need to include <b>Router</b> in your imports from @angular/router (You should already be importing ActivatedRoute as well). You will also need to injet it in your constructor, I gave mine the variable <b>_router</b>.</p>
+    <div class="lucky-box">
+        <div class="lucky-lookat-bg"></div>
+        <p>What's the difference between Router and ActivatedRoute</p>
+    </div>
+    <p>Activated route primarily deals with information on the route you are currently on. Router most often deals with the entire router, including command that can be issued, which is exactly what we will be doing.</p>
+    <p>I will show the end result of the router call and go over it with you.</p>
+    <img src="img/34-submit-method.jpg" alt="room form component method">
+    <p>We add a .then and inside the then we create an anonymous function. This function will be completed as soon as the reservation is done. Inside the function we call the router command <b>navigate</b>. This takes in an array, but we only want one destination, so there's only one value. You should be familiar with <b>../list</b>; we're going back one level and then moving to the list component. But there's one issue:</p>
+    <p>The routers navigate command doesn't know what route we are currently on. That's where the <b>relativeTo</b> option comes in to play. We can pass it the current route that we are on, but is there anything that holds the <b>information</b> of the route that we are on? Hey, it's ActivatedRoute to the rescue, so I just pass in the activate route and we're solid.</p>
+    <p>With this method in place, our form should now write to the database. Test it out...</p>
+    <h4>You may notice a bug at this point. Your reservation writes, but then the rooms are added onto you navbar again, and now you have every room listed twice. I ran into this bug as well. You can try tackling this one yourself, but the next lesson we will cover how to fix this bug.</h4>
+    <footer>
+        <a href="33-room-form.html">&lt;&lt; 33 - Room Form</a>
+        <a href="index.html">Back to list</a>
+        <a href="">35 - Debugging our Navbar &gt;&gt; </a>
+    </footer>
+</body>
+</html>
