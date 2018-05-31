@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>32 - Room Form preparation</title>
+    <link rel="stylesheet" href="css/04style.css">
+</head>
+<body>
+    <header>
+        <h1>Lesson 32: Preparing for our room form</h1>
+    </header>
+    <p>Before we go over our all the details about our form, let's get some basic HTML first. This won't really be a lesson per se, I just want to go over the anatomy of our form first.</p>
+    <h4>If you already copy/pasted the form code from class earlier, and you got through it without errors, you can basically skip all of this until we get to the write functionality.</h4>
+    <p>Here is my base HTML. Keep in mind that my room form TS file is basically empty. There's no directives in here, just straight HTML.</p>
+    <img src="img/32-room-form-html.jpg" alt="roomform html">
+    <p>First off, everything is wrapped in a form tag, that's very important. We start off with an option/select dropdown with only one option for now. Directly underneath is a warning message that we will want to display if the user hasn't selected a reason.</p>
+    <p>Next we have have a couple of email input tags for the user to enter their e-mail and to confirm.</p>
+    <p>Underneath that, theres a couple of time inputs for the start and end time.</p>
+    <p>There's a checkbox underneath making sure the user agrees to clean up because nobody likes a dirty room.</p>
+    <p>To round out our form we have a submit type input that will be used for... submitting.</p>
+    <p>Last up, we have some warnings underneath. These will probably need to be displayed conditionally; we want to warn them that changes haven't been saved (this will help with a bonus lesson much later on), and if there are fields that haven't been filled out.</p>
+    <p>Let's wrap it up here. Style up the form however you like. In the next lesson, we will start adding some directives and give this bad boy some functionality.</p>
+    <footer>
+        <a href="31-room-list.html">&lt;&lt; 31 - Our Room List</a>
+        <a href="index.html">Back to list</a>
+        <a href="33-room-form.html">33 - ngForm and all its wonders &gt;&gt; </a>
+    </footer>
+</body>
+</html>
