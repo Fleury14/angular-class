@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>36 - Delete</title>
+    <link rel="stylesheet" href="css/04style.css">
+</head>
+<body>
+    <header>
+        <h1>Lesson 36 - Delete! Delete! Delete!</h1>
+    </header>
+    <p>Now that we have a write function, all we need is a delete function and we're fully functional. We already wrote the service method, so now we just need to call that method and pass the correct values. We know this will happen in our room list, so let's head there now.</p>
+    <h3>Delete in our room list</h3>
+    <p>Let's first look at our html. Your delete button inside the *ngFor for our rooms should look something like this:</p>
+    <div class="codebox">
+        <p>&lt;button&gt;Delete me!&lt;/button&gt;</p>
+    </div>
+    <p>It's a button... and not much else. We know that we want it to do something on click, so that means attaching a click event. You may recall that in Angular, we call events with parentheses.</p>
+    <p>Secondly, we will need that click event to call a method in our room.list TS file. We haven't made it yet, but we can call it <i>delete</i> and create it later, but we're not done there.</p>
+    <p>Remember that our delete method will have to pass the reservation info to the delete method in the service. Is there anyway we can grab the info from the reservation that the user clicks on and send it to our method? If you were in the class when we did that card picker, think back, because this was one of the most important lessons.</p>
+    <p>Don't have it yet? Notice that in our for..of in the html we are declare the value of each iteration to be assigned to the variable <i>reservation</i>. Not only can we user interpolation braces to display properties of that iteration, but <b>we can also pass that value to a method.</b> Doing so gives us this end result:</p>
+    <div class="codebox">
+        <p>&lt;button <span class="highlight">(click)="delete(reservation)"</span>&gt;Delete me!&lt;/button&gt;</p>
+    </div>
+    <p>Now that the HTML is handled, let's take care of the method in our ts file. We called it <i>delete</i> in the HTML, so let's stick to that:</p>
+    <div class="codebox">
+        <p>public delete(reservation: Reservation) {}</p>
+    </div>
+    <p>Note that we declared that its taking in a variable of type <i>Reservation</i>, and our HTML is handling that passing. So now that we have our reservation, we can start with the database call. Since we're calling our room service, it will need to be injected and imported first. I gave it the variable name <i>_room</i>:</p>
+    <div class="codebox">
+        <p>public delete(reservation: Reservation) {</p>
+        <p class="ind1">this._room.deleteReservation();</p>
+        <p>}</p>
+    </div>
+    <p>Now we need to pass the two values required for our delete method in the room service. The first is the room id...</p>
+    <div class="lucky-box">
+        <div class="lucky-right-bg"></div>
+        <p>I'm already grabbing the room info and assigning it to a variable from when we first made the list. Can I just use that?</p>
+    </div>
+    <p>Absolutely. In our example, we called it <i>roomInfo</i>, and that contained the entire object of room information. We only need the ID, so we can just refer to it as <b>roomInfo.id</b>.</p>
+    <p>The second part is our reservation id. Reember a few lessons ago when we went through that hassle of adding the id that firebase gives each reservation to our array? We did that to make this functionality possible: Since firebase requires that Id to delete something, now we can just pass it to firebase and everything will be cool. The end result looks like this:</p>
+    <div class="codebox">
+        <p>public delete(reservation: Reservation) {</p>
+        <p class="ind1">this._room.deleteReservation(roomInfo.id, reservation.id);</p>
+        <p>}</p>
+    </div>
+    <p>And we're done! Now we can write and delete, and we now have a fully functional app. Here's a final look at my room list:</p>
+    <img src="img/36-room-list-ss.jpg" alt="room list ss">
+    <h4>At this point, your focus should be trying to make this look as nice and presentable as possible. If you would like to experiemnt to add more functionality, go right ahead. I will attempt to add some bonus lessons over time to go over concepts we didn't get to, like canDeactivate, deployment, and reactive forms.</h4>
+    <footer>
+        <a href="35-bug-fix.html">&lt;&lt; 35 - Write Bugfix</a>
+        <a href="index.html">Back to list</a>
+        <a href="">37 - ??? &gt;&gt; </a>
+    </footer>
+</body>
+</html>
