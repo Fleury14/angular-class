@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>33 - Room Form</title>
+    <link rel="stylesheet" href="css/04style.css">
+</head>
+<body>
+    <header>
+        <h1>Lesson 33: Its Form Time!</h1>
+    </header>
+    <p>Now that we've built our form, it's time to make our form do work. There are generally two types of forms in Angular: template driven forms and reactive forms. We will be focusing on template driven forms. I may throw a lesson on reactive forms later.</p>
+    <p>First, make sure that you import <b>FormsModule</b> in your <b>room.module.ts</b>. This gives all the components in the room module access to the neat form stuff we'll be doing. You do not need to import it in the componentm just the module will do.</p>
+    <h4>Again, if you copied the form code from slack in class earlier, you don't need to do everything in this lesson, but read along so you understand all the different tools we use. If you want build your own form after this, user this lesson as a reference.</h4>
+    <h3>ngForm, Activate!</h3>
+    <p>Let's kick things off by attaching a selector in our HTML to ngForm. This will look a little weird at first, but your form tag should look like this:</p>
+    <div class="codebox">
+        <p>&lt;form #roomForm="ngForm" class="room-form"&gt;</p>
+    </div>
+    <p>This creates a <b>selector</b> in our HTML. I know you've seen that term before: In our components, the selector is how we refer to a particular component from the HTML. This works in a similary fashion, we can now refer to the form in the HTML using the selector <b>roomForm.</b></p>
+    <p>That's nice, but what does this ngForm actually give us? Let's find out. In your <b>room-form.component.ts</b> file, add two things to your @angular/core import: ViewChild and OnInit.</p>
+    <p>OnInit you've seen before, but what is ViewChild? Using ViewChild will allow us to <b>grab an element from the DOM that has a selector</b>. We just created a selector, so that's perfect. This is often used in conjuction with child components, but we haven't gotten too much into that yet.</p>
+    <p>So how do we use ViewChild? It goes inside your ts along with your variable declarations. I've included some variables that we will be using later as well:</p>
+    <div class="codebox">
+        <p>public roomName: string;</p>
+        <p>public options: string[];</p>
+        <p>@ViewChild('roomForm') private _roomForm: NgForm;</p>
+    </div>
+    <p><b>roomName</b> will hold the name of the room that we are on. I'm going to leave that to you, we covered how to do that in the past few lessons. (Hint: Look in the params). The <b>options</b> array will hold the options for our Reasons dropdown.</p>
+    <p>The real meat is the ViewChild line: It selects the item on the DOM that has the selector <b>roomForm</b>. We gave our form tag that selector, so now we can refer to that form in our TS with the variable <b>_roomForm</b>. It's almost like a fancy <i>getElementById</i>.</p>
+    <p>Now implement OnInit, and inside your ngOnInit, lets console.log <i>this._roomForm</i>. Thanks to our ViewChild, we know that refers to our form, so lets see what we got:</p>
+    <img src="img/33-ng-form-log.jpg" alt="room form console log">
+    <p>Look at all that stuff! We can check to see if our form is dirty (i.e. has anything been input) or pristine (opposite of dirty), whether or not our form is valid or invalid, and a whole bunch of other cool things. We'll be working mostly with the valid property, but after this lesson you should be able to get creative with some of these things.</p>
+    <p>But something is missing: Our values. If you click on the value part of our console log, you'll notice that we arent getting the values of the form. That's because we need to implement a directive you saw in our first exercise: <b>ngModel</b>.</p>
+    <h3>Applying ngModel</h3>
+    <p>Normally, we would declare our ngModel directive using the bracket combination of [()] and we would give it a name. We could then match up that name with a variable that we declare in our typescript. But we don't need to do all of that. ngModel performs a <b>two-way binding</b> between a variable of our choosing and the value of the element. But what happens if we don't declare a variable name and simply put <b>ngModel</b>?</p>
+    <p>We wouldn't have a variable in our TS to refer to whatever element we threw that ngModel on. That would seem bad, but as we just saw, we already have a method to call the values of the form, and that is...</p>
+    <div class="lucky-box">
+        <div class="lucky-lookaway-bg"></div>
+        <p>Uhh... _roomForm.value?</p>
+    </div>
+    <p>That's correct! Because we will be handling our data with our ngForm methods, assign each field to it's own variable becomes redundant. But there's a catch that we will get to later. For now, lets tack on a submit method. We won't actually do any submitting to the database yet, we just want to see our values. Lets add the following to our form tag:</p>
+    <div class="codebox">
+        &lt;form #roomForm="ngForm" class="room-form" [ngSubmit]="submitForm(roomForm.value)"&gt;
+    </div>
+    <p>This tells our form that when we submit, execute the method <b>submitForm</b> and pass in our form values. We Will need to create that method in our TS file:</p>
+    <div class="codebox">
+        <p>public submitForm(value) {</p>
+            <p class="ind1">console.log('form values:', value);</p>
+        <p>}</p>
+    </div>
+    <p>Now try typing in some values into the form and click the submit button. You should start to see values in your console.log! But I bet you have questions.</p>
+    <div class="lucky-box">
+        <div class="lucky-lookat-bg"></div>
+        <p>How does it know the names of the fields?</p>
+    </div>
+    <p>The name of the field is taken from <b>the name attribute in each input element</b>. In ou.r case, we gve the email field an attribute <b>name</b> and set that equal to <b>"email"</b>. That's where it gets the property name from.</p>
+    <p>This leads to another important point, the catch I mentioned earlier: We want this form to fit our reservation interface. This means that the <b>attributes in our name field must match the property names in our reservation interface.</b> For this reason, you should make sure in your submit method that you give the values a type <i>Reservation</i>.</p>
+    <div class="codebox">
+        <p>public submitForm(value<span class="highlight">:Reservation</span>) {</p>
+            <p class="ind1">console.log('form values:', value);</p>
+        <p>}</p>
+    </div>
+    <p>It's definitely worth mentioning that if your names don't mat up with your interface, you will not get an immediate error on the linter, you won't find out until you go to write to your database. For this reason, make sure your names match up, and make sure in your console.log that you are getting every field required for your interface.</p>
+    <p>We're getting our values now, so technically we have enough to complete our form, but that's no fun. Let's get some validation going.</p>
+    <h3>Using HTML5 Attributes</h3>
+    <p>We can use some HTML 5 attributes to add some validation for us. First thing would be to throw a <b>novalidate</b> inside our form like so:</p>
+    <div class="codebox">
+        &lt;form #roomForm="ngForm" class="room-form" [ngSubmit]="submitForm(roomForm.value)" <span class="highlight">novalidate</span>&gt;
+    </div>
+    <p>This may seem counter-intuitive, but what we're doing her is telling the browser that we are going to handle our own validation consequences. This does not disable the effect HTML5 attributes have on tags. And were going to use one of them: <b>required</b>.</p>
+    <p>Before we start applying the tags, we're going to need to see our ngForm information upon submitting so we can troubleshoot our form. Copy the console.log that you previously had into your OnInit into your submit method. Now when we click the submit button, we should actually get two console logs. Our ngForm info and the values of our form. Open up that ngForm console log and try clicking on our valid and invalid children. (If you did not know, you can click on the <b>(...)</b> in the console logs and actually see the result. That's what we are doing now).</p>
+    <p>So an empty form return a valid value of <i>true.</i> We don't want that. Now try adding <b>required</b> inside the input tags for the email. Save and take a look at our valid method from the ngForm: Our form is no longer valid! Yay!</p>
+    <p>Adding <b>required</b> to an input tag means that failure to put anything inside the input tag causes the form to not be valid. We can now utilize one of our warning p tags underneath the form!</p>
+    <p>Find the p tag that says "You have fields that need to be filled out". We're going to add an *ngIf to this tag making it look like this:</p>
+    <div class="codebox">
+        <p>&lt;p *ngIf="roomForm.invalid"&gt;You have fields that need to be filled out&lt;/p&gt;</p>
+    </div>
+    <p>Don't forget that the #roomForm in the form tag is what is enabling us to call roomForm.invalid this way. But the end result is neat: As long as there is an empty field, there will be a warning that says they need to fill fields out.</p>
+    <p>This is great, but right now we're only looking at the condition of our entire form. Is there a way we can check the condition of one particular field? There sure is.</p>
+    <h3>ngForm .controls</h3>
+    <p>Let's go back to the console.log for our NgForm. You should notice one property called controls. Take a look.</p>
+    <img src="img/33-controls-console-log.jpg" alt="controls console log">
+    <p>Clicking on <i>controls</i> gives us an object. That object contains each of our fields, and inside each of those fields.... is our own set of properties like <i>valid</i> and <i>pristine</i>! Super, that's just what we want. <b>(ngFormName).controls allows you to have all the options for an ngForm for each field in your form.</b></p>
+    <h4>Let's apply this to our reasons dropdown, but we'll need to do some things first</h4>
+    <p>We created an array called options that will hold the... options... for our drop down. Let's build that array inside our ngOnInit. Don't worry, this one will be super simple:</p>
+    <div class="codebox">
+        <p>this.options = [ 'Performance Review', 'Job Meeting', 'Game Session', 'Client Meeting' ];</p>
+    </div>
+    <p>You can put whatever you like for your options. Now we want to use *ngFor to loop over these options. It's been a while since we went over *ngFor, feel free to review if you like. Here's a look at the select/option part of our HTML that holds our reasons.</p>
+    <div class="codebox">
+        <p>&lt;select name="reason" ngModel required&gt;</p>
+        <p class="ind1">&lt;option *ngFor="let reason of options" (value)="reason"&gt;&lt;option&gt;</p>
+        <p>&lt;select&gt;</p>
+    </div>
+    <p>We used a loop to create our reason list. don't forget the <b>(value)</b> part. The reason we use the parentheses () instead of simply using a value attribute is because the parentheses allows us to use variable names.</p>
+    <p>Our dropdown should be set, but we want to have a warning if they havent selected an item. There is a p tag underneath that will contain our warning, we just have to attack an ngIf. Now that we have our controls, we know what the condition will be:</p>
+    <div class="codebox">
+        <p>&lt;p *ngIf="roomForm.controls.reason?.invalid"&gt;You need to select something&lt;/p&gt;</p>
+    </div>
+    <p>We added the question mark to <i>reason</i> because it's entirely possible that the reason field is empty. Now the p tag should show up if we don't have an option selected, which is great. If it's not working, make sure you have the <b>required</b> attribute on your select tag along with an <b>ngModel</b>.</p>
+    <p>Warning tags are neat, but maybe something a little more subtle like a shadow would be nice. Do you remember how we applied a class conditionally in the card picker exercise? One was <b>ngStyle</b>, but that's not what we're looking for. Instead...</p>
+    <h3>Applying ngClass</h3>
+    <p>Let's use ngClass instead. Let's try applying a different color shadow to our email field depending on whether or not the user entered a valid email.</p>
+    <p>Our first step should be to use the HTML5 <b>email</b> attribute the same way we applied the <b>required</b> attribute in our input tag:</p>
+    <div class="codebox">
+        <p>&lt;input name="email" type="email" placeholder="email" ngModel required <span class="highlight">email</span>&gt;</p>
+    </div>
+    <p>This <b>email</b> attribute will cause the field to read as not valid in our controls if they don't input a valid email. Now we need to create our two classes for the shadows in our css. Here are the classes in my room form css file:</p>
+    <div class="codebox">
+        <p>.danger {</p>
+        <p class="ind1">box-shadow: 0px 0px 10px #f00;</p>
+        <p>}</p>
+        <p>.valid {</p>
+        <p class="ind1">box-shadow: 0px 0px 10px #0f0;</p>
+        <p>}</p>
+    </div>
+    <p>Now we have our two classes for our shadows, <b>danger</b> for a red shadow and <b>valid</b> for a green shadow. Now we need to apply them conditionally, but what is our condition? We know that because we put the <b>email</b> attribute that the input field will not be valid if the email is not a legit email, so we can just use our roomForm controls to apply our classes:</p>
+    <div class="codebox">
+        <p>&lt;input name="email" type="email" placeholder="email" ngModel required email <span class="highlight">[ngClass]="{danger: roomForm.controls.email?.invalid, valid: roomForm.controls.email?.valid}"</span> &gt;</p>
+    </div>
+    <p>Get a good look at the syntax: ngClass takes in an object. Each property of the object is the name of the class you want to apply conditionally, the value of the property is the condition for that respective class. If the condition is true, the class is applied, if it is false, it is not.</p>
+    <p>Thanks to our ngModel, this now happens dynamically. As soon as someone enters in a valid email address, the shadow will change from red to green. If you start to delete from that field to make it invalid, it goes back to red!</p>
+    <div class="example">
+        <p>[ngClass]="{</p>
+        <p><i>classname</i>: <i>condition to apply classname</i>,</p>
+        <p><i>classname2</i>: <i>condition to apply classname2</i></p>
+        <p>}"</p>
+    </div>
+    <p><b>ngClass</b> is an excellent way to apply css effects quite easily based on value of your variables. Try to apply it in as many ways as you can throughout your site, not just on the form.</p>
+    <h4>Try it out: Your email field should now have an appropriately colored shadow based on your input.</h4>
+    <p>Once that is working, apply the same thing to your email confirmation field.</p>
+    <h3>Our Submit Button</h3>
+    <p>One last thing we can do here, let's disable our submit button if our form is invalid. This way no one can submit data that doesn't conform to our interface. We have experience in using this from both the exercises in class using <b>[disabled]</b>. Here's how my submit button looks after the change:</p>
+    <div class="codebox">
+        <p>&lt;input class="btn btn-info" type="submit" [disabled]="roomForm.invalid"&gt;</p>
+    </div>
+    <p>What <b>[disabled]</b> does is disable the element if the condition inside the quotes is true. In our case, if roomForm.invalid is true, our button is disabled, which is our goal.</p>
+    <h4>Challenge: Try to get your button to disable if the room form is invalid OR the email and confirmation email dont match. Here's a few hints: your condition will have an or pipe || and will need to look at the <b>value</b> of our two fields.</h4>
+    <p>With that, our form work is done. Here's a final look at my HTML and TS files:</p>
+    <img src="img/33-room-form-html.jpg" alt="room form html">
+    <img src="img/33-room-form-ts.jpg" alt="room form ts">
+    <p>Again, mine is super basic, with no styles. Try to personalize the form a bit by giving some nice styles.</p>
+    <p>Let's stop for now, in the next lesson we'll cover adding and deleting reervations to give our app full functionality. Almost done!</p>
+    <footer>
+        <a href="32-room-form-prepare.html">&lt;&lt; 32 - Preparing our Room Form</a>
+        <a href="index.html">Back to list</a>
+        <a href="34-write-delete.html">34 - Our write function &gt;&gt; </a>
+    </footer>
+</body>
+</html>

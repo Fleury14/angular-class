@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>35 - Navbar bug fix</title>
+    <link rel="stylesheet" href="css/04style.css">
+</head>
+<body>
+    <header>
+        <h1>Lesson 35 - Bugfix: Fixing Our Navbar</h1>
+    </header>
+    <p>Our navbar has a problem: When we add a reservation it add the rooms to our navbar a second time. Rather than go back and edit the old lesson, I thought it would be a good idea if made this a bug fixing exercise.</p>
+    <h3>Why is this happening</h3>
+    <p>Let's take a look at our nav bar back from lesson 22:</p>
+    <img src="img/22-nav-component.jpg" alt="nav component">
+    <p>When the component fires up, we create the array with two items. Then we subscribe to our room observable and inside the subscription we push the results to our array.</p>
+    <p>But remember, the code inside the function in our subscribe executes every time the observable emits. And it's emitting any time there's a change in information. </p>
+    <p>Now we can stop that with <b>rxjs/take.</b> But we had to remove the take from this code because without it, the room list wouldn't update in real time. So that idea is out the window. Let's take a look at our flow.</p>
+    <img src="img/35-subscription-flow.jpg" alt="nav bar flow">
+    <p>Our initialization is happening outside of the subscribe, so maybe that's the problem? If we reset the array inside the subscription, that would delete our two static entries... buuuut...</p>
+    <div class="lucky-box">
+        <div class="lucky-up-bg"></div>
+        <p>What if we declared the value of our array as just the two static entries inside the subscribe instead of before it?</p>
+    </div>
+    <p>Ah-ha! So now, when a subscription is run, we assign it to hold the two nav items. And if the code in the subscription is ran a second, third, or fourth time, each time it will start with a full nav array and reset to hold just the two items. Excellent. Here's what our flow would look like:</p>
+    <img src="img/35-subscription-flow-new.jpg" alt="nav bar flow new">
+    <p>And here's how I rewrote the nav-bar component:</p>
+    <img src="img/35-nav-component-fix.jpg" alt="">
+    <h4>Try it yourself: Move your declaration of your static nav items inside the subscribe. You nav bar should no longer double up when you add to the database</h4>
+    <footer>
+        <a href="34-write-delete.html">&lt;&lt; 34 - Our write function</a>
+        <a href="index.html">Back to list</a>
+        <a href="36-delete-delete.html">36 - Deleting a reservation &gt;&gt; </a>
+    </footer>
+</body>
+</html>

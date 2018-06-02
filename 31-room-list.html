@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>31 - Reservation List</title>
+    <link rel="stylesheet" href="css/04style.css">
+</head>
+<body>
+    <header>
+        <h1>Lesson 31 - Building Our Reservation List</h1>
+    </header>
+    <p>Now that we know how to get our room data, we can put together our reservation list. This should be relatively simple with one catch that we'll get to. But first things first:</p>
+    <h4>Put CommonModule inside your room.module.ts if you haven't done so already.</h4>
+    <p>The reason we have to do this is that is because anytime we create a new module, we are creating a blank slate. This means we don't have access to our basic directives like <b>*ngIf</b> and <b>*ngFor</b>. In our base module, that is handled when we imported <b>BrowserModule</b>, but BrowserModule has a whole host of things that we don't need. Enter <b>CommonModule</b> which contains all our basic directives without anything extra. Make sure to import it up top in your <b>room.module.ts</b> and add it to your <b>imports array</b>.</p>
+    <h3>Getting our Room Info (Again)</h3>
+    <p>We've already gotten our room info once, so we should be able to do it again fairly easily. We can still subscribe to parameters in our activated route to act as our trigger to get information from the room service. Bring in both the room service and ActivateRoute and inject them both via the constructor. Create a variable of type <b>Room</b> that will hold our room informations, I called mine <b>roomInfo</b>. Go ahead and bring in OnInit, declare your class as using it with <b>implements</b> and create an ngOnInit method. We will be working inside the ngOnInit.</p>
+    <p>With that all done, we should be able to suscribe to .paramMap on our activated route right? Not so fast, that wont work. Why?</p>
+    <div class="lucky-box">
+        <div class="lucky-lookat-bg"></div>
+        <p>Because the router hates me?</p>
+    </div>
+    <p>The router doesn't hate you. The reason is because we aren't on the base router anymore. Allow me to explain:</p>
+    <p>When we were on the room component, those results were being displayed in the <b>router-outlet</b> of our base component right? Because it was only the first router outlet, this means <b>the room component is part of the base router.</b></p>
+    <p>But that doesn't apply to our room list component: Those results are being displayed in the router outlet that we made inside the room component. It's in a router-outlet inside a router-outlet. (Router-outlet-ception!). Because it is a second-level router-outlet <b>the room list is part of a child route</b>. If we try to get the parameters as is, we will get the parameter of our child route. That's not what we want, our child route doesn't even have any parameters.</p>
+    <p>So how can we go back to the base router from a child route? The answer is actually quite simple: Tack on a <b>.parent</b> right before our paramMap like this.</p>
+    <div class="codebox">
+        <p>this._route.parent.subscribe()</p>
+    </div>
+    <p>Now we're going to the parent of this child route, which is our base route. Awesome! Lets get that data in our subscribe as assign it to the variable we made.</p>
+    <div class="codebox">
+        <p>this._route.parent.paramMap.subscribe( routeParam => {</p>
+        <p>});</p>
+    </div>
+    <p>Now that we have our route parameter, we can call the room service the same way as before:</p>
+    <div class="codebox">
+        <p>this._route.parent.paramMap.subscribe( routeParam => {</p>
+            <p class="ind1 highlight">this._room.getRoomById(route.get('id')).subscribe(roomData => this.roomInfo = roomData);</p>
+        <p>});</p>
+    </div>
+    <p>We're calling the room service, passing in the result of our paramMap and using the .get the same way we did before to get the parameter titled <b>id</b>. We then subscribe to the result and assign the result to our variable. You can expand this to also console log the roomData if you want. Here's the final result of my room list .ts file:</p>
+    <img src="img/31-room-list-ts.jpg" alt="room list ts ss">
+    <p>We've got our room info, now the fun part, we get to display it!</p>
+    <h3>Displaying our Room List</h3>
+    <p>My version of the html will be super basic. Style and display yours however you see fit.</p>
+    <p>I start with a basic header and I display the title:</p>
+    <div class="codebox">
+        <p>&lt;h1&gt;List of Room Stuffs:&lt;/h1&gt;</p>
+        <p>&lt;p&gt;Title: {{ roomInfo?.title }}&lt;/p&gt;</p>
+    </div>
+    <p>Do you remember why we need to use the question mark?</p>
+    <p>When the page loads and immediately displays the html, it hasn't finished it's request for the room information because its happening asynchronously. By inserting the question mark, we are telling the browser to not flip out if there's nothing there, but where there is, display the title.</p>
+    <p>That's good and all, lets display the amount of reservations first. We know our reservations property is an array, so we can use .length to display how may items are in that array, which is exactly what we want:</p>
+    <div class="codebox">
+        <p>&lt;h1&gt;List of Room Stuffs:&lt;/h1&gt;</p>
+        <p>&lt;p&gt;Title: {{ roomInfo?.title }}&lt;/p&gt;</p>
+        <p>&lt;p&gt;Number of reservations: {{ roomInfo?.reservations?.length || 'None' }}&lt;/p&gt;</p>
+    </div>
+    <p>This time I also had to put a question mark on the reservations as well; it's entirely possible that the array is empty. I also used a double pipe to display a value should that return falsy. Now if there are no reservations, instead of displaying 0, it says 'None'. I thought it was a nice touch...</p>
+    <p>Now let's add a button that will send someone to the room form if they want to add a reservation. If you chose to put your form link in your room component, you can skip this step:</p>
+    <div class="codebox">
+        <p>&lt;h1&gt;List of Room Stuffs:&lt;/h1&gt;</p>
+        <p>&lt;p&gt;Title: {{ roomInfo?.title }}&lt;/p&gt;</p>
+        <p>&lt;p&gt;Number of reservations: {{ roomInfo?.reservations?.length || 'None' }}&lt;/p&gt;</p>
+        <p>&lt;button routerLink="./../form"&gt;Make a Reservation&lt;/button&gt;</p>
+    </div>
+    <p>Remember to use routerLink instead of href! Also note I had to throw in the double dots to make sure I go back a level, otherwise i would end up at room/(roomid)/list/form which would be madness.</p>
+    <p>Now for the meaty party of our list: the actual reservation. Now that we have an array, we can go over the reservations with *ngFor:</p>
+    <div class="codebox">
+        <p>&lt;h1&gt;List of Room Stuffs:&lt;/h1&gt;</p>
+        <p>&lt;p&gt;Title: {{ roomInfo?.title }}&lt;/p&gt;</p>
+        <p>&lt;p&gt;Number of reservations: {{ roomInfo?.reservations?.length || 'None' }}&lt;/p&gt;</p>
+        <p>&lt;button routerLink="./../form"&gt;Make a Reservation&lt;/button&gt;</p>
+        <p class="highlight">&lt;div *ngFor="let reservation of roomInfo?.reservations"&gt;&lt;/div&gt;</p>
+    </div>
+    <p>We didn't need the question mark on our reservations because if they dont exist, the loop will just not run.</p>
+    <p>Now we just need to throw our reservation array info. This should take you back to the card picker. Here's my end result:</p>
+    <img src="img/31-room-list-html.jpg" alt="room list html ss">
+    <p>Notice I created a button for each reservation to delete. We'll worry about making that functional later, but for now make sure to include the button.</p>
+    <p>Room list complete!</p>
+    <h4>Mine is super basic. Be sure to style yours up. Maybe add some stuff I didn't. Make it your own.</h4>
+    <p>Next up will be our introduction to forms, which is a pretty meaty topic.</p>
+    <footer>
+        <a href="30-room-data.html">&lt;&lt; 30 - Getting our room data</a>
+        <a href="index.html">Back to list</a>
+        <a href="32-room-form-prepare.html">32 - Preparing for our form &gt;&gt; </a>
+    </footer>
+</body>
+</html>
