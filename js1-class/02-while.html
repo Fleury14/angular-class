@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/04style.css">
+</head>
+<body>
+    <header>
+        <h1>While Loops</h1>
+    </header>
+    <p>Now that we've gone over for loops, let's look over another type, the <b>while</b> loop.</p>
+    <h3>A Basic Example</h3>
+    <div class="codebox">
+        <p>let counter = 0;</p>
+        <p>while (counter < 10) {</p>
+        <p class="ind1">console.log(`The number is ${i});</p>
+        <p class="ind1">counter++;</p>
+        <p>}</p>
+    </div>
+    <p>One of the advantages to the while loop is that it's a little bit easier to read. We can see that we declare a variable named <i>counter</i>, and set it equal to 0. We then have a block of code that is repeated as long as the value of <i>counter</i> is less than ten. After our console log, we increment our counter, and then run the code again.</p>
+    <p>This can be read like a normal sentence: "While counter is less than 10, do this." This is one of the main advantages and is why in my opinion it can seem easier to learn. There are two main behavioral difference between <b>while</b> and <b>for</b>:</p>
+    <h4>Difference 1: Block, Interrupted</h4>
+    <p>Unlike a for loop which only checks its condition after the block of code has been repeated, while loops check the condition <b>all the time</b>. This means that in our example, as soon as counter reaches 10, which makes our condition false, it exits out of the loop <b>and ignores any code in the block that is below it</b>. So for example if we added the following to our example:</p>
+    <div class="codebox">
+        <p>let counter = 0;</p>
+        <p>while (counter < 10) {</p>
+        <p class="ind1">console.log(`Before increment: The number is ${i});</p>
+        <p class="ind1">counter++;</p>
+        <p class="ind1 highlight">console.log(`After increment: The number is ${i});</p>
+        <p>}</p>
+    </div>
+    <p>If we run this, you will not see the second console log for the number 10; as soon as <i>counter</i> hits 10, Javascript says "peace out" and leaves the loop immediately and doesn't care about the second console log.</p>
+    <h4>Difference 2: With great looping comes great responsibility...</h4>
+    <p>This is the big one. In a for loop, we HAVE to declare our incrementor in order for our loop to work at all. In a while loop, it is the coder's responsibility to throw the incrementor in the block. This means if you try to get fancy and do something like throw the incrementor inside a conditional statement that may not always run, the loop may run forever. This is (in my opinion) the biggest reason you don't see while loops quite as much in JavaScript: it is really easy to mess them up.</p>
+    <h4>Fun tip: If you are writing code in an environment that constantly refreshes like CodePen, be sure to disable that behavior before writing a while loop. You've been warned.</h4>
+    <div class="lucky-box">
+        <div class="lucky-up-bg"></div>
+        <p>Is there a way to make sure the block of code runs at least once?</p>
+    </div>
+    <p>What a strangely particular question. And the answer is yes. Enter the <b>do..while</b> loop.</p>
+    <h3>Do..While Example</h3>
+    <div class="codebox">
+        <p>let counter = 0;</p>
+        <p>do {</p>
+        <p class="ind1">console.log(`The number is ${i});</p>
+        <p class="ind1">counter++;</p>
+        <p>}</p>
+        <p>while (counter < 10)</p>
+    </div>
+    <p>Using do..while means that the block of code will always run at least once, <b>even if the condtion is false.</b> So if we changed our condition to <i>while (counter > 100)</i>. It would still run once, because the condition doesn't begin evaluating until the first block is run.</p>
+    <p>All of the other behaviors of a while loop are retained here: As soon as the condition is false, the loop terminates regardless of whether or not the block is done. The pitfall is true as well; it is on the coder to make sure the to include the incrementer in such a way that the loop doesn't go on forever.</p>
+    <h3>When do I use for and when do I use while?</h3>
+    <p>In my (limited) experience, I use for loops 99% of the time. While loops may be easier to read, but as your flow becomes more complicated, it is easier to use the for loop to run an entire block of code a set amount of times. There is some usefulness in utilizing the while loops immediate break out of a block, but it's also balanced out by being really easy to break. </p>
+    <p>As you get more proficient with loops, you may find yourself repeating the same style of loop for the same purpose. This is why some of the more advanced loops came to be, that we will explore in a new lesson.</p>
+    <a href="js1-index.html" class="go-back-home-js">Back to Menu</a>
+
+</body>
+</html>
