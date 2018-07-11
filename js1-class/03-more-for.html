@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/04style.css">
+</head>
+<body>
+    <header>
+        <h1>Advanced Loops</h1>
+    </header>
+    <p>You may notice, particularly when dealing with arrays, that you find yourself writing the same for loop. Fortunately, JavaScript has even more tools, particularly with arrays. I'll post an example and explain the notation.</p>
+    <h3>Example 1: forEach()</h3>
+    <p>The <b>forEach</b> loop allows us to iterate over an entire array. Instead of having to use a variable to increment up to the array length, you are give each value of the array.</p>
+    <div class="codebox">
+        <p>const captains = ['Kirk', 'Picard', 'Sisko', 'Janeway', 'Archer', 'Lorca']</p>
+        <p>captains.forEach( eachCaptain => {</p>
+        <p class="ind1">console.log('This is a captain:', eachCaptain);</p>
+        <p>});</p>
+    </div>
+    <p>There's a lot to take in here as this may be your first time seeing arrow notation. You will see this style of notation a lot, especially if you go on to Angular where it is used almost exclusively to its counterpart, which would be an anonymous function (we'll get to that later)</p>
+    <p>With this notation, declaring a value named <i>eachCaptain</i>. The name of this is not important, it can be any name you want as it is simply a variable name. What is important to know is that it's value <b>will contain each value of the array, one at a time</b>. That's why I gave it the name <i>eachCaptain</i>, so it's easier visually.</p>
+    <p>We then apply our variable which now represents each value and it will run the code inside the block after the phat arrow => once for each item in the array, with our variable contatin each value. If you run this code, you will see a list of captains in the console log.</p>
+    <div class="lucky-box">
+        <div class="lucky-right-bg"></div>
+        <p>What I want to get the index?</p>
+    </div>
+    <p>While one of the benefits of this loop is that we don't <b>need</b> the index, sometimes you will. That can be passed into our block like so:</p>
+    <div class="codebox">
+        <p>const captains = ['Kirk', 'Picard', 'Sisko', 'Janeway', 'Archer', 'Lorca']</p>
+        <p>captains.forEach( (eachCaptain, index) => {</p>
+        <p class="ind1">console.log(`Captain ${eachCaptain} has an index of ${index});</p>
+        <p>});</p>
+    </div>
+    <p>Now we have the index, AND the value! Two for the price of one!</p>
+    <h3>Example 2: for..of</h3>
+    <p>For..of alows you to iterate over any kind of <b>iterable objects.</b> Most commonly, this is generally used with arrays, and sometimes strings. This will not work with objects though! We can write our previous array like so:</p>
+    <div class="codebox">
+        <p>const captains = ['Kirk', 'Picard', 'Sisko', 'Janeway', 'Archer', 'Lorca']</p>
+        <p>for (let eachCaptain of captains) {</p>
+        <p class="ind1">console.log(`Hello, Captain ${eachCaptain}!);</p>
+        <p>});</p>
+    </div>
+    <p>With this style of loop, the variable <i>eachCaptain</i> is still representing each iteration of the array. There is a way to grab the index if you like, but it's a little more convoluted. I suggest either using <b>forEach</b>, or reading up on <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of">the MDN entry for <b>for..of</b></a>.</p>
+    <h4>Tip: If you are planning on moving on to Angular, familiarize yourself with for..of. You will see it a lot.</h4>
+    <h3>Example 3: for..in</h3>
+    <p>For..in is primarily used to loop over properties of an <b>Object</b>. I kow we haven't gone over objects yet, so at this point, try to be familiar with what it's doing and know that if you ever need to go over an object, this is a great way to do it:</p>
+    <div class="codebox">
+        <p>const myInfo = {</p>
+        <p class="ind1">firstName: 'J.R.',</p>
+        <p class="ind1">lastName: 'Ruggiero',</p>
+        <p class="ind1">age: 39</p>
+        <p>};</p>
+        <p>for (let property in myInfo) {</p>
+        <p class="ind1">console.log( myInfo[property] )</p>
+        <p>}</p>
+        <p class="highlight-red">// Result: J.R., Ruggiero, 39</p>
+    </div>
+    <p>This time, instead of the variable we create representing each value in an array, it represents each property in the object. We then console log the value for each of those properties.</p>
+    <p>Try to avoid using <b>for..in</b> with arrays. While it will technically work, it can have some unexpected side effects. I recommend sticking to for..of or forEach for arrays.</p>
+    <a href="js1-index.html" class="go-back-home-js">Back to Menu</a>
+</body>
+</html>
